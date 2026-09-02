@@ -75,6 +75,7 @@
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     box-shadow:var(--shadow);
+    min-width:0;
   }
 
   .current .place{font-size:1.3rem;font-weight:600;}
@@ -332,7 +333,7 @@ function applyBackground(code, daytime){
   else if(code === 3 || code === 45 || code === 48) colors = ['#485563','#29323c','#3e4c59'];
   else if(code <= 2) colors = daytime ? ['#2980b9','#6dd5fa','#ffffff33'] : ['#0f2027','#203a43','#2c5364'];
   else colors = ['#0f2027','#203a43','#2c5364'];
-  document.body.style.background = `linear-gradient(135deg, ${colors[0]}, ${colors[1]} 55%, ${colors[2]})`;
+  document.body.style.backgroundImage = `linear-gradient(135deg, ${colors[0]}, ${colors[1]} 55%, ${colors[2]})`;
 }
 
 function renderHourly(data){
