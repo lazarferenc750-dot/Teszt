@@ -36,13 +36,26 @@
     <div class="hero-blob blob1"></div>
     <div class="hero-blob blob2"></div>
     <div class="hero-blob blob3"></div>
-    <div class="container hero-content">
-      <p class="hero-eyebrow">Üdvözlünk a</p>
-      <h1>Lázár&nbsp;Család<span class="dot">.</span></h1>
-      <p class="hero-subtitle">Szeretet, nevetés és rengeteg közös élmény — ez vagyunk mi. Kukkants be az életünkbe!</p>
-      <div class="hero-actions">
-        <a href="#tortenetunk" class="btn btn-primary">Ismerj meg minket</a>
-        <a href="#kapcsolat" class="btn btn-ghost">Írj nekünk</a>
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <p class="hero-eyebrow">Üdvözlünk a</p>
+        <h1>Lázár&nbsp;Család<span class="dot">.</span></h1>
+        <p class="hero-subtitle">Szeretet, nevetés és rengeteg közös élmény — ez vagyunk mi. Kukkants be az életünkbe!</p>
+        <div class="hero-actions">
+          <a href="#tortenetunk" class="btn btn-primary">Ismerj meg minket</a>
+          <a href="#kapcsolat" class="btn btn-ghost">Írj nekünk</a>
+        </div>
+      </div>
+      <div class="hero-photos">
+        <figure class="photo-card photo-main">
+          <img src="assets/photos/family-group.jpg" alt="A Lázár család együtt egy balatoni kilátóban" loading="eager">
+        </figure>
+        <figure class="photo-card photo-accent photo-accent-a">
+          <img src="assets/photos/szulok.jpg" alt="A szülők a Balaton-parton">
+        </figure>
+        <figure class="photo-card photo-accent photo-accent-b">
+          <img src="assets/photos/fiuk.jpg" alt="A fiúk egy nyári esti koncerten">
+        </figure>
       </div>
     </div>
   </section>
@@ -74,26 +87,20 @@
   <section class="section section-alt" id="csaladtagok">
     <div class="container">
       <h2 class="section-title"><span class="badge">Család</span>Ismerd meg a csapatot</h2>
-      <div class="members">
-        <div class="member">
-          <div class="member-avatar avatar1">👨</div>
-          <h3>Édesapa</h3>
-          <p>A család feje, mindig kész egy jó viccre vagy egy grillezésre.</p>
+      <div class="member-cards">
+        <div class="member-card">
+          <div class="member-photo">
+            <img src="assets/photos/szulok.jpg" alt="Szülők a Balaton-parton, biciklitúrán">
+          </div>
+          <h3>Szülők</h3>
+          <p>Ők ketten tartják össze a családot — örök csapat, örök szeretet.</p>
         </div>
-        <div class="member">
-          <div class="member-avatar avatar2">👩</div>
-          <h3>Édesanya</h3>
-          <p>A ház szíve-lelke, aki mindenkire vigyáz és mindent összetart.</p>
-        </div>
-        <div class="member">
-          <div class="member-avatar avatar3">👦</div>
-          <h3>Gyermek</h3>
-          <p>Tele energiával, kíváncsisággal és rengeteg kérdéssel.</p>
-        </div>
-        <div class="member">
-          <div class="member-avatar avatar4">👧</div>
-          <h3>Gyermek</h3>
-          <p>Kreatív lélek, aki mindig kitalál valami új játékot.</p>
+        <div class="member-card">
+          <div class="member-photo member-photo-portrait">
+            <img src="assets/photos/fiuk.jpg" alt="A fiúk egy nyári esti koncerten">
+          </div>
+          <h3>Fiúk</h3>
+          <p>Három srác, mindig együtt, mindig készen egy újabb kalandra.</p>
         </div>
       </div>
     </div>
@@ -102,14 +109,20 @@
   <section class="section" id="galeria">
     <div class="container">
       <h2 class="section-title"><span class="badge">Pillanatok</span>Galéria</h2>
-      <p class="section-lead">Néhány színes emlék az elmúlt időszakból.</p>
+      <p class="section-lead">Néhány valódi pillanat az elmúlt időszakból.</p>
       <div class="gallery">
-        <div class="gallery-item g1">🌅</div>
-        <div class="gallery-item g2">🏖️</div>
-        <div class="gallery-item g3">🎂</div>
-        <div class="gallery-item g4">🎄</div>
-        <div class="gallery-item g5">🚲</div>
-        <div class="gallery-item g6">🍉</div>
+        <figure class="gallery-item gallery-feature">
+          <img src="assets/photos/family-group.jpg" alt="Az egész család együtt egy balatoni kilátóban">
+          <figcaption>Balaton-parti kilátó — együtt az egész család</figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <img src="assets/photos/szulok.jpg" alt="Szülők biciklitúrán a Balatonnál">
+          <figcaption>Bringatúra a tóparton</figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <img src="assets/photos/fiuk.jpg" alt="A fiúk egy nyári esti koncerten">
+          <figcaption>Nyári est, élő zenével</figcaption>
+        </figure>
       </div>
     </div>
   </section>
