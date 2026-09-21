@@ -1,0 +1,706 @@
+<title>Reggeli sós víz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap">
+
+<style>
+:root{
+  color-scheme: light;
+  --ground:#F1F4F3;
+  --surface:#FFFFFF;
+  --surface-2:#F8FAF9;
+  --ink:#131B20;
+  --ink-2:#48585F;
+  --muted:#79878E;
+  --line:#DCE3E4;
+  --line-strong:#C3CDCF;
+  --accent:#9C5A11;
+  --accent-2:#C98A2E;
+  --accent-soft:#F6EBDA;
+  --good:#1B6B4C;
+  --good-soft:#E2F0E9;
+  --warn:#9A6613;
+  --warn-soft:#F7EDD9;
+  --risk:#A32F2F;
+  --risk-soft:#F7E5E4;
+  --series-1:#2a78d6;
+  --series-2:#eb6834;
+  --series-3:#1baf7a;
+  --grid:#E7ECEC;
+  --shadow:0 1px 2px rgba(19,27,32,.05), 0 8px 24px -16px rgba(19,27,32,.25);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --ground:#0C1215;
+    --surface:#141D22;
+    --surface-2:#18242A;
+    --ink:#E8EFF1;
+    --ink-2:#A9B8BF;
+    --muted:#7E8D94;
+    --line:#243138;
+    --line-strong:#33444C;
+    --accent:#DFA45B;
+    --accent-2:#C98A2E;
+    --accent-soft:#2A2013;
+    --good:#54B489;
+    --good-soft:#12271F;
+    --warn:#D69A3F;
+    --warn-soft:#2A2113;
+    --risk:#E0817A;
+    --risk-soft:#2C1917;
+    --series-1:#3987e5;
+    --series-2:#d95926;
+    --series-3:#199e70;
+    --grid:#1F2B31;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --ground:#0C1215;
+  --surface:#141D22;
+  --surface-2:#18242A;
+  --ink:#E8EFF1;
+  --ink-2:#A9B8BF;
+  --muted:#7E8D94;
+  --line:#243138;
+  --line-strong:#33444C;
+  --accent:#DFA45B;
+  --accent-2:#C98A2E;
+  --accent-soft:#2A2013;
+  --good:#54B489;
+  --good-soft:#12271F;
+  --warn:#D69A3F;
+  --warn-soft:#2A2113;
+  --risk:#E0817A;
+  --risk-soft:#2C1917;
+  --series-1:#3987e5;
+  --series-2:#d95926;
+  --series-3:#199e70;
+  --grid:#1F2B31;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:"IBM Plex Serif","Iowan Old Style",Georgia,serif;
+  font-size:16px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.sans{font-family:"IBM Plex Sans",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+.mono,code,th,.tick,.val,.chip,.eyebrow,.meta-k{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:sticky;
+  top:env(safe-area-inset-top, 0px);
+  z-index:20;
+  background:color-mix(in srgb, var(--ground) 88%, transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-in{
+  max-width:74rem;margin:0 auto;
+  padding:10px 20px;
+  display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+}
+.brand{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent);font-weight:600;white-space:nowrap;
+}
+.navlinks{display:flex;gap:16px;flex-wrap:wrap;font-family:"IBM Plex Sans",sans-serif;font-size:13px}
+.navlinks a{color:var(--ink-2);text-decoration:none;padding-bottom:2px;border-bottom:1px solid transparent}
+.navlinks a:hover{color:var(--ink);border-bottom-color:var(--accent)}
+
+/* ---------- layout ---------- */
+.wrap{max-width:74rem;margin:0 auto;padding:0 20px;padding-block:0 64px}
+section{padding-block:44px 0;scroll-margin-top:72px}
+.prose{max-width:66ch}
+p{margin:0 0 1em}
+.lede{font-size:1.14rem;line-height:1.6;color:var(--ink-2)}
+
+/* ---------- masthead ---------- */
+.mast{padding-block:52px 8px;border-bottom:2px solid var(--ink);}
+.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:14px}
+h1{
+  font-size:clamp(2.1rem,6vw,3.5rem);
+  line-height:1.02;font-weight:700;letter-spacing:-.025em;
+  margin:0 0 18px;text-wrap:balance;max-width:20ch;
+}
+h1 em{font-style:normal;color:var(--accent);}
+.mast .lede{max-width:60ch;margin-bottom:28px}
+.meta{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:14px 24px;padding-block:18px;border-top:1px solid var(--line);
+}
+.meta-k{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:3px}
+.meta-v{font-family:"IBM Plex Sans",sans-serif;font-size:13.5px;color:var(--ink-2);line-height:1.4}
+
+/* ---------- headings ---------- */
+.h2row{display:flex;align-items:baseline;gap:14px;margin:0 0 6px}
+.h2num{
+  font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;
+  color:var(--accent);letter-spacing:.08em;padding-top:4px;
+}
+h2{font-size:clamp(1.45rem,3.4vw,2rem);line-height:1.15;letter-spacing:-.018em;margin:0;font-weight:600;text-wrap:balance}
+.sub{color:var(--muted);font-size:14px;font-family:"IBM Plex Sans",sans-serif;margin:0 0 26px;max-width:62ch}
+h3{font-size:1.06rem;font-weight:600;margin:30px 0 8px;letter-spacing:-.01em}
+h4{font-size:.82rem;font-weight:600;margin:0 0 8px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-2);font-family:"IBM Plex Sans",sans-serif}
+
+/* ---------- verdict chips ---------- */
+.chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  padding:3px 9px 3px 7px;border-radius:3px;white-space:nowrap;
+}
+.chip::before{font-size:11px;line-height:1}
+.chip-good{background:var(--good-soft);color:var(--good)}
+.chip-good::before{content:"●"}
+.chip-warn{background:var(--warn-soft);color:var(--warn)}
+.chip-warn::before{content:"◐"}
+.chip-risk{background:var(--risk-soft);color:var(--risk)}
+.chip-risk::before{content:"▲"}
+
+/* ---------- verdict cards ---------- */
+.verdicts{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.vcard{background:var(--surface);padding:22px 20px;display:flex;flex-direction:column;gap:10px}
+.vcard .q{font-family:"IBM Plex Sans",sans-serif;font-weight:600;font-size:1rem;line-height:1.3;letter-spacing:-.01em}
+.vcard p{margin:0;font-size:14.5px;line-height:1.55;color:var(--ink-2)}
+
+/* ---------- key figure ---------- */
+.figrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:26px;margin:28px 0;padding-block:22px;border-block:1px solid var(--line)}
+.fig .n{font-family:"IBM Plex Sans",sans-serif;font-size:2.1rem;font-weight:600;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.fig .n small{font-size:.95rem;font-weight:500;color:var(--muted);letter-spacing:0}
+.fig .c{font-size:13px;color:var(--ink-2);margin-top:8px;line-height:1.45;font-family:"IBM Plex Sans",sans-serif}
+.fig.accent .n{color:var(--accent)}
+.fig.risk .n{color:var(--risk)}
+
+/* ---------- charts ---------- */
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:22px 20px 16px;margin:26px 0;box-shadow:var(--shadow)}
+.chart-title{font-family:"IBM Plex Sans",sans-serif;font-weight:600;font-size:15px;margin:0 0 3px;letter-spacing:-.01em}
+.chart-sub{font-size:12.5px;color:var(--muted);margin:0 0 22px;font-family:"IBM Plex Sans",sans-serif;line-height:1.45}
+.bars{display:grid;grid-template-columns:minmax(96px,max-content) 1fr minmax(48px,max-content);gap:11px 12px;align-items:center}
+.blabel{font-family:"IBM Plex Sans",sans-serif;font-size:12.5px;color:var(--ink-2);line-height:1.25;text-align:right}
+.btrack{position:relative;height:20px;background:var(--grid);border-radius:3px}
+.bfill{height:100%;border-radius:3px;background:var(--series-1);position:relative}
+.bfill.is-accent{background:var(--accent-2)}
+.val{font-size:12.5px;font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
+.thresh{position:absolute;top:-6px;bottom:-6px;width:0;border-left:1px dashed var(--risk);pointer-events:none}
+.axis{display:grid;grid-template-columns:minmax(96px,max-content) 1fr minmax(48px,max-content);gap:12px;margin-top:10px}
+.ticks{position:relative;height:16px;border-top:1px solid var(--line);grid-column:2}
+.tick{position:absolute;top:3px;transform:translateX(-50%);font-size:10.5px;color:var(--muted);white-space:nowrap}
+.tick:first-child{transform:none}
+.axis-note{grid-column:2;font-size:11px;color:var(--risk);font-family:"IBM Plex Mono",monospace;margin-top:2px}
+
+/* stacked */
+.stack-row{display:grid;grid-template-columns:minmax(72px,max-content) 1fr;gap:12px;align-items:center;margin-bottom:12px}
+.stack{display:flex;height:34px;gap:2px}
+.seg{position:relative;height:100%;display:flex;align-items:center;justify-content:center;font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:500;color:#fff;overflow:hidden;white-space:nowrap}
+.seg:first-child{border-radius:3px 0 0 3px}
+.seg:last-child{border-radius:0 3px 3px 0}
+.s1{background:var(--series-1)}
+.s2{background:var(--series-2)}
+.s3{background:var(--series-3)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
+.lg{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-2);font-family:"IBM Plex Sans",sans-serif}
+.sw{width:10px;height:10px;border-radius:2px;flex:none}
+
+/* tooltip */
+[data-tip]{cursor:default}
+[data-tip]:hover::after,[data-tip]:focus-visible::after{
+  content:attr(data-tip);
+  position:absolute;left:50%;bottom:calc(100% + 8px);transform:translateX(-50%);
+  background:var(--ink);color:var(--ground);
+  font-family:"IBM Plex Sans",sans-serif;font-size:11.5px;line-height:1.35;
+  padding:6px 9px;border-radius:4px;white-space:nowrap;z-index:5;pointer-events:none;
+  box-shadow:0 4px 12px rgba(0,0,0,.2);
+}
+
+/* ---------- table ---------- */
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface);margin:24px 0}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:14px}
+th{
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+  text-align:left;padding:12px 16px;border-bottom:1px solid var(--line-strong);font-weight:600;
+  background:var(--surface-2);
+}
+td{padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.5;color:var(--ink-2)}
+tr:last-child td{border-bottom:none}
+td.claim{color:var(--ink);font-family:"IBM Plex Sans",sans-serif;font-weight:500;font-size:13.5px}
+td.verdict{white-space:nowrap}
+
+/* ---------- boxes ---------- */
+.note{
+  background:var(--surface);border:1px solid var(--line);
+  border-left:3px solid var(--accent);
+  border-radius:0 5px 5px 0;padding:18px 20px;margin:24px 0;
+}
+.note.risk{border-left-color:var(--risk)}
+.note.good{border-left-color:var(--good)}
+.note p:last-child{margin-bottom:0}
+.note h4{margin-bottom:6px}
+
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;margin-top:22px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:20px}
+.panel h4{color:var(--accent);letter-spacing:.06em}
+.panel ul{margin:0;padding-left:1.1em}
+.panel li{margin-bottom:7px;font-size:14px;line-height:1.5;color:var(--ink-2)}
+.panel li strong{color:var(--ink);font-weight:600}
+ul.clean{list-style:none;padding:0;margin:0}
+ul.clean li{padding-left:1.3em;position:relative;margin-bottom:9px;font-size:14.5px;line-height:1.55;color:var(--ink-2)}
+ul.clean li::before{content:"—";position:absolute;left:0;color:var(--accent);font-family:"IBM Plex Mono",monospace}
+
+/* protocol steps */
+.steps{counter-reset:s;display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-top:22px}
+.step{background:var(--surface);padding:18px 20px;display:grid;grid-template-columns:28px 1fr;gap:14px;align-items:start}
+.step::before{
+  counter-increment:s;content:counter(s,decimal-leading-zero);
+  font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;color:var(--accent);padding-top:3px;
+}
+.step h4{margin-bottom:4px;text-transform:none;letter-spacing:-.005em;font-size:.95rem;color:var(--ink)}
+.step p{margin:0;font-size:14px;color:var(--ink-2);line-height:1.55}
+
+/* refs */
+.refs{list-style:none;padding:0;margin:0;counter-reset:r}
+.refs li{
+  counter-increment:r;position:relative;padding:12px 0 12px 42px;border-bottom:1px solid var(--line);
+  font-size:13.5px;line-height:1.5;color:var(--ink-2);font-family:"IBM Plex Sans",sans-serif;
+}
+.refs li::before{
+  content:"[" counter(r) "]";position:absolute;left:0;top:12px;
+  font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);
+}
+.refs a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line-strong)}
+.refs a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+.refs .src{color:var(--muted);font-size:12px;display:block;margin-top:2px}
+
+.disclaimer{
+  margin-top:44px;padding:20px;border:1px dashed var(--line-strong);border-radius:6px;
+  font-size:13px;color:var(--muted);font-family:"IBM Plex Sans",sans-serif;line-height:1.6;
+}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+sup a{text-decoration:none;font-size:10px;font-family:"IBM Plex Mono",monospace;padding:0 1px;border:none}
+
+@media (max-width:560px){
+  .bars,.axis{grid-template-columns:minmax(72px,max-content) 1fr minmax(40px,max-content)}
+  .blabel{font-size:11.5px}
+  .seg{font-size:10px}
+}
+@media print{
+  .topbar{display:none}
+  body{background:#fff}
+  section{page-break-inside:avoid}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <span class="brand">Élettani beszámoló · 2026</span>
+    <nav class="navlinks">
+      <a href="#osszegzes">Összegzés</a>
+      <a href="#elettan">Élettan</a>
+      <a href="#allitasok">Állítások</a>
+      <a href="#javallat">Javallatok</a>
+      <a href="#kockazat">Kockázatok</a>
+      <a href="#vizbevitel">Napi víz</a>
+      <a href="#protokoll">Protokoll</a>
+      <a href="#forrasok">Források</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="mast">
+    <div class="eyebrow">Só · víz · ozmoreguláció</div>
+    <h1>A reggeli sós víz és a napi <em>vízbevitel</em> élettana</h1>
+    <p class="lede">Mit csinál valójában egy pohár sós víz éhgyomorra, mennyi vizet kíván a szervezet egy nap alatt, és hol húzódik a határ a bizonyított orvosi javallat és a közösségi médiából érkező szokás között.</p>
+    <div class="meta">
+      <div><span class="meta-k">Tárgy</span><span class="meta-v">Reggeli nátriumklorid-oldat („sole water”) és a napi folyadékbevitel</span></div>
+      <div><span class="meta-k">Módszer</span><span class="meta-v">Irányelvek, randomizált vizsgálatok és szakmai összefoglalók célzott áttekintése</span></div>
+      <div><span class="meta-k">Hivatkozott források</span><span class="meta-v">14 tétel — WHO, EFSA, NEJM, eBioMedicine, Autonomic Neuroscience, AFP, NIH</span></div>
+      <div><span class="meta-k">Készült</span><span class="meta-v">2026. szeptember 21.</span></div>
+    </div>
+  </div>
+
+  <!-- ============ 1 ============ -->
+  <section id="osszegzes">
+    <div class="h2row"><span class="h2num">01</span><h2>Vezetői összegzés</h2></div>
+    <p class="sub">Három kérdés, három egymondatos válasz — a részletek a következő fejezetekben.</p>
+
+    <div class="verdicts">
+      <div class="vcard">
+        <span class="chip chip-risk">Nincs bizonyíték</span>
+        <div class="q">Használ-e egészséges embernek a reggeli sós víz?</div>
+        <p>A „sole water” konkrét állításait (emésztés, alvás, vérnyomás, energiaszint) klinikai vizsgálat nem tesztelte; a Cleveland Clinic szakmai állásfoglalása szerint a tudomány nem támasztja alá őket.<sup><a href="#r1">[1]</a></sup></p>
+      </div>
+      <div class="vcard">
+        <span class="chip chip-good">Bizonyított — szűk körben</span>
+        <div class="q">Van-e helye az orvosi gyakorlatban?</div>
+        <p>Igen: hasmenéses kiszáradásban (ORS), ortosztatikus intoleranciában és POTS-ban, tartós hőterhelésnél — ott viszont mért mennyiségekkel és orvosi felügyelet mellett.<sup><a href="#r6">[6]</a></sup></p>
+      </div>
+      <div class="vcard">
+        <span class="chip chip-warn">Feltételes</span>
+        <div class="q">Mennyi vizet igyon egy egészséges felnőtt?</div>
+        <p>Az EFSA szerint a teljes vízbevitel 2,0 l (nő) és 2,5 l (férfi) naponta — ételből is —, de egészségesnél a szomjúság megbízható vezérlő; egyetlen küszöbérték sem előz meg betegséget.<sup><a href="#r3">[3]</a></sup></p>
+      </div>
+    </div>
+
+    <div class="figrow">
+      <div class="fig accent">
+        <div class="n">5,8 <small>g só</small></div>
+        <div class="c">Egy csapott teáskanál só ≈ 2,3 g nátrium — önmagában kimeríti a WHO teljes napi keretét.</div>
+      </div>
+      <div class="fig">
+        <div class="n">&lt;2 <small>g Na/nap</small></div>
+        <div class="c">A WHO erős ajánlása felnőttre: kevesebb mint 5 g só naponta, minden forrást összeszámolva.<sup><a href="#r2">[2]</a></sup></div>
+      </div>
+      <div class="fig risk">
+        <div class="n">15,9 <small>g só</small></div>
+        <div class="c">A magyar férfiak becsült napi sóbevitele (OTÁP 2014); a nőké 11,2 g — a keret két-háromszorosa.<sup><a href="#r14">[14]</a></sup></div>
+      </div>
+      <div class="fig">
+        <div class="n">135–145 <small>mmol/l</small></div>
+        <div class="c">A szérum nátrium normáltartománya. A szervezet ezt ±1–2%-on belül tartja — nem a reggeli pohárból.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2 ============ -->
+  <section id="elettan">
+    <div class="h2row"><span class="h2num">02</span><h2>Mi történik ébredéskor</h2></div>
+    <p class="sub">A só- és vízháztartás szabályozása — és miért nem a reggeli pohár dönti el az egyensúlyt.</p>
+
+    <div class="prose">
+      <p>A plazma ozmolalitását (275–295 mOsm/kg) és a szérum nátriumot két, egymástól függetlenül működő kör tartja szűk sávban. Az <strong>ozmoreguláció</strong> a vizet mozgatja: a hipotalamusz ozmoreceptorai már 1–2%-os emelkedésre vazopresszint (ADH) szabadítanak fel, a vese visszaszívja a vizet, és megindul a szomjúságérzet. A <strong>volumenreguláció</strong> a nátriumot mozgatja: a renin–angiotenzin–aldoszteron rendszer (RAAS) a vese disztális tubulusában szabályozza, mennyi nátriumot tart vissza a szervezet.</p>
+
+      <p>Éjszaka mindkét kör „takarékon” dolgozik. Alvás közben a bőrön és a légzéssel <strong>0,3–0,5 liter víz</strong> távozik észrevétlenül, miközben az éjszakai ADH-csúcs koncentrált vizeletet állít elő — ezért sötétebb a reggeli első vizelet. Az aldoszteron szintje a hajnali órákban a legmagasabb, párhuzamosan a kortizol ébredési válaszával (CAR), amely az ébredés utáni 30–45 percben tetőzik.</p>
+
+      <div class="note">
+        <h4>A kulcsészrevétel</h4>
+        <p>A szervezet ébredéskor eleve <strong>nátriumvisszatartó üzemmódban</strong> van. Ezért az a népszerű érvelés, hogy „reggelre kiürült a sód, pótolni kell”, élettanilag visszafelé sül el: egészséges vesével a nátriumhiány éjszakai alvás alatt gyakorlatilag nem alakul ki — a vízvesztés az, ami valós, és azt vízzel kell pótolni.</p>
+      </div>
+
+      <h3>Mi történik, ha sós vizet iszunk</h3>
+      <p>A nátrium a vékonybélben aktívan szívódik fel (NHE3-cserélő, glükóz jelenlétében SGLT1-kotranszport), a víz pedig ozmotikusan követi. Ennek a mechanizmusnak van egy klasszikus orvosi alkalmazása: a <strong>WHO alacsony ozmolaritású orális rehidráló oldata</strong> (75 mmol/l nátrium, 75 mmol/l glükóz, 245 mOsm/l) épp azért működik hasmenésben, mert a glükóz „behúzza” a nátriumot, a nátrium pedig a vizet.</p>
+      <p>A reggeli sós víz viszont nem ez: glükóz nélküli, gyakran hipertóniás sóoldat. Egészséges emberben a tiszta víz felszívódása sem lassú — a gyomorürülés az üres gyomorba gyorsan kerülő, izotóniásnál hígabb folyadéknál a leggyorsabb —, a sótöbblet tehát <em>nem gyorsítja</em> a hidratálást. Töményebb oldatnál az ellenkezője történik: a magas ozmolaritás lassítja a gyomorürülést, és a vékonybélben ozmotikus vízkiáramlást vált ki.</p>
+      <p>Egy dolgot viszont a <em>sima</em> víz is megtesz: 500 ml hideg víz gyors elfogyasztása ozmoszenzitív, szimpatikus közvetítésű <strong>pressor választ</strong> vált ki, amely 30–60 percig mérsékli az álló helyzetben fellépő szívfrekvencia-emelkedést. Ez az ortosztatikus intolerancia kezelésének bevált fogása — és nem a só, hanem a víz mennyisége és hőmérséklete okozza.<sup><a href="#r6">[6]</a></sup></p>
+    </div>
+
+    <!-- CHART B -->
+    <figure class="chart">
+      <p class="chart-title">Napi vízforgalom egy 70 kg-os felnőttnél</p>
+      <p class="chart-sub">Tipikus értékek mérsékelt klímán, közepes aktivitás mellett, liter/nap. A bevitel közel harmada ételből származik — a „napi 2 liter ital” ezt rendszerint figyelmen kívül hagyja.<sup><a href="#r3">[3]</a></sup></p>
+
+      <div class="stack-row">
+        <span class="blabel" style="text-align:left">Bevitel</span>
+        <div class="stack">
+          <div class="seg s1" style="flex:1.5" tabindex="0" data-tip="Italok: 1,5 l (60%)">1,5 l</div>
+          <div class="seg s2" style="flex:0.7" tabindex="0" data-tip="Ételek víztartalma: 0,7 l (28%)">0,7</div>
+          <div class="seg s3" style="flex:0.3" tabindex="0" data-tip="Oxidációs víz az anyagcseréből: 0,3 l (12%)">0,3</div>
+        </div>
+      </div>
+      <div class="stack-row">
+        <span class="blabel" style="text-align:left">Leadás</span>
+        <div class="stack">
+          <div class="seg s1" style="flex:1.5" tabindex="0" data-tip="Vizelet: 1,5 l (60%)">1,5 l</div>
+          <div class="seg s2" style="flex:0.8" tabindex="0" data-tip="Bőr és légzés (insensibilis vízvesztés): 0,8 l (32%)">0,8</div>
+          <div class="seg s3" style="flex:0.2" tabindex="0" data-tip="Széklet: 0,2 l (8%)">0,2</div>
+        </div>
+      </div>
+
+      <div class="legend">
+        <span class="lg"><span class="sw s1"></span>Ital / vizelet</span>
+        <span class="lg"><span class="sw s2"></span>Étel / bőr és légzés</span>
+        <span class="lg"><span class="sw s3"></span>Oxidációs víz / széklet</span>
+      </div>
+    </figure>
+  </section>
+
+  <!-- ============ 3 ============ -->
+  <section id="allitasok">
+    <div class="h2row"><span class="h2num">03</span><h2>Állítás és bizonyíték</h2></div>
+    <p class="sub">A reggeli sós vízhez kapcsolt leggyakoribb ígéretek, szembesítve azzal, amit a szakirodalom valóban mond.</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th>Állítás</th><th>Ítélet</th><th>Mit mond a szakirodalom</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="claim">„Jobban hidratál, mint a sima víz”</td>
+            <td class="verdict"><span class="chip chip-risk">Cáfolt</span></td>
+            <td>Egészséges, normovolémiás emberben a vese a felesleges nátriumot kiválasztja; a sótöbblet nem növeli tartósan a plazmavolument. Bizonyított többlete csak jelentős izzadásos vagy emésztőrendszeri sóvesztés pótlásakor van.</td>
+          </tr>
+          <tr>
+            <td class="claim">„84 nyomelemet pótol a himalájasó”</td>
+            <td class="verdict"><span class="chip chip-risk">Cáfolt</span></td>
+            <td>A himalájasó 0,28% kálium, 0,1% magnézium és 0,0004% vas — elhanyagolható mennyiség a teljes értékű élelmiszerekből származó bevitelhez képest.<sup><a href="#r1">[1]</a></sup></td>
+          </tr>
+          <tr>
+            <td class="claim">„Csökkenti a vérnyomást”</td>
+            <td class="verdict"><span class="chip chip-risk">Ellentétes irányú</span></td>
+            <td>A magas nátriumbevitel a vérnyomás emelkedésének jól megalapozott oka; a WHO becslése szerint évente ~1,89 millió halálozás hozható vele kapcsolatba.<sup><a href="#r2">[2]</a></sup></td>
+          </tr>
+          <tr>
+            <td class="claim">„Javítja az alvást és az energiaszintet”</td>
+            <td class="verdict"><span class="chip chip-warn">Nem vizsgált</span></td>
+            <td>Klinikai vizsgálat nem tesztelte. A tapasztalt élénkülés valószínűbb magyarázata a folyadékbevitel maga (enyhe éjszakai vízhiány pótlása) és a reggeli rutin placebohatása.<sup><a href="#r1">[1]</a></sup></td>
+          </tr>
+          <tr>
+            <td class="claim">„Méregtelenít / átmossa a bélrendszert”</td>
+            <td class="verdict"><span class="chip chip-risk">Kockázatos</span></td>
+            <td>A „salt water flush” ozmotikus hasmenést, hányingert, görcsöt okoz; súlyos esetben <strong>hypernatraemiát</strong>, elektrolitzavart és kiszáradást. Ismételt használata a bélflórát is felboríthatja.<sup><a href="#r7">[7]</a></sup></td>
+          </tr>
+          <tr>
+            <td class="claim">„Megelőzi az izomgörcsöt”</td>
+            <td class="verdict"><span class="chip chip-warn">Részben, szűk körben</span></td>
+            <td>Sóvesztéssel járó, tartós terhelésnél a nátriumpótlásnak van szerepe; hétköznapi, ülő életmód mellett reggel éhgyomorra nincs bizonyított hatása.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CHART A -->
+    <figure class="chart">
+      <p class="chart-title">Hová fér be a reggeli teáskanál?</p>
+      <p class="chart-sub">Napi sóbevitel, gramm konyhasó (NaCl). A szaggatott vonal a WHO 5 g-os felső határa. A sárga sáv nem bevitel, hanem a reggeli pohárba tett <em>egyetlen</em> teáskanál.<sup><a href="#r2">[2]</a><a href="#r14">[14]</a></sup></p>
+
+      <div class="bars">
+        <span class="blabel">WHO ajánlott<br>felső határ</span>
+        <div class="btrack"><div class="bfill" style="width:27.8%" tabindex="0" data-tip="WHO: &lt;5 g só (&lt;2 g nátrium) naponta"></div><div class="thresh" style="left:27.8%"></div></div>
+        <span class="val">5,0</span>
+
+        <span class="blabel" style="color:var(--accent)">1 tk. só a reggeli<br>vízben</span>
+        <div class="btrack"><div class="bfill is-accent" style="width:32.2%" tabindex="0" data-tip="Egy csapott teáskanál ≈ 5,8 g só ≈ 2,3 g nátrium"></div><div class="thresh" style="left:27.8%"></div></div>
+        <span class="val">5,8</span>
+
+        <span class="blabel">Globális átlagos<br>bevitel</span>
+        <div class="btrack"><div class="bfill" style="width:60%" tabindex="0" data-tip="Világátlag: 4310 mg nátrium = 10,8 g só naponta"></div><div class="thresh" style="left:27.8%"></div></div>
+        <span class="val">10,8</span>
+
+        <span class="blabel">Magyar nők<br>(OTÁP 2014)</span>
+        <div class="btrack"><div class="bfill" style="width:62.2%" tabindex="0" data-tip="Magyar nők becsült bevitele: 11,2 g só/nap"></div><div class="thresh" style="left:27.8%"></div></div>
+        <span class="val">11,2</span>
+
+        <span class="blabel">Magyar férfiak<br>(OTÁP 2014)</span>
+        <div class="btrack"><div class="bfill" style="width:88.3%" tabindex="0" data-tip="Magyar férfiak becsült bevitele: 15,9 g só/nap"></div><div class="thresh" style="left:27.8%"></div></div>
+        <span class="val">15,9</span>
+      </div>
+
+      <div class="axis">
+        <div class="ticks">
+          <span class="tick" style="left:0">0</span>
+          <span class="tick" style="left:27.8%">5</span>
+          <span class="tick" style="left:55.6%">10</span>
+          <span class="tick" style="left:83.3%">15 g</span>
+        </div>
+      </div>
+      <div class="axis" style="margin-top:0"><div class="axis-note">- - - WHO felső határ (5 g só / 2 g nátrium)</div></div>
+    </figure>
+
+    <div class="note risk">
+      <h4>A számtani probléma</h4>
+      <p>Aki már eleve a magyar átlag közelében van, annak a reggeli teáskanál nem „pótlás”, hanem a napi bevitel <strong>további 35–50%-os megemelése</strong>. Ha valaki mégis így kezdi a napot, azt a mennyiséget le kell vonni a nap hátralévő részéből — és akkor a gyakorlati kérdés már nem az, hogy iszik-e sós vizet, hanem hogy mit hagy ki helyette a kenyérből, a felvágottból és a levesből.</p>
+    </div>
+  </section>
+
+  <!-- ============ 4 ============ -->
+  <section id="javallat">
+    <div class="h2row"><span class="h2num">04</span><h2>Amikor a sós víz gyógyszer</h2></div>
+    <p class="sub">Olyan klinikai helyzetek, ahol a nátrium- és folyadékterhelés bizonyított, irányelvekben rögzített beavatkozás.</p>
+
+    <div class="cols">
+      <div class="panel">
+        <h4>Hasmenéses kiszáradás</h4>
+        <ul>
+          <li><strong>ORS, nem sós víz.</strong> A WHO alacsony ozmolaritású oldata (75 mmol/l Na + 75 mmol/l glükóz) a glükóz-nátrium kotranszportot használja ki.</li>
+          <li>A glükóz nélküli sóoldat ebben a helyzetben lényegesen kevésbé hatékony.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h4>POTS és vazovagális syncope</h4>
+        <ul>
+          <li>A 2015-ös HRS konszenzus <strong>2–3 l folyadékot és 10–12 g sót</strong> ajánl naponta feltételezett hipovolémiánál.</li>
+          <li>A 2022-es CMAJ-ajánlás <strong>3–5 g nátriumot</strong> nevez meg; a konszenzusos sópótlás 6–10 g só/nap.</li>
+          <li>500 ml hideg víz gyors elfogyasztása állás előtt 30–60 percre mérsékli a tachikardiát.<sup><a href="#r6">[6]</a></sup></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h4>Hőterhelés és tartós sport</h4>
+        <ul>
+          <li>2–3 óránál hosszabb, bőséges izzadással járó terhelésnél a nátriumpótlás indokolt — de <strong>izotóniás</strong> formában, terhelés közben, nem reggel éhgyomorra.</li>
+          <li>A cél nem a többlet, hanem a veszteség pótlása.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h4>Mineralokortikoid-hiány</h4>
+        <ul>
+          <li>Addison-kórban, sóvesztő állapotokban, cisztás fibrózisban a megemelt sóbevitel szakorvosi terápia része.</li>
+          <li>Itt a mennyiséget laborérték (Na, K, renin) vezérli, nem közösségi médiából vett recept.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note">
+      <h4>Közös nevező</h4>
+      <p>Minden fenti javallatban van egy azonosított <strong>volumen- vagy sóhiány</strong>, és van egy mérhető végpont — vérnyomás, pulzus állásban, testsúly, laborérték. A tünetmentes, egészséges felnőtt reggeli sós vize egyik feltételnek sem felel meg. A sópótlás biztonságosságáról és hatékonyságáról egyébként sincs adat olyan betegeknél, akiknél más okból sómegszorítás indokolt — ilyenkor a szakirodalom kifejezetten a kerülését javasolja.<sup><a href="#r6">[6]</a></sup></p>
+    </div>
+  </section>
+
+  <!-- ============ 5 ============ -->
+  <section id="kockazat">
+    <div class="h2row"><span class="h2num">05</span><h2>Kockázatok és ellenjavallatok</h2></div>
+    <p class="sub">Kinek jelent valódi veszélyt a rendszeres reggeli sóterhelés.</p>
+
+    <div class="cols">
+      <div class="panel">
+        <h4>Abszolút kerülendő</h4>
+        <ul>
+          <li><strong>Magasvérnyomás-betegség</strong>, különösen sóérzékeny formában</li>
+          <li><strong>Krónikus vesebetegség</strong> (CKD), csökkent GFR</li>
+          <li><strong>Szívelégtelenség</strong>, folyadékretencióval</li>
+          <li><strong>Májcirrózis</strong>, ascites</li>
+          <li><strong>Preeclampsia</strong>, terhességi hypertonia</li>
+          <li>Bármilyen okból elrendelt <strong>sószegény diéta</strong></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h4>Gyógyszer-interakciók</h4>
+        <ul>
+          <li><strong>Lítium:</strong> a nátriumbevitel ingadozása közvetlenül módosítja a lítiumszintet — a hirtelen sótöbblet vagy sómegvonás toxicitáshoz, illetve hatásvesztéshez vezethet.</li>
+          <li><strong>Diuretikumok, ACE-gátlók, ARB-k:</strong> a nátrium- és káliumháztartás eltolódik; káliumtartalmú sópótlóval együtt <strong>hyperkalaemia</strong> veszélye.</li>
+          <li><strong>SSRI, NSAID, tiazid:</strong> hyponatraemiára hajlamosít — bő folyadékbevitellel együtt fokozott figyelmet kíván.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h4>Akut szövődmények</h4>
+        <ul>
+          <li><strong>Hypernatraemia:</strong> tömény sóoldatnál a víz kiáramlik a sejtekből — gyengeség, zavartság, extrém szomjúság, súlyos esetben görcsroham.<sup><a href="#r7">[7]</a></sup></li>
+          <li><strong>Ozmotikus hasmenés</strong>, hányinger, görcs, kiszáradás.</li>
+          <li><strong>Gyomornyálkahártya-irritáció</strong> éhgyomorra, refluxra hajlamosoknál panaszfokozódás.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Ami helyette bizonyítottan használ: a sópótló</h3>
+    <div class="prose">
+      <p>A nátriumcsökkentés legnagyobb, keményvégpontos vizsgálata a <strong>SSaSS</strong> volt: 600 kínai faluban 20 995 résztvevő — stroke-on átesettek vagy 60 év felettiek kezeletlen hypertoniával — kapott hagyományos só helyett 75% NaCl / 25% KCl összetételű sópótlót. Öt év alatt a stroke 14%-kal, a súlyos kardiovaszkuláris események 13%-kal, a halálozás 12%-kal csökkent, a hyperkalaemia gyakoriságának növekedése nélkül (RR 1,04).<sup><a href="#r5">[5]</a></sup> Veseelégtelenségben és kálium-megtakarító gyógyszerek mellett a káliumtartalmú sópótló viszont külön mérlegelést kíván.</p>
+
+      <h3>A vita, amit érdemes ismerni</h3>
+      <p>A PURE vizsgálat J-alakú összefüggést talált: a legalacsonyabb nátriumürítésűeknél is emelkedett kockázatot mért. A módszertani kritika azonban súlyos — a spot vizeletminta és a Kawasaki-formula szisztematikusan torzít az alacsony bevitel tartományában, és a fordított okság (a beteg ember kevesebbet eszik, így kevesebb sót is) sem kizárható; az alacsony nátriumbevitelű csoport átlagosan idősebb és betegebb volt.<sup><a href="#r9">[9]</a></sup> A populációs szintű sócsökkentés előnyét ez a vita nem írja felül — a hétköznapi gyakorlat szempontjából pedig érdektelen: Magyarországon senki nincs abban a tartományban, ahol a J-görbe bal szára egyáltalán kérdés lenne.</p>
+    </div>
+  </section>
+
+  <!-- ============ 6 ============ -->
+  <section id="vizbevitel">
+    <div class="h2row"><span class="h2num">06</span><h2>A napi vízivás</h2></div>
+    <p class="sub">Mennyi elég, mi bizonyított haszna, és hol kezdődik a túlzás.</p>
+
+    <div class="prose">
+      <p>Az <strong>EFSA</strong> referenciaértéke a teljes vízbevitelre napi <strong>2,0 liter nőknél és 2,5 liter férfiaknál</strong> — mérsékelt hőmérsékleten és közepes fizikai aktivitás mellett. Fontos, hogy ez minden forrást tartalmaz: ivóvizet, minden egyéb italt és az ételek víztartalmát is, amelyből tipikusan 20–30% jön ételből.<sup><a href="#r3">[3]</a></sup> Az italban mérhető rész tehát nagyjából 1,5–1,8 liter.</p>
+      <p>A „napi nyolc pohár” szabályt az amerikai Institute of Medicine már 2004-ben visszavonta, arra jutva, hogy egészséges felnőttnél a <strong>szomjúság megbízhatóan vezérli</strong> a vízszükségletet.<sup><a href="#r3">[3]</a></sup> Az EFSA maga is kimondja: a rendelkezésre álló tudományos bizonyíték nem elég ahhoz, hogy olyan küszöbértéket állapítsanak meg, amely megelőzne betegséget vagy csökkentené a krónikus betegségek kockázatát.</p>
+
+      <h3>Ahol a bőségesebb ivás mégis mérhető haszonnal jár</h3>
+      <ul class="clean">
+        <li><strong>Vesekő-recidíva.</strong> Borghi ötéves randomizált vizsgálatában a megemelt vízbevitel mellett a kiújulás 12,1% volt a szokásos ellátás 27%-ával szemben, és a kiújulásig eltelt idő 25-ről 38,7 hónapra nőtt. Az AUA és az EAU irányelve ez alapján javasol legalább <strong>2,5 l napi vizeletmennyiséget</strong>.<sup><a href="#r10">[10]</a></sup> Árnyalja a képet, hogy a legnagyobb ilyen célú viselkedésváltoztató vizsgálat ugyan megemelte a vizeletmennyiséget, a kiújulást két év alatt statisztikailag mégsem csökkentette szignifikánsan.<sup><a href="#r11">[11]</a></sup></li>
+        <li><strong>Hidratáltság és öregedés.</strong> Az NIH 11 255 felnőtt 30 éves követésén alapuló elemzésében a normáltartomány felső részébe eső szérum nátrium gyorsabb biológiai öregedéssel, több krónikus betegséggel és magasabb korai halálozással járt együtt.<sup><a href="#r4">[4]</a></sup> Ez megfigyeléses összefüggés: irányt mutat, ok-okozatot nem bizonyít.</li>
+      </ul>
+
+      <h3>A túlivás mint valódi kockázat</h3>
+      <p>A <strong>terheléshez társuló hyponatraemia</strong> (EAH) akkor áll fenn, ha a szérum nátrium 135 mmol/l alá esik; a tünetek a terhelés után akár 24 órával is jelentkezhetnek. Két fő oka a szomjúságon túli túlivás és a nem-ozmotikus vazopresszin-elválasztás, amely visszatartja a vizet. Fokozottan veszélyeztetettek a nők, az alacsony testtömegűek és a nem-szteroid gyulladáscsökkentőt szedők. Korai jelei a hányinger, hányás, szédülés, fejfájás és a testsúly <em>emelkedése</em>; kezelés nélkül agyödémáig, zavartságig, görcsrohamig súlyosbodhat. A Wilderness Medical Society és a szakirodalom megelőzési üzenete egyetlen mondat: <strong>a szomjúság szerinti ivás az EAH esetek gyakorlatilag mindegyikét megelőzi.</strong><sup><a href="#r8">[8]</a></sup></p>
+
+      <div class="note risk">
+        <h4>Praktikus felső korlát</h4>
+        <p>Az egészséges vese maximális vízkiválasztó kapacitása nagyjából <strong>0,8–1,0 liter óránként</strong>. Bármilyen ivási séma, amely ezt tartósan meghaladja — legyen sós vagy sótlan —, hígulásos hyponatraemia felé visz. Ha valaki kényszeresen „teljesíti a napi litert”, annak nagyobb a kockázata, mint amennyi a haszna.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 7 ============ -->
+  <section id="protokoll">
+    <div class="h2row"><span class="h2num">07</span><h2>Gyakorlati protokoll</h2></div>
+    <p class="sub">Ha a szokás mellett dönt valaki, így a legkisebb a kockázat — és így derül ki, hogy használ-e egyáltalán.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div>
+          <h4>Először a víz, só nélkül</h4>
+          <p>Ébredés után 300–500 ml langyos vagy hideg víz pótolja az éjszakai insensibilis vesztést. A szubjektív élénkülés túlnyomó része ettől van, nem a sótól — érdemes legalább két hétig így próbálni, mielőtt bármit hozzáadnánk.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div>
+          <h4>Zárja ki az ellenjavallatokat</h4>
+          <p>Ha a vérnyomás tartósan 130/80 Hgmm felett van, ha vese-, szív- vagy májbetegség áll fenn, ha valaki lítiumot, diuretikumot, ACE-gátlót vagy ARB-t szed, illetve terhesség alatt: a reggeli sós víz nem opció. Ezt a pontot kezelőorvossal kell lezárni, nem önállóan.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div>
+          <h4>Ha mégis só: a legkisebb értelmes adag</h4>
+          <p>Legfeljebb <strong>1/8–1/4 teáskanál</strong> (kb. 0,6–1,5 g só = 240–600 mg nátrium) 300–500 ml vízben, jól feloldva — és ezt le kell vonni a napi keretből. A töményebb oldat és a „flush”-protokoll nem kisebb, hanem más nagyságrendű kockázat.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div>
+          <h4>Mérjen, ne érezzen</h4>
+          <p>Reggeli vérnyomás ülve, nyugalomban, hét napon át — és ugyanígy négy hét múlva; a két hetes átlagot hasonlítsa össze. Emellett heti testsúly és a vizelet színe (a halvány szalmasárga a cél; a tiszta, víztiszta vizelet már túlivásra utal).</p>
+        </div>
+      </div>
+      <div class="step">
+        <div>
+          <h4>Hagyja abba, ha</h4>
+          <p>a vérnyomás átlaga emelkedik, boka- vagy arcduzzanat jelenik meg, fejfájás, hányinger, szapora szívverés vagy szokatlan szomjúság lép fel. Rendszeres sózott víz mellett érdemes fél évente szérum nátriumot, káliumot és kreatinint ellenőrizni.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div>
+          <h4>A napi vízre: szomjúság plusz két horgony</h4>
+          <p>Egészséges felnőttnél a szomjúság elég. Két támpont segít: egy pohár víz minden étkezéshez, és plusz folyadék meleg időben, sportnál, lázas állapotban. A liter-számolás nem cél, csak eszköz — a vizelet színe pontosabb visszajelzés.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="note good">
+      <h4>A beszámoló egymondatos tanulsága</h4>
+      <p>A reggeli pohár víznek van élettani értelme; a benne feloldott sónak egészséges emberben nincs bizonyított haszna, viszont valós kockázata van — a sóból Magyarországon nem hiány van, hanem több mint kétszeres többlet.</p>
+    </div>
+  </section>
+
+  <!-- ============ 8 ============ -->
+  <section id="forrasok">
+    <div class="h2row"><span class="h2num">08</span><h2>Források</h2></div>
+    <p class="sub">Irányelvek, randomizált vizsgálatok és szakmai összefoglalók, amelyekre a beszámoló épül.</p>
+
+    <ol class="refs">
+      <li id="r1"><a href="https://health.clevelandclinic.org/sole-water">Sole Water (Himalayan Salt Water)</a><span class="src">Cleveland Clinic — a „sole water” állításai és a himalájasó ásványianyag-tartalma</span></li>
+      <li id="r2"><a href="https://www.ncbi.nlm.nih.gov/books/NBK133292/">Guideline: Sodium Intake for Adults and Children — Recommendations</a><span class="src">WHO / NCBI Bookshelf — &lt;2 g nátrium/nap erős ajánlás; globális átlagbevitel</span></li>
+      <li id="r3"><a href="https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2010.1459">Scientific Opinion on Dietary Reference Values for water</a><span class="src">EFSA Journal 2010;8(3):1459 — teljes vízbevitel 2,0 l (nő) / 2,5 l (férfi)</span></li>
+      <li id="r4"><a href="https://www.thelancet.com/journals/ebiom/article/PIIS2352-3964(22)00586-2/fulltext">Middle-age high normal serum sodium as a risk factor for accelerated biological aging, chronic diseases, and premature mortality</a><span class="src">Dmitrieva et al., eBioMedicine 2023 — 11 255 felnőtt, 30 éves követés</span></li>
+      <li id="r5"><a href="https://www.nejm.org/doi/full/10.1056/NEJMoa2105675">Effect of Salt Substitution on Cardiovascular Events and Death (SSaSS)</a><span class="src">New England Journal of Medicine 2021 — 20 995 résztvevő, stroke −14%</span></li>
+      <li id="r6"><a href="https://www.autonomicneuroscience.com/article/S1566-0702(21)00136-3/fulltext">Salt supplementation in the management of orthostatic intolerance: vasovagal syncope and POTS</a><span class="src">Autonomic Neuroscience 2022;237:102906 — sópótlási konszenzus, vízbolus pressor hatás</span></li>
+      <li id="r7"><a href="https://ubiehealth.com/doctors-note/salt-water-flush-coloncleanse-hypernatremia-alert753q1">Why the „Master Cleanse” Salt Water Flush Risks Hypernatremia</a><span class="src">Orvosi állásfoglalás a sós vizes „bélátmosás” szövődményeiről</span></li>
+      <li id="r8"><a href="https://www.aafp.org/afp/2021/0215/p252">Exercise-Associated Hyponatremia: Updated Guidelines from the Wilderness Medical Society</a><span class="src">American Family Physician 2021 — EAH definíció, rizikócsoportok, megelőzés</span></li>
+      <li id="r9"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10584076/">Less sodium and more potassium to reduce cardiovascular risk — and the PURE study</a><span class="src">A J-görbe-hipotézis módszertani kritikája (spot vizelet, Kawasaki-formula, fordított okság)</span></li>
+      <li id="r10"><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10838424/">Borghi et al.: Urinary volume, water and recurrences in idiopathic calcium nephrolithiasis — 5-year randomized study</a><span class="src">J Urol 1996;155:839–43, szeminális közlemény-áttekintéssel; AUA/EAU 2,5 l/nap ajánlás</span></li>
+      <li id="r11"><a href="https://www.medscape.com/viewarticle/hydration-intervention-falls-short-preventing-kidney-stone-2026a100099g">Hydration Intervention Falls Short in Preventing Kidney Stone Recurrence</a><span class="src">A legnagyobb hidratációs viselkedésváltoztató RCT eredménye</span></li>
+      <li id="r12"><a href="https://www.nih.gov/news-events/news-releases/good-hydration-linked-healthy-aging">Good hydration linked to healthy aging</a><span class="src">National Institutes of Health / NHLBI közlemény</span></li>
+      <li id="r13"><a href="https://www.frontiersin.org/journals/medicine/articles/10.3389/fmed.2017.00021/full">Exercise-Associated Hyponatremia: 2017 Update</a><span class="src">Frontiers in Medicine — patomechanizmus, nem-ozmotikus AVP-elválasztás</span></li>
+      <li id="r14"><a href="https://www.webbeteg.hu/cikkek/fogyokura/15441/napi_ot_gramm_so">Tévhitek és tények a sóbevitelről — napi 5 gramm az ajánlott?</a><span class="src">Magyar sóbeviteli adatok az OTÁP-felmérésekből (2014: férfi 15,9 g, nő 11,2 g). Másodlagos forrás — az eredeti közlés az NNK/OÉTI jelentése.</span></li>
+    </ol>
+
+    <div class="disclaimer">
+      <strong>Fontos.</strong> Ez a beszámoló szakirodalmi áttekintés, nem orvosi tanács, és nem helyettesíti a kezelőorvossal folytatott konzultációt. A közölt mennyiségek irányelvekből és publikált vizsgálatokból származnak, egyéni alkalmazásuk orvosi mérlegelést kíván — különösen magasvérnyomás-betegség, vese-, szív- vagy májbetegség, terhesség, illetve gyógyszeres kezelés esetén. A hivatkozott források a beszámoló készítésekor elérhető, 2026 szeptemberéig publikált irodalmat tükrözik; a magyar sóbeviteli adat másodlagos forrásból származik, és a legfrissebb OTÁP-jelentéssel érdemes ellenőrizni.
+    </div>
+  </section>
+
+</div>
