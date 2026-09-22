@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>A 39. hét időjárása</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    color-scheme: light;
+    --ground:#EAF0F6;
+    --card:#FFFFFF;
+    --card-sub:#F3F6FA;
+    --ink:#0F1B2D;
+    --ink-2:#44536A;
+    --muted:#6B7B91;
+    --hair:#DCE4ED;
+    --axis:#BCC8D6;
+    --cold:#2a78d6;
+    --warm:#eb6834;
+    --cold-wash:rgba(42,120,214,.14);
+    --warm-wash:rgba(235,104,52,.14);
+    --cloud:#B9C7D9;
+    --cloud-dark:#8494AB;
+    --sunc:#F5A524;
+    --hero-a:#0D2242;
+    --hero-b:#173F75;
+    --hero-ink:#F3F7FC;
+    --hero-ink-2:#B7C8DE;
+    --hero-line:rgba(255,255,255,.14);
+    --lv0:#EEF2F6; --lv0-ink:#6B7B91;
+    --lv1:#FCEFCB; --lv1-ink:#5A4104;
+    --lv2:#F7CD70; --lv2-ink:#3F2C00;
+    --lv3:#EFA11B; --lv3-ink:#2A1C00;
+    --t-front:#E9E6FA; --c-front:#4638B0;
+    --t-shower:#E1EAF6; --c-shower:#27558F;
+    --t-cool:#DDF0FA; --c-cool:#0F6894;
+    --t-crisp:#DCF3EB; --c-crisp:#0F6F55;
+    --t-warm:#FCEAD3; --c-warm:#9A4C07;
+    --shadow:0 1px 2px rgba(15,27,45,.05), 0 10px 28px rgba(15,27,45,.07);
+    --radius:20px;
+    --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --f-body:"Figtree", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    --f-mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme: dark;
+      --ground:#0A111C;
+      --card:#111B29;
+      --card-sub:#172334;
+      --ink:#E8EFF8;
+      --ink-2:#A9B8CC;
+      --muted:#8394AA;
+      --hair:#223247;
+      --axis:#34465E;
+      --cold:#3987e5;
+      --warm:#d95926;
+      --cold-wash:rgba(57,135,229,.22);
+      --warm-wash:rgba(217,89,38,.22);
+      --cloud:#7185A1;
+      --cloud-dark:#56688A;
+      --hero-a:#0A1A31;
+      --hero-b:#12325E;
+      --lv0:#172334; --lv0-ink:#8394AA;
+      --lv1:#3A3118; --lv1-ink:#EFE2C2;
+      --lv2:#7A5A15; --lv2-ink:#FFF0CC;
+      --lv3:#E7A626; --lv3-ink:#1B1300;
+      --t-front:#1E1B3C; --c-front:#B1A8F7;
+      --t-shower:#14243A; --c-shower:#93BAEC;
+      --t-cool:#0E283A; --c-cool:#86CAEE;
+      --t-crisp:#0D2A24; --c-crisp:#76D6B7;
+      --t-warm:#31220E; --c-warm:#F2B470;
+      --shadow:0 1px 2px rgba(0,0,0,.3);
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme: dark;
+    --ground:#0A111C;
+    --card:#111B29;
+    --card-sub:#172334;
+    --ink:#E8EFF8;
+    --ink-2:#A9B8CC;
+    --muted:#8394AA;
+    --hair:#223247;
+    --axis:#34465E;
+    --cold:#3987e5;
+    --warm:#d95926;
+    --cold-wash:rgba(57,135,229,.22);
+    --warm-wash:rgba(217,89,38,.22);
+    --cloud:#7185A1;
+    --cloud-dark:#56688A;
+    --hero-a:#0A1A31;
+    --hero-b:#12325E;
+    --lv0:#172334; --lv0-ink:#8394AA;
+    --lv1:#3A3118; --lv1-ink:#EFE2C2;
+    --lv2:#7A5A15; --lv2-ink:#FFF0CC;
+    --lv3:#E7A626; --lv3-ink:#1B1300;
+    --t-front:#1E1B3C; --c-front:#B1A8F7;
+    --t-shower:#14243A; --c-shower:#93BAEC;
+    --t-cool:#0E283A; --c-cool:#86CAEE;
+    --t-crisp:#0D2A24; --c-crisp:#76D6B7;
+    --t-warm:#31220E; --c-warm:#F2B470;
+    --shadow:0 1px 2px rgba(0,0,0,.3);
+  }
+
+  *{box-sizing:border-box;}
+  [hidden]{display:none !important;}
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--ink);
+    font-family:var(--f-body);
+    font-size:15px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration-color:var(--axis);text-underline-offset:3px;}
+  a:hover{text-decoration-color:currentColor;}
+  a:focus-visible, button:focus-visible, summary:focus-visible{outline:2px solid var(--cold);outline-offset:2px;border-radius:6px;}
+
+  .page{
+    max-width:1180px;
+    margin:0 auto;
+    padding-inline:clamp(16px, 3vw, 32px);
+    padding-block:24px 56px;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+  }
+
+  h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-.01em;}
+  h2{font-size:1.3rem;font-weight:800;}
+  h3{font-size:1.02rem;font-weight:600;}
+  p{margin:0;}
+  .eyebrow{
+    font-size:.74rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+  }
+  .num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    border-radius:26px;
+    padding:clamp(22px, 4vw, 40px);
+    color:var(--hero-ink);
+    background:
+      radial-gradient(120% 90% at 100% 0%, rgba(240,140,70,.30) 0%, rgba(240,140,70,0) 55%),
+      radial-gradient(90% 80% at 0% 100%, rgba(80,160,245,.28) 0%, rgba(80,160,245,0) 60%),
+      linear-gradient(140deg, var(--hero-a), var(--hero-b));
+    display:grid;
+    grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
+    gap:28px;
+    align-items:center;
+    overflow:hidden;
+  }
+  @media (max-width: 860px){ .hero{grid-template-columns:1fr;} }
+  .hero .eyebrow{color:var(--hero-ink-2);}
+  .hero h1{
+    font-size:clamp(1.9rem, 4.2vw, 2.9rem);
+    font-weight:800;
+    line-height:1.02;
+    margin:10px 0 14px;
+  }
+  .hero h1 .cold{color:#8CC4FF;}
+  .hero h1 .warm{color:#FFB07A;}
+  .hero .dek{color:var(--hero-ink-2);font-size:1.02rem;max-width:58ch;}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;}
+  .meta span{
+    font-size:.8rem;padding:5px 11px;border-radius:999px;
+    background:rgba(255,255,255,.09);border:1px solid var(--hero-line);color:var(--hero-ink);
+  }
+  .arc{
+    background:rgba(255,255,255,.06);
+    border:1px solid var(--hero-line);
+    border-radius:18px;
+    padding:16px 16px 10px;
+    min-width:0;
+  }
+  .arc-head{display:flex;justify-content:space-between;gap:10px;font-size:.78rem;color:var(--hero-ink-2);}
+  .arc-head b{color:var(--hero-ink);font-weight:600;}
+  #heroArc{width:100%;height:170px;display:block;}
+
+  /* ---------- CARDS ---------- */
+  .card{
+    background:var(--card);
+    border-radius:var(--radius);
+    padding:clamp(18px, 2.4vw, 26px);
+    box-shadow:var(--shadow);
+    border:1px solid var(--hair);
+    min-width:0;
+  }
+  .card-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:10px 20px;margin-bottom:16px;}
+  .card-head p{color:var(--ink-2);font-size:.92rem;max-width:70ch;margin-top:4px;}
+  .grid-2{display:grid;grid-template-columns:repeat(2, minmax(0,1fr));gap:20px;}
+  @media (max-width: 900px){ .grid-2{grid-template-columns:1fr;} }
+
+  /* ---------- KPI ---------- */
+  .kpis{display:grid;grid-template-columns:repeat(4, minmax(0,1fr));gap:14px;}
+  @media (max-width: 980px){ .kpis{grid-template-columns:repeat(2, minmax(0,1fr));} }
+  @media (max-width: 460px){ .kpis{grid-template-columns:1fr;} }
+  .kpi{
+    background:var(--card);border:1px solid var(--hair);border-radius:18px;padding:16px 18px;
+    display:flex;flex-direction:column;gap:4px;box-shadow:var(--shadow);min-width:0;
+  }
+  .kpi .label{font-size:.82rem;color:var(--ink-2);font-weight:500;display:flex;align-items:center;gap:8px;}
+  .kpi .dot{width:10px;height:10px;border-radius:50%;flex:none;}
+  .kpi .value{font-size:2rem;font-weight:700;letter-spacing:-.02em;line-height:1.15;}
+  .kpi .value small{font-size:1rem;font-weight:600;color:var(--ink-2);margin-left:2px;}
+  .kpi .sub{font-size:.82rem;color:var(--muted);}
+
+  /* ---------- CHART ---------- */
+  .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.82rem;color:var(--ink-2);}
+  .legend span{display:inline-flex;align-items:center;gap:7px;}
+  .key-band{width:22px;height:10px;border-radius:3px;display:inline-block;position:relative;}
+  .key-band::after{content:"";position:absolute;left:0;right:0;top:4px;height:2px;border-radius:2px;background:currentColor;}
+  .key-max{background:var(--warm-wash);color:var(--warm);}
+  .key-min{background:var(--cold-wash);color:var(--cold);}
+  .key-norm{width:22px;height:0;border-top:1px solid var(--muted);display:inline-block;}
+  .chart{position:relative;width:100%;}
+  .chart svg{display:block;width:100%;overflow:visible;}
+  .chart text{font-family:var(--f-body);}
+  .tick{font-family:var(--f-mono) !important;font-size:11px;fill:var(--muted);font-variant-numeric:tabular-nums;}
+  .xlab{font-size:12px;fill:var(--ink-2);font-weight:600;}
+  .xsub{font-size:10.5px;fill:var(--muted);}
+  .dlabel{font-size:12px;font-weight:700;fill:var(--ink);}
+  .dlabel-2{font-size:11px;fill:var(--ink-2);}
+  .zone{font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;fill:var(--muted);}
+  .tip{
+    position:absolute;pointer-events:none;z-index:5;
+    background:var(--card);color:var(--ink);border:1px solid var(--hair);
+    box-shadow:0 8px 24px rgba(10,20,35,.18);
+    border-radius:12px;padding:10px 12px;font-size:.82rem;line-height:1.45;min-width:180px;max-width:240px;
+  }
+  .tip b{font-weight:700;}
+  .tip .row{display:flex;align-items:center;gap:8px;}
+  .tip .sw{width:10px;height:10px;border-radius:3px;flex:none;}
+  .tip .note{color:var(--ink-2);margin-top:4px;font-size:.78rem;}
+
+  details.table-view{margin-top:14px;border-top:1px solid var(--hair);padding-top:10px;}
+  details.table-view summary{cursor:pointer;font-size:.86rem;color:var(--ink-2);font-weight:600;}
+  .tbl-wrap{overflow-x:auto;margin-top:10px;}
+  table{border-collapse:collapse;width:100%;font-size:.86rem;}
+  th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--hair);vertical-align:top;}
+  th{font-weight:600;color:var(--ink-2);font-size:.78rem;letter-spacing:.03em;}
+  td.n{font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap;}
+
+  /* ---------- DAY CARDS ---------- */
+  .days{display:grid;grid-template-columns:repeat(4, minmax(0,1fr));gap:14px;}
+  @media (max-width: 1020px){ .days{grid-template-columns:repeat(2, minmax(0,1fr));} }
+  @media (max-width: 540px){ .days{grid-template-columns:1fr;} }
+  .day{
+    --tint:var(--card-sub); --tint-ink:var(--ink-2);
+    background:var(--card);
+    border:1px solid var(--hair);
+    border-radius:18px;
+    padding:16px 16px 14px;
+    display:flex;flex-direction:column;gap:10px;
+    box-shadow:var(--shadow);
+    min-width:0;
+  }
+  .day.rg-front{--tint:var(--t-front);--tint-ink:var(--c-front);}
+  .day.rg-shower{--tint:var(--t-shower);--tint-ink:var(--c-shower);}
+  .day.rg-cool{--tint:var(--t-cool);--tint-ink:var(--c-cool);}
+  .day.rg-crisp{--tint:var(--t-crisp);--tint-ink:var(--c-crisp);}
+  .day.rg-warm{--tint:var(--t-warm);--tint-ink:var(--c-warm);}
+  .day-head{
+    background:var(--tint);
+    margin:-16px -16px 0;
+    padding:16px 16px 14px;
+    border-radius:17px 17px 0 0;
+    display:flex;flex-direction:column;gap:10px;
+  }
+  .day-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+  .day-name{font-family:var(--f-display);font-weight:800;font-size:1.2rem;line-height:1.1;}
+  .day-date{font-size:.8rem;color:var(--ink-2);}
+  .day-ico{width:48px;height:48px;flex:none;}
+  .chip{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+    padding:3px 9px;border-radius:999px;
+    background:var(--card);color:var(--tint-ink);border:1px solid color-mix(in srgb, var(--tint-ink) 30%, transparent);
+    align-self:flex-start;
+  }
+  .status-tag{font-size:.7rem;font-weight:600;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;}
+  .status-tag.today{color:var(--cold);}
+  .temps{display:flex;align-items:baseline;gap:14px;}
+  .temps .hi{font-size:1.55rem;font-weight:700;letter-spacing:-.02em;}
+  .temps .lo{font-size:1rem;font-weight:600;color:var(--ink-2);}
+  .temps .cap{display:block;font-size:.68rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+  .day p{font-size:.88rem;color:var(--ink-2);}
+  .day .facts{list-style:none;margin:auto 0 0;padding:10px 0 0;border-top:1px solid var(--hair);display:flex;flex-direction:column;gap:5px;font-size:.8rem;color:var(--ink-2);}
+  .day .facts li{display:grid;grid-template-columns:16px 1fr;gap:6px;align-items:start;}
+  .day .facts svg{width:14px;height:14px;margin-top:3px;}
+
+  /* ---------- HAZARD MATRIX ---------- */
+  .matrix{min-width:720px;}
+  .matrix th, .matrix td{border-bottom:none;padding:3px;text-align:center;}
+  .matrix thead th{font-size:.78rem;color:var(--ink-2);padding-bottom:8px;}
+  .matrix thead th small{display:block;font-weight:400;color:var(--muted);font-size:.72rem;letter-spacing:0;}
+  .matrix thead th.today{color:var(--cold);}
+  .matrix tbody th{text-align:left;font-size:.86rem;color:var(--ink);font-weight:600;padding-right:12px;white-space:nowrap;letter-spacing:0;}
+  .cell{
+    border-radius:9px;padding:9px 4px;font-size:.74rem;font-weight:600;line-height:1.2;
+    display:flex;align-items:center;justify-content:center;gap:4px;min-height:38px;cursor:default;
+  }
+  .cell.l0{background:var(--lv0);color:var(--lv0-ink);font-weight:500;}
+  .cell.l1{background:var(--lv1);color:var(--lv1-ink);}
+  .cell.l2{background:var(--lv2);color:var(--lv2-ink);}
+  .cell.l3{background:var(--lv3);color:var(--lv3-ink);}
+  .cell svg{width:12px;height:12px;flex:none;}
+  .scale{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:.8rem;color:var(--ink-2);margin-top:14px;align-items:center;}
+  .scale i{display:inline-block;width:18px;height:12px;border-radius:4px;vertical-align:-2px;margin-right:6px;}
+
+  /* ---------- REGIONS ---------- */
+  .regions{display:grid;grid-template-columns:repeat(4, minmax(0,1fr));gap:14px;}
+  @media (max-width: 1020px){ .regions{grid-template-columns:repeat(2, minmax(0,1fr));} }
+  @media (max-width: 540px){ .regions{grid-template-columns:1fr;} }
+  .region{background:var(--card-sub);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0;}
+  .region .rtop{display:flex;align-items:center;gap:10px;}
+  .region .badge{
+    width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:none;
+    font-family:var(--f-display);font-weight:800;font-size:.8rem;color:#fff;
+  }
+  .region .cities{font-size:.78rem;color:var(--muted);}
+  .region ul{margin:0;padding-left:18px;font-size:.86rem;color:var(--ink-2);display:flex;flex-direction:column;gap:4px;}
+
+  /* ---------- TIMELINE (past week / outlook) ---------- */
+  .tl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0;}
+  .tl li{display:grid;grid-template-columns:92px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--hair);}
+  .tl li:last-child{border-bottom:none;}
+  .tl .when{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);padding-top:2px;}
+  .tl .what{font-size:.9rem;color:var(--ink-2);}
+  .tl .what b{color:var(--ink);font-weight:600;}
+  .conf{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--card-sub);color:var(--ink-2);}
+  .conf i{width:8px;height:8px;border-radius:50%;display:inline-block;}
+  .callout{
+    margin-top:14px;padding:14px 16px;border-radius:14px;background:var(--t-warm);color:var(--ink);font-size:.9rem;
+  }
+  .callout b{color:var(--c-warm);}
+
+  /* ---------- SUN & MOON ---------- */
+  .sunfacts{display:grid;grid-template-columns:repeat(3, minmax(0,1fr));gap:10px;margin-top:14px;}
+  @media (max-width: 460px){ .sunfacts{grid-template-columns:1fr;} }
+  .sunfact{background:var(--card-sub);border-radius:14px;padding:12px;}
+  .sunfact .k{font-size:.74rem;color:var(--muted);font-weight:600;letter-spacing:.04em;text-transform:uppercase;}
+  .sunfact .v{font-size:1.15rem;font-weight:700;}
+  .sunfact .s{font-size:.78rem;color:var(--ink-2);}
+
+  /* ---------- ADVICE ---------- */
+  .advice{display:grid;grid-template-columns:1fr;gap:10px;}
+  .adv{display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:start;padding:12px;border-radius:14px;background:var(--card-sub);}
+  .adv .ai{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;}
+  .adv .ai svg{width:22px;height:22px;}
+  .adv h3{font-size:.95rem;margin-bottom:2px;}
+  .adv p{font-size:.86rem;color:var(--ink-2);}
+
+  /* ---------- AGREEMENT ---------- */
+  .agree{display:grid;grid-template-columns:repeat(4, minmax(0,1fr));gap:10px;margin-bottom:16px;}
+  @media (max-width: 900px){ .agree{grid-template-columns:repeat(2, minmax(0,1fr));} }
+  @media (max-width: 460px){ .agree{grid-template-columns:1fr;} }
+  .ag{border-radius:14px;padding:12px 14px;background:var(--card-sub);display:flex;flex-direction:column;gap:6px;}
+  .ag .t{font-size:.86rem;font-weight:600;}
+  .ag .v{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--ink-2);}
+  .ag .v svg{width:14px;height:14px;flex:none;}
+  .src-table td:first-child{font-weight:600;color:var(--ink);white-space:nowrap;}
+  .src-table td{color:var(--ink-2);}
+  .src-table .kind{display:block;font-weight:400;color:var(--muted);font-size:.76rem;}
+
+  /* ---------- FOOTER ---------- */
+  footer.card{font-size:.84rem;color:var(--ink-2);}
+  footer h2{font-size:1.05rem;margin-bottom:8px;}
+  .srcs{columns:2 300px;column-gap:28px;padding-left:18px;margin:8px 0 0;}
+  .srcs li{margin-bottom:5px;break-inside:avoid;}
+  .method{margin-top:14px;padding-top:12px;border-top:1px solid var(--hair);color:var(--muted);font-size:.8rem;}
+
+  @media (prefers-reduced-motion: no-preference){
+    .day, .kpi, .card{animation:rise .5s ease both;}
+    @keyframes rise{from{transform:translateY(6px);}to{transform:none;}}
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-sun" viewBox="0 0 32 32">
+      <circle cx="16" cy="16" r="6" style="fill:var(--sunc)"/>
+      <path d="M16 3v4M16 25v4M3 16h4M25 16h4M6.8 6.8l2.8 2.8M22.4 22.4l2.8 2.8M6.8 25.2l2.8-2.8M22.4 9.6l2.8-2.8" style="stroke:var(--sunc)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+    </symbol>
+    <symbol id="i-partly" viewBox="0 0 32 32">
+      <circle cx="12" cy="11" r="5" style="fill:var(--sunc)"/>
+      <path d="M12 2.5v2.5M3.5 11H6M5.9 4.9l1.8 1.8M18.1 4.9l-1.8 1.8" style="stroke:var(--sunc)" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <path d="M11 27h13a5.5 5.5 0 0 0 .5-10.97A7.5 7.5 0 0 0 10.2 17.3 4.9 4.9 0 0 0 11 27z" style="fill:var(--cloud)"/>
+    </symbol>
+    <symbol id="i-shower" viewBox="0 0 32 32">
+      <circle cx="11" cy="9" r="4.5" style="fill:var(--sunc)"/>
+      <path d="M9 22h14a5.5 5.5 0 0 0 .5-10.97A7.5 7.5 0 0 0 8.2 12.3 4.9 4.9 0 0 0 9 22z" style="fill:var(--cloud)"/>
+      <path d="M12 25l-1.2 3M17 25l-1.2 3M22 25l-1.2 3" style="stroke:var(--cold)" stroke-width="2" stroke-linecap="round" fill="none"/>
+    </symbol>
+    <symbol id="i-storm" viewBox="0 0 32 32">
+      <path d="M8 20h15a6 6 0 0 0 .6-11.97A8 8 0 0 0 7.2 9.6 5.2 5.2 0 0 0 8 20z" style="fill:var(--cloud-dark)"/>
+      <path d="M17 17l-5 7h4l-2 6 7-9h-4.2l2.2-4z" style="fill:var(--sunc)"/>
+    </symbol>
+    <symbol id="i-wind" viewBox="0 0 24 24">
+      <path d="M3 9h11a3 3 0 1 0-3-3M3 15h15a3 3 0 1 1-3 3M3 12h8" style="stroke:currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+    </symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24">
+      <path d="M12 3l10 18H2L12 3z" style="fill:currentColor"/>
+      <path d="M12 10v5M12 17.6v.4" style="stroke:var(--lv3)" stroke-width="2.2" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-frost" viewBox="0 0 24 24">
+      <path d="M12 2v20M3.3 7l17.4 10M3.3 17L20.7 7M9 4l3 3 3-3M9 20l3-3 3 3" style="stroke:currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </symbol>
+    <symbol id="i-therm" viewBox="0 0 24 24">
+      <path d="M10 4a2 2 0 1 1 4 0v10.3a4 4 0 1 1-4 0V4z" style="stroke:currentColor" stroke-width="1.8" fill="none"/>
+      <circle cx="12" cy="17.5" r="1.8" style="fill:currentColor"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24">
+      <path d="M4 12.5l5 5L20 6.5" style="stroke:currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </symbol>
+    <symbol id="i-split" viewBox="0 0 24 24">
+      <path d="M12 3v18M5 8l-3 4 3 4M19 8l3 4-3 4" style="stroke:currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </symbol>
+    <symbol id="i-shirt" viewBox="0 0 24 24">
+      <path d="M8 3l-5 3 2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0z" style="stroke:currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>
+    </symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24">
+      <path d="M5 19C5 10 11 4 20 4c0 9-6 15-15 15zM5 19l8-8" style="stroke:currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </symbol>
+    <symbol id="i-car" viewBox="0 0 24 24">
+      <path d="M4 16V12l2-5h12l2 5v4M4 16h16M4 16v2M20 16v2" style="stroke:currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <circle cx="7.5" cy="13" r="1.2" style="fill:currentColor"/><circle cx="16.5" cy="13" r="1.2" style="fill:currentColor"/>
+    </symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24">
+      <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" style="stroke:currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>
+      <path d="M6 12h3l1.5-2 2 4 1.5-2H18" style="stroke:currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </symbol>
+  </defs>
+</svg>
+
+<main class="page">
+
+  <!-- ===== HERO ===== -->
+  <header class="hero">
+    <div>
+      <div class="eyebrow">Heti időjárás-beszámoló · Magyarország · 2026. szeptember 21–27. · 39. hét</div>
+      <h1>Hidegfrontból <span class="cold">csípős hajnalok</span>, majd <span class="warm">vénasszonyok nyara</span></h1>
+      <p class="dek">Hétfőn viharos széllel söpört át a hidegfront, kedden 16–21 fokra esett vissza a nappali csúcs, a hét közepén pedig 2–4 fokos hajnalok és talaj menti fagy jöhet. A hétvégén visszatér a napsütés, jövő hét elején egy európai hőkupola peremén ismét 25 fok fölé emelkedhet a hőmérséklet.</p>
+      <div class="meta">
+        <span>Kiadva: 2026. szept. 22., kedd</span>
+        <span>7 nap + kitekintés</span>
+        <span>5 meteorológiai platform összevetése</span>
+      </div>
+    </div>
+    <div class="arc" aria-label="A napi csúcshőmérséklet íve szeptember 19. és 28. között">
+      <div class="arc-head"><span><b>A hét íve</b> · napi csúcs, sávközép</span><span>szept. 19. → 28.</span></div>
+      <svg id="heroArc" role="img" aria-label="Csúcshőmérséklet: vasárnap 28,5 fok, kedden 18,5 fok, jövő hétfőn 24,5 fok (sávközepek)"></svg>
+    </div>
+  </header>
+
+  <!-- ===== KPI ===== -->
+  <section class="kpis" aria-label="A hét számokban">
+    <div class="kpi">
+      <div class="label"><span class="dot" style="background:var(--cold)"></span>Csúcshőmérséklet-zuhanás</div>
+      <div class="value">≈ −10<small>°C</small></div>
+      <div class="sub">vasárnap ~30 °C → kedd 16–21 °C</div>
+    </div>
+    <div class="kpi">
+      <div class="label"><span class="dot" style="background:#6FB7E9"></span>Leghidegebb hajnalok</div>
+      <div class="value">2–4<small>°C</small></div>
+      <div class="sub">kedd–szombat, fagyzugokban talaj menti fagy</div>
+    </div>
+    <div class="kpi">
+      <div class="label"><span class="dot" style="background:var(--lv3)"></span>Legerősebb széllökések</div>
+      <div class="value">60–80<small>km/h</small></div>
+      <div class="sub">hétfő, a front zivatarcelláiban</div>
+    </div>
+    <div class="kpi">
+      <div class="label"><span class="dot" style="background:var(--warm)"></span>Figyelmeztetett vármegyék</div>
+      <div class="value">10</div>
+      <div class="sub">kedd, elsőfokú zivatar-figyelmeztetés</div>
+    </div>
+  </section>
+
+  <!-- ===== TEMPERATURE CHART ===== -->
+  <section class="card" id="tempCard">
+    <div class="card-head">
+      <div>
+        <div class="eyebrow">Hőmérséklet · országos tartomány</div>
+        <h2>Tíz nap alatt nyárból őszbe, majd vissza</h2>
+        <p>A sávok a források által közölt országos minimum- és maximumtartományt mutatják, a vonal a sáv közepét. A vízszintes vonalak a sokéves budapesti átlagot jelölik szeptember utolsó dekádjára.</p>
+      </div>
+      <div class="legend" aria-hidden="true">
+        <span><i class="key-band key-max"></i>Napi csúcs</span>
+        <span><i class="key-band key-min"></i>Hajnali minimum</span>
+        <span><i class="key-norm"></i>Sokéves átlag</span>
+      </div>
+    </div>
+    <div class="chart" id="tempChart"></div>
+    <details class="table-view">
+      <summary>Adatok táblázatban</summary>
+      <div class="tbl-wrap"><table id="tempTable"></table></div>
+    </details>
+  </section>
+
+  <!-- ===== DAY CARDS ===== -->
+  <section aria-labelledby="daysTitle">
+    <div class="card-head" style="margin-bottom:12px">
+      <div>
+        <div class="eyebrow">Napról napra</div>
+        <h2 id="daysTitle">Hétfőtől a jövő hétfőig</h2>
+      </div>
+    </div>
+    <div class="days" id="days"></div>
+  </section>
+
+  <!-- ===== HAZARD MATRIX ===== -->
+  <section class="card">
+    <div class="card-head">
+      <div>
+        <div class="eyebrow">Veszélyek és kockázatok</div>
+        <h2>Mikor mire figyeljünk?</h2>
+        <p>A hét elejét a szél és a zivatarok uralják, a közepét a fagyveszély, a végét a meleg. A „figyelmeztetés” szint a HungaroMet által ténylegesen kiadott elsőfokú (sárga) jelzést jelenti; a többi szint a források szöveges előrejelzéséből képzett összesítés.</p>
+      </div>
+    </div>
+    <div class="tbl-wrap"><table class="matrix" id="matrix"></table></div>
+    <div class="scale" aria-hidden="true">
+      <span><i style="background:var(--lv0)"></i>nincs</span>
+      <span><i style="background:var(--lv1)"></i>enyhe</span>
+      <span><i style="background:var(--lv2)"></i>jelentős</span>
+      <span><i style="background:var(--lv3)"></i>figyelmeztetés (sárga)</span>
+    </div>
+  </section>
+
+  <!-- ===== REGIONS ===== -->
+  <section class="card">
+    <div class="card-head">
+      <div>
+        <div class="eyebrow">Tájegységek</div>
+        <h2>Így érinti a hét az ország egyes részeit</h2>
+      </div>
+    </div>
+    <div class="regions">
+      <article class="region">
+        <div class="rtop"><span class="badge" style="background:#4638B0">ÉK</span><div><h3>Észak- és Kelet-Magyarország</h3><div class="cities">Miskolc · Debrecen · Nyíregyháza · Eger</div></div></div>
+        <ul>
+          <li>Hétfőn itt volt a legaktívabb a front: zivatar, 1 cm-nél kisebb jég, 60–75 km/h-s lökések; sárga figyelmeztetés Borsod-Abaúj-Zemplén, Hajdú-Bihar és Szabolcs-Szatmár-Bereg vármegyére.</li>
+          <li>Kedden újabb zivatarok jégdarával; szerdán is lehet kevés helyen zápor.</li>
+          <li>Kedd hajnalban itt a leghidegebb: 4–10 °C.</li>
+        </ul>
+      </article>
+      <article class="region">
+        <div class="rtop"><span class="badge" style="background:#0F6894">NY</span><div><h3>Dunántúl és Balaton</h3><div class="cities">Győr · Veszprém · Zalaegerszeg · Hévíz · Pécs</div></div></div>
+        <ul>
+          <li>Hétfőn szélfigyelmeztetés Veszprém vármegyében.</li>
+          <li>Kedden erős, helyenként viharos északnyugati lökések, gyenge eső is előfordulhat.</li>
+          <li>Csütörtök délután nyugat felől felhősödés, elszórt zápor, zivatar.</li>
+          <li>A Balatonon hét elején kiemelten figyeljük a viharjelzést.</li>
+        </ul>
+      </article>
+      <article class="region">
+        <div class="rtop"><span class="badge" style="background:#27558F">KÖ</span><div><h3>Budapest és Közép-Magyarország</h3><div class="cities">Budapest · Pest · Komárom-Esztergom · Nógrád</div></div></div>
+        <ul>
+          <li>Hétfőn Budapesten ~24 °C-os csúcs, ~15 °C-os reggel, erős szél.</li>
+          <li>Kedden zivatar-figyelmeztetés Pest, Komárom-Esztergom és Nógrád vármegyére.</li>
+          <li>Szerdától hűvös reggelek, a hétvégén 20–25 °C körüli, napos délutánok.</li>
+        </ul>
+      </article>
+      <article class="region">
+        <div class="rtop"><span class="badge" style="background:#9A4C07">DA</span><div><h3>Alföld és Dél</h3><div class="cities">Szeged · Kecskemét · Szolnok · Békéscsaba</div></div></div>
+        <ul>
+          <li>Kedden zivatar-figyelmeztetés Békés, Csongrád-Csanád és Jász-Nagykun-Szolnok vármegyére.</li>
+          <li>A derült, szélcsendes síkvidéki fagyzugokban szerdától szombatig talaj menti fagy.</li>
+          <li>A hétvégén száraz, napos idő, jelentős napi hőingással.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PAST WEEK + OUTLOOK ===== -->
+  <div class="grid-2">
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <div class="eyebrow">Visszatekintés · szept. 14–20.</div>
+          <h2>Az előző hét: még nyár volt</h2>
+        </div>
+      </div>
+      <ol class="tl">
+        <li><span class="when">szept. 9.</span><span class="what"><b>Három melegrekord dőlt meg</b> az Időkép adatai szerint – a hónap eleji kánikula háttere.</span></li>
+        <li><span class="when">hónap közepe</span><span class="what">Több alkalommal <b>28–30 °C közeli</b> csúcsértékek.</span></li>
+        <li><span class="when">szept. 16.</span><span class="what"><b>Hullámzó front</b> osztotta ketté a Kárpát-medencét, csapadékkal az egyik oldalán.</span></li>
+        <li><span class="when">szept. 19.</span><span class="what">Napos szombat elszórt záporral, zivatarral; délután <b>28–29 °C</b>.</span></li>
+        <li><span class="when">szept. 20.</span><span class="what">Anticiklonális, napos, száraz vasárnap, sokfelé <b>30 °C közelében</b>; reggelek 8–15 °C.</span></li>
+        <li><span class="when">szept. 20–21.</span><span class="what">Vasárnap este, éjjel megérkezett a <b>hidegfront</b>, hétfő délre elhagyta az országot.</span></li>
+      </ol>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <div class="eyebrow">Kitekintés · szept. 28. – okt. 4.</div>
+          <h2>Hőkupola Európa fölött</h2>
+        </div>
+        <span class="conf"><i style="background:var(--lv2)"></i>Közepes bizonyosság</span>
+      </div>
+      <ol class="tl">
+        <li><span class="when">háttér</span><span class="what">Nagy kiterjedésű anticiklon délről szállít meleg levegőt; Európa nagy részén a hőmérséklet <b>10–14 fokkal</b> haladhatja meg a sokéves átlagot.</span></li>
+        <li><span class="when">Európa</span><span class="what">Közép-Európában a hétvégétől <b>27–30 °C</b>, az Ibériai-félszigeten <b>40 °C közeli</b> csúcsok.</span></li>
+        <li><span class="when">szept. 28.</span><span class="what">A HungaroMet <b>22–27 °C</b>-ot, a legmelegebb helyeken <b>28 °C</b>-ot jelez.</span></li>
+        <li><span class="when">okt. eleje</span><span class="what">Az Időkép szerint a meleg szeptember végéig tart, október első napjaitól <b>lassú csökkenés</b> jön, 25 °C körüli maximumokkal. A meleg a hónap elején Skandinávia felé tolódhat.</span></li>
+      </ol>
+      <div class="callout"><b>Eltérés a források között:</b> a HungaroMet hazai csúcsai (22–28 °C) visszafogottabbak, mint a hőkupoláról szóló, ECMWF-alapú elemzések 28–30 °C-os értékei. A pontos érték a jövő heti frissítésekben dől el.</div>
+    </section>
+  </div>
+
+  <!-- ===== SUN & MOON + ADVICE ===== -->
+  <div class="grid-2">
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <div class="eyebrow">Nap és Hold · Budapest</div>
+          <h2>Napéjegyenlőség a hét közepén</h2>
+          <p>A csillagászati ősz szeptember 23-án hajnalban kezdődik. A nappal és az éjszaka a légköri fénytörés miatt Budapesten valójában szeptember 26. körül lesz egyforma hosszú.</p>
+        </div>
+      </div>
+      <div class="chart" id="dayChart"></div>
+      <div class="sunfacts">
+        <div class="sunfact"><div class="k">Napkelte</div><div class="v num">06:30 → 06:38</div><div class="s">szept. 22. → 28.</div></div>
+        <div class="sunfact"><div class="k">Napnyugta</div><div class="v num">18:43 → 18:30</div><div class="s">naponta ~2 perccel korábban</div></div>
+        <div class="sunfact"><div class="k">Telihold</div><div class="v">szept. 26.</div><div class="s">szüreti telihold, derült égen</div></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <div class="eyebrow">Gyakorlati tanácsok</div>
+          <h2>Mit jelent ez a mindennapokban?</h2>
+        </div>
+      </div>
+      <div class="advice">
+        <div class="adv">
+          <div class="ai" style="background:var(--t-shower);color:var(--c-shower)"><svg><use href="#i-shirt"/></svg></div>
+          <div><h3>Réteges öltözet egész héten</h3><p>A hajnal és a délután között 15–20 fok is lehet a különbség, pénteken például 2–9 °C-ról 18–23 °C-ra melegszik a levegő.</p></div>
+        </div>
+        <div class="adv">
+          <div class="ai" style="background:var(--t-crisp);color:var(--c-crisp)"><svg><use href="#i-leaf"/></svg></div>
+          <div><h3>Kert és mezőgazdaság</h3><p>Szerdától szombatig takarjuk le vagy vigyük be a fagyérzékeny növényeket. A száraz, napos hétvége kedvez a szüretnek és a betakarításnak.</p></div>
+        </div>
+        <div class="adv">
+          <div class="ai" style="background:var(--t-front);color:var(--c-front)"><svg><use href="#i-car"/></svg></div>
+          <div><h3>Közlekedés és szabadtér</h3><p>Hétfőn és kedden a zivatarok környékén ne parkoljunk fák alá, a hirtelen lökések ágakat törhetnek. Balatoni vízre szállás előtt nézzük meg a viharjelzést.</p></div>
+        </div>
+        <div class="adv">
+          <div class="ai" style="background:var(--t-warm);color:var(--c-warm)"><svg><use href="#i-heart"/></svg></div>
+          <div><h3>Egészség, fronthatás</h3><p>A front utáni hűvös, szeles idő a Köpönyeg szerint fejfájást, migrént okozhat az érzékenyeknél. A jövő heti gyors felmelegedés újabb terhelést jelenthet.</p></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===== PLATFORM COMPARISON ===== -->
+  <section class="card">
+    <div class="card-head">
+      <div>
+        <div class="eyebrow">Források összevetése</div>
+        <h2>Mit mondanak a vezető meteorológiai platformok?</h2>
+        <p>A fő üzenetekben egyetértenek a források, a jövő heti meleg mértékében viszont eltérnek.</p>
+      </div>
+    </div>
+    <div class="agree">
+      <div class="ag"><div class="t">Hidegfront és lehűlés (H–K)</div><div class="v" style="color:var(--c-crisp)"><svg><use href="#i-check"/></svg><span style="color:var(--ink-2)">Teljes egyetértés</span></div></div>
+      <div class="ag"><div class="t">Hideg hajnalok, talaj menti fagy</div><div class="v" style="color:var(--c-crisp)"><svg><use href="#i-check"/></svg><span style="color:var(--ink-2)">Egyetértés</span></div></div>
+      <div class="ag"><div class="t">Hétvégi felmelegedés</div><div class="v" style="color:var(--c-crisp)"><svg><use href="#i-check"/></svg><span style="color:var(--ink-2)">Egyetértés</span></div></div>
+      <div class="ag"><div class="t">A jövő heti meleg mértéke</div><div class="v" style="color:var(--c-warm)"><svg><use href="#i-split"/></svg><span style="color:var(--ink-2)">Részben eltér: 22–28 vagy 28–30 °C</span></div></div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="src-table">
+        <thead><tr><th>Platform</th><th>A hétről</th><th>Hétvége és kitekintés</th></tr></thead>
+        <tbody>
+          <tr><td>HungaroMet<span class="kind">hivatalos szolgálat · met.hu</span></td><td>Gyorsan átvonuló hidegfront hétfőn, 60–75 km/h-s lökések, jég; keddtől szombatig 2–4 °C-os leghidegebb hajnalok, talaj menti fagy; elsőfokú figyelmeztetések.</td><td>P 18–23 °C, Szo 19–24 °C, V 20–25 °C napos, száraz; szept. 28-án 22–27 °C, helyenként 28 °C.</td></tr>
+          <tr><td>Időkép<span class="kind">idokep.hu</span></td><td>Front utáni lehűlés; szeptember 9-én három melegrekord dőlt meg.</td><td>A meleg szeptember végéig tart, október elejétől lassú csökkenés 25 °C körüli csúcsokkal.</td></tr>
+          <tr><td>Köpönyeg<span class="kind">koponyeg.origo.hu</span></td><td>Drasztikus lehűlés, az ősz első talaj menti fagyai; front utáni biometeorológiai terhelés.</td><td>Hűvös, szeles kezdés után enyhülő második félhét.</td></tr>
+          <tr><td>Pártai &amp; Aigner<span class="kind">eumet.hu · 14 napos</span></td><td>A csillagászati ősz szeptember 23-án kezdődik.</td><td>Vénasszonyok nyara: hideg, párás reggelek, derült, kellemes délutánok, jellemzően szeptember második felében.</td></tr>
+          <tr><td>ECMWF-alapú elemzések<span class="kind">Portfolio · Origo · VG</span></td><td>Az európai középtávú modell szerint nagy kiterjedésű anticiklon épül ki.</td><td>Hőkupola: +10–14 °C-os anomália Európában, Közép-Európában 27–30 °C; itthon akár 28–30 °C, október elejéig.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== SOURCES ===== -->
+  <footer class="card">
+    <h2>Források</h2>
+    <ul class="srcs">
+      <li><a href="https://www.met.hu/idojaras/elorejelzes/kozeptavu_elorejelzes/index.php" target="_blank" rel="noopener">HungaroMet – középtávú előrejelzés</a></li>
+      <li><a href="https://www.met.hu/idojaras/veszelyjelzes/index.php" target="_blank" rel="noopener">HungaroMet – veszélyjelzés</a></li>
+      <li><a href="https://www.met.hu/idojaras/elorejelzes/modellek/ECMWF/main.php" target="_blank" rel="noopener">HungaroMet – ECMWF modelltermékek</a></li>
+      <li><a href="https://www.idokep.hu/" target="_blank" rel="noopener">Időkép</a></li>
+      <li><a href="https://koponyeg.origo.hu/elorejelzes" target="_blank" rel="noopener">Köpönyeg – előrejelzések</a></li>
+      <li><a href="https://www.eumet.hu/14-napos-elorejelzes/" target="_blank" rel="noopener">Pártai &amp; Aigner – 14 napos előrejelzés</a></li>
+      <li><a href="https://www.eumet.hu/hirek/vnyiny/" target="_blank" rel="noopener">Pártai &amp; Aigner – Vénasszonyok nyara vagy indián nyár?</a></li>
+      <li><a href="https://index.hu/belfold/2026/09/21/idojaras-hidegfront-felmelegedes-homerseklet-fagypont-radar/" target="_blank" rel="noopener">Index – fagyközeli hajnalok után újra nyár (szept. 21.)</a></li>
+      <li><a href="https://telex.hu/belfold/2026/09/21/idojaras-osz-szeptember-hidegfront-eros-szel" target="_blank" rel="noopener">Telex – megjött az igazi ősz (szept. 21.)</a></li>
+      <li><a href="https://444.hu/2026/09/21/viharos-szelekkel-rugja-rank-az-ajtot-az-osz" target="_blank" rel="noopener">444 – viharos szelekkel jön az ősz (szept. 21.)</a></li>
+      <li><a href="https://www.atv.hu/belfold/20260921/vihar-hetfo-jeg-zivatar-riasztas/" target="_blank" rel="noopener">ATV – 75 km/h-s szél és jég (szept. 21.)</a></li>
+      <li><a href="https://infostart.hu/belfold/2026/09/22/csipos-hajnal-utan-puloveres-ido-jon-16-21-fokkal" target="_blank" rel="noopener">Infostart – csípős hajnal, 16–21 fok (szept. 22.)</a></li>
+      <li><a href="https://www.portfolio.hu/gazdasag/20260922/idojaras-elorejelzes-viharos-szel-es-talaj-menti-fagy-erkezik-magyarorszagra-864356" target="_blank" rel="noopener">Portfolio – viharos szél és talaj menti fagy (szept. 22.)</a></li>
+      <li><a href="https://promotions.hu/idojaras/2026/09/22/legorveny-talajmenti-fagy-zivatar-jegeso-pest-bekes-borsod-abauj-zemplen-csongrad-csanad-hajdu-bihar-heves-komarom-esztergom-nograd-szabolcs-szatmar-bereg-jasz-nagykun-szolnok-varmegye" target="_blank" rel="noopener">Promotions.hu – légörvény, fagy, figyelmeztetések (szept. 22.)</a></li>
+      <li><a href="https://www.portfolio.hu/gazdasag/20260922/ujabb-hokupola-telepszik-europara-szeptember-vegen-864330" target="_blank" rel="noopener">Portfolio – újabb hőkupola szeptember végén (szept. 22.)</a></li>
+      <li><a href="https://www.origo.hu/nagyvilag/2026/09/hokupola-magyarorszag-meleg-idojaras" target="_blank" rel="noopener">Origo – hőkupola, közel 30 fok</a></li>
+      <li><a href="https://promotions.hu/idojaras/2026/09/19/hetvegi-idojaras-elorejelzes-szombat-vasarnap-30-fok-homerseklet-kulonbseg-eso-zapor" target="_blank" rel="noopener">Promotions.hu – hétvége 29–30 fok (szept. 19.)</a></li>
+      <li><a href="https://www.idojarasbudapest.com/" target="_blank" rel="noopener">Budapest – sokéves szeptemberi átlagok</a></li>
+    </ul>
+    <p class="method"><b>Módszertan.</b> Az értékek a fenti források 2026. szeptember 19–22. között közzétett előrejelzéseiből és jelentéseiből készült összesítések. Ahol a források eltérnek, a diagram a közölt tartományok burkolóját mutatja. A péntek–vasárnapi minimumsávok felső értéke becslés, mert a források ezekre a napokra csak a leghidegebb értéket (2–4 °C) vagy „10 °C alatt helyenként” jellegű leírást közöltek; a hétfő 28-i minimumra nincs közölt adat. A napkelte, a napnyugta és a nappalhossz Budapestre számított érték (±1 perc), a holdfázis csillagászati számítás. Az előrejelzések változhatnak; a hivatalos figyelmeztetésekért mindig a met.hu-t kövesse.</p>
+  </footer>
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- EGYETLEN ADATFORRÁS ---------- */
+  var DAYS = [
+    {k:"19", dow:"Szombat", sh:"Szo", date:"szept. 19.", maxLo:26, maxHi:29, minLo:8,  minHi:15, st:"obs"},
+    {k:"20", dow:"Vasárnap", sh:"V",  date:"szept. 20.", maxLo:27, maxHi:30, minLo:9,  minHi:15, st:"obs"},
+    {k:"21", dow:"Hétfő",   sh:"H",   date:"szept. 21.", maxLo:18, maxHi:24, minLo:10, minHi:17, st:"obs",
+      card:true, rg:"front", rgl:"Hidegfront", ico:"storm",
+      txt:"Nagy sebességgel vonult át a hidegfront, délre elhagyta az országot. Elszórt eső, zápor; északkeleten zivatar, 1 cm-nél kisebb jég.",
+      wind:"60–75 km/h, a zivatarcellákban 70–80 km/h", alert:"Sárga: BAZ, Hajdú-Bihar, Szabolcs (zivatar), Veszprém (szél)"},
+    {k:"22", dow:"Kedd",    sh:"K",   date:"szept. 22.", maxLo:16, maxHi:21, minLo:4,  minHi:10, st:"today",
+      card:true, rg:"shower", rgl:"Hűvös, szeles", ico:"shower",
+      txt:"Gomolyfelhős, napos idő elszórt záporokkal; keleten, északkeleten zivatar jégdarával. A Dunántúlon gyenge eső is lehet.",
+      wind:"ÉNy, a Dunántúlon erős, helyenként viharos lökések", alert:"10 vármegye: elsőfokú zivatar-figyelmeztetés"},
+    {k:"23", dow:"Szerda",  sh:"Sze", date:"szept. 23.", maxLo:16, maxHi:22, minLo:6,  minHi:11, st:"fc",
+      card:true, rg:"cool", rgl:"Napéjegyenlőség", ico:"partly",
+      txt:"Gomolyfelhős, napos idő; keleten, északkeleten kevés helyen zápor, zivatar. Hajnalban a szélvédett helyeken talaj menti fagy.",
+      wind:"Északi szél, élénk, néhol erős lökésekkel", frost:"Talaj menti fagy szélvédett helyeken"},
+    {k:"24", dow:"Csütörtök", sh:"Cs", date:"szept. 24.", maxLo:17, maxHi:24, minLo:2, minHi:10, st:"fc",
+      card:true, rg:"cool", rgl:"Felhősödés nyugatról", ico:"shower",
+      txt:"Reggel napos, délután nyugat, északnyugat felől megnövekszik a felhőzet; a nyugati országrészben elszórt zápor, zivatar.",
+      wind:"ÉNy, majd Ny szél, sokfelé megerősödik", frost:"Fagyzugokban talaj menti fagy"},
+    {k:"25", dow:"Péntek",  sh:"P",   date:"szept. 25.", maxLo:18, maxHi:23, minLo:2,  minHi:9,  st:"fc", minEst:true,
+      card:true, rg:"crisp", rgl:"Csípős reggel", ico:"sun",
+      txt:"Túlnyomóan napos, száraz idő. Az egyik leghidegebb hajnal: a fagyzugokban 2–4 °C, talaj menti fagy.",
+      wind:"Gyenge, mérsékelt (anticiklonális helyzet)", frost:"Leghidegebb hajnalok: 2–4 °C"},
+    {k:"26", dow:"Szombat", sh:"Szo", date:"szept. 26.", maxLo:19, maxHi:24, minLo:3,  minHi:10, st:"fc", minEst:true,
+      card:true, rg:"crisp", rgl:"Vénasszonyok nyara", ico:"sun",
+      txt:"Sok napsütés, száraz idő; kellemes délután, este gyorsan hűl a levegő. Éjjel szüreti telihold.",
+      wind:"Gyenge, mérsékelt", frost:"Fagyzugokban még talaj menti fagy"},
+    {k:"27", dow:"Vasárnap", sh:"V",  date:"szept. 27.", maxLo:20, maxHi:25, minLo:6,  minHi:12, st:"fc", minEst:true,
+      card:true, rg:"warm", rgl:"Napos, száraz", ico:"sun",
+      txt:"Napos, száraz, egyre melegebb idő. Reggel helyenként még 10 °C alatt.",
+      wind:"Gyenge, mérsékelt"},
+    {k:"28", dow:"Hétfő",   sh:"H",   date:"szept. 28.", maxLo:22, maxHi:27, minLo:null, minHi:null, st:"out",
+      card:true, rg:"warm", rgl:"Kitekintés", ico:"sun",
+      txt:"A hőkupola peremén nyárias meleg: 22–27 °C, a legmelegebb helyeken 28 °C.",
+      wind:"—", note:"helyenként 28 °C"}
+  ];
+  var NORM_MAX = 19, NORM_MIN = 10;
+
+  var HAZ = [
+    {name:"Széllökés",        ico:"i-wind",  lv:[3,2,1,1,0,0,0,0],
+      notes:["60–80 km/h, Veszprém: szélfigyelmeztetés","ÉNy, Dunántúlon viharos lökések","Északi szél, néhol erős lökések","ÉNy–Ny szél megerősödik","","","",""]},
+    {name:"Zivatar, jég",     ico:"i-storm", lv:[3,3,1,1,0,0,0,0],
+      notes:["3 ÉK-i vármegye: sárga, jég ≤ 1 cm","10 vármegye: sárga, jégdara, 50–70 km/h","Kevés helyen, főként keleten","Délután, főként nyugaton","","","",""]},
+    {name:"Csapadék",         ico:"i-shower",lv:[2,2,1,1,0,0,0,0],
+      notes:["Elszórt eső, zápor a fronttal","Elszórt zápor, Dunántúlon gyenge eső","Kevés helyen zápor","Elszórt zápor nyugaton","Száraz","Száraz","Száraz",""]},
+    {name:"Talaj menti fagy", ico:"i-frost", lv:[0,1,2,2,2,2,1,0],
+      notes:["","Éjjel helyenként","Szélvédett helyeken","Fagyzugokban","Leghidegebb: 2–4 °C","Fagyzugokban","Helyenként 10 °C alatt",""]},
+    {name:"Nyárias meleg",    ico:"i-therm", lv:[0,0,0,0,0,0,1,2],
+      notes:["","","","","","","20–25 °C","22–27, helyenként 28 °C"]}
+  ];
+  var LV_LABEL = ["nincs","enyhe","jelentős","figyelm."];
+
+  var SUN = [ // Budapest, számított
+    {d:19, rise:"06:26", set:"18:49", len:743},
+    {d:20, rise:"06:27", set:"18:47", len:740},
+    {d:21, rise:"06:28", set:"18:45", len:736},
+    {d:22, rise:"06:30", set:"18:43", len:733},
+    {d:23, rise:"06:31", set:"18:41", len:729},
+    {d:24, rise:"06:33", set:"18:39", len:726},
+    {d:25, rise:"06:34", set:"18:37", len:723},
+    {d:26, rise:"06:35", set:"18:34", len:719},
+    {d:27, rise:"06:37", set:"18:32", len:716},
+    {d:28, rise:"06:38", set:"18:30", len:712}
+  ];
+
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs, parent){
+    var n = document.createElementNS(NS, tag);
+    for (var a in attrs){ if (attrs[a] !== null && attrs[a] !== undefined) n.setAttribute(a, attrs[a]); }
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function txt(parent, x, y, s, cls, anchor){
+    var t = el("text", {x:x, y:y, "class":cls, "text-anchor":anchor || "middle"}, parent);
+    t.textContent = s; return t;
+  }
+  function rng(a,b){ return a === null ? "nincs adat" : (a + "–" + b + " °C"); }
+  function mid(a,b){ return a === null ? null : (a+b)/2; }
+  function fmtLen(m){ return Math.floor(m/60) + " ó " + String(m%60).padStart(2,"0") + " p"; }
+  function css(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+
+  /* ---------- HERO ÍV ---------- */
+  function tempColor(t){
+    var stops = [[16,[92,170,245]],[21,[120,205,230]],[25,[245,205,95]],[30,[255,125,70]]];
+    if (t <= stops[0][0]) return "rgb(" + stops[0][1] + ")";
+    for (var i=1;i<stops.length;i++){
+      if (t <= stops[i][0]){
+        var a = stops[i-1], b = stops[i], f = (t-a[0])/(b[0]-a[0]);
+        var c = a[1].map(function(v,j){ return Math.round(v + (b[1][j]-v)*f); });
+        return "rgb(" + c.join(",") + ")";
+      }
+    }
+    return "rgb(" + stops[stops.length-1][1] + ")";
+  }
+  function drawHero(){
+    var svg = document.getElementById("heroArc");
+    var W = svg.clientWidth || 400, H = 170;
+    svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+    svg.innerHTML = "";
+    var padL = 14, padR = 14, top = 28, bot = 30;
+    var vals = DAYS.map(function(d){ return mid(d.maxLo, d.maxHi); });
+    var lo = 15, hi = 31;
+    var x = function(i){ return padL + i * (W - padL - padR) / (DAYS.length - 1); };
+    var y = function(v){ return top + (hi - v) / (hi - lo) * (H - top - bot); };
+    var defs = el("defs", {}, svg);
+    var g = el("linearGradient", {id:"arcGrad", x1:"0", x2:W, y1:"0", y2:"0", gradientUnits:"userSpaceOnUse"}, defs);
+    vals.forEach(function(v,i){ el("stop", {offset:(x(i)/W).toFixed(3), "stop-color":tempColor(v)}, g); });
+    var ga = el("linearGradient", {id:"arcFill", x1:"0", x2:"0", y1:"0", y2:"1"}, defs);
+    el("stop", {offset:"0", "stop-color":"#ffffff", "stop-opacity":".16"}, ga);
+    el("stop", {offset:"1", "stop-color":"#ffffff", "stop-opacity":"0"}, ga);
+    var d = "", area = "";
+    vals.forEach(function(v,i){
+      var px = x(i), py = y(v);
+      if (i === 0){ d = "M" + px + " " + py; }
+      else {
+        var p0x = x(i-1), p0y = y(vals[i-1]), cx = (p0x + px)/2;
+        d += " C" + cx + " " + p0y + " " + cx + " " + py + " " + px + " " + py;
+      }
+    });
+    area = d + " L" + x(vals.length-1) + " " + (H - bot) + " L" + x(0) + " " + (H - bot) + " Z";
+    el("path", {d:area, fill:"url(#arcFill)"}, svg);
+    el("path", {d:d, fill:"none", stroke:"url(#arcGrad)", "stroke-width":"3.5", "stroke-linecap":"round"}, svg);
+    vals.forEach(function(v,i){
+      el("circle", {cx:x(i), cy:y(v), r:4, fill:tempColor(v), stroke:"#12305A", "stroke-width":"2"}, svg);
+      var lab = el("text", {x:x(i), y:H - 10, "text-anchor":"middle", fill:"#B7C8DE", "font-size":"10.5", "font-family":"Figtree, system-ui, sans-serif"}, svg);
+      lab.textContent = DAYS[i].sh;
+    });
+    [[1,"~30°"],[3,"16–21°"],[9,"22–27°"]].forEach(function(p){
+      var i = p[0];
+      var t = el("text", {x:x(i), y:y(vals[i]) - 12, "text-anchor": i === 9 ? "end" : "middle", fill:"#F3F7FC", "font-size":"12", "font-weight":"700", "font-family":"Figtree, system-ui, sans-serif"}, svg);
+      t.textContent = p[1];
+    });
+  }
+
+  /* ---------- HŐMÉRSÉKLET-DIAGRAM ---------- */
+  var tip = null;
+  function showTip(container, html, px, py){
+    if (!tip){ tip = document.createElement("div"); tip.className = "tip"; tip.setAttribute("role","status"); }
+    if (tip.parentNode !== container) container.appendChild(tip);
+    tip.innerHTML = html; tip.hidden = false;
+    var cw = container.clientWidth, tw = tip.offsetWidth, th = tip.offsetHeight;
+    var left = px + 14; if (left + tw > cw) left = px - tw - 14; if (left < 0) left = 0;
+    var topp = py - th/2; if (topp < 0) topp = 0;
+    tip.style.left = left + "px"; tip.style.top = topp + "px";
+  }
+  function hideTip(){ if (tip) tip.hidden = true; }
+
+  function drawTemp(){
+    var box = document.getElementById("tempChart");
+    var W = Math.max(box.clientWidth, 300);
+    var narrow = W < 560;
+    var H = narrow ? 300 : 360;
+    box.innerHTML = "";
+    var svg = el("svg", {viewBox:"0 0 " + W + " " + H, role:"img", "aria-label":"Napi minimum- és maximumhőmérséklet-tartományok szeptember 19. és 28. között"}, box);
+    var m = {l:34, r:narrow ? 12 : 66, t:30, b:44};
+    var lo = 0, hi = 32;
+    var n = DAYS.length, step = (W - m.l - m.r) / n;
+    var x = function(i){ return m.l + step * (i + .5); };
+    var y = function(v){ return m.t + (hi - v) / (hi - lo) * (H - m.t - m.b); };
+
+    // háttérzónák: lezajlott / előrejelzés
+    var splitX = m.l + step * 3;
+    el("rect", {x:m.l, y:m.t - 18, width:splitX - m.l, height:H - m.t - m.b + 18, fill:css("--card-sub")}, svg);
+    txt(svg, m.l + 8, m.t - 6, narrow ? "LEZAJLOTT" : "LEZAJLOTT", "zone", "start");
+    txt(svg, splitX + 8, m.t - 6, "ELŐREJELZÉS", "zone", "start");
+
+    // rács + tengely
+    for (var v = 0; v <= 30; v += 5){
+      el("line", {x1:m.l, x2:W - m.r, y1:y(v), y2:y(v), stroke:css("--hair"), "stroke-width":1}, svg);
+      txt(svg, m.l - 8, y(v) + 4, v + "°", "tick", "end");
+    }
+    el("line", {x1:m.l, x2:W - m.r, y1:y(0), y2:y(0), stroke:css("--axis"), "stroke-width":1}, svg);
+
+    // átlagvonalak
+    [[NORM_MAX,"átlag max 19°"],[NORM_MIN,"átlag min 10°"]].forEach(function(p){
+      el("line", {x1:m.l, x2:W - m.r, y1:y(p[0]), y2:y(p[0]), stroke:css("--muted"), "stroke-width":1, "stroke-opacity":.8}, svg);
+      if (!narrow) txt(svg, W - m.r + 6, y(p[0]) + 4, p[1], "dlabel-2", "start");
+    });
+
+    // sávok (area) + középvonal
+    function band(keyLo, keyHi, wash, color){
+      var pts = DAYS.map(function(d,i){ return d[keyLo] === null ? null : {i:i, lo:d[keyLo], hi:d[keyHi]}; }).filter(Boolean);
+      var top = pts.map(function(p,j){ return (j ? "L" : "M") + x(p.i) + " " + y(p.hi); }).join(" ");
+      var bottom = pts.slice().reverse().map(function(p){ return "L" + x(p.i) + " " + y(p.lo); }).join(" ");
+      el("path", {d: top + " " + bottom + " Z", fill:wash}, svg);
+      var line = pts.map(function(p,j){ return (j ? "L" : "M") + x(p.i) + " " + y((p.lo + p.hi)/2); }).join(" ");
+      el("path", {d:line, fill:"none", stroke:color, "stroke-width":2, "stroke-linejoin":"round", "stroke-linecap":"round"}, svg);
+      // vékony tartományjelző (range bar) naponta
+      pts.forEach(function(p){
+        el("rect", {x:x(p.i) - 3, y:y(p.hi), width:6, height:Math.max(y(p.lo) - y(p.hi), 2), rx:3, fill:color, "fill-opacity":.35}, svg);
+      });
+      pts.forEach(function(p){
+        el("circle", {cx:x(p.i), cy:y((p.lo + p.hi)/2), r:4.5, fill:color, stroke:css("--card"), "stroke-width":2}, svg);
+      });
+    }
+    band("maxLo","maxHi", css("--warm-wash"), css("--warm"));
+    band("minLo","minHi", css("--cold-wash"), css("--cold"));
+
+    // "ma" jelölő
+    var ti = 3;
+    el("line", {x1:x(ti), x2:x(ti), y1:m.t - 2, y2:H - m.b, stroke:css("--cold"), "stroke-width":1, "stroke-opacity":.6}, svg);
+
+    // szelektív címkék
+    txt(svg, x(1), y(30) - 10, "30°", "dlabel");
+    txt(svg, x(3), y(21) - 10, "16–21°", "dlabel");
+    txt(svg, x(5), y(2) + 18, "2°", "dlabel");
+    txt(svg, x(9), y(27) - 10, "27°", "dlabel");
+
+    // x tengely
+    DAYS.forEach(function(d,i){
+      txt(svg, x(i), H - m.b + 18, d.sh, "xlab" + "");
+      txt(svg, x(i), H - m.b + 32, d.k + (narrow ? "" : "."), "xsub");
+    });
+    var todayLab = txt(svg, x(ti), m.t - 22 < 0 ? 10 : m.t - 20, "MA", "zone");
+    todayLab.setAttribute("style", "fill:" + css("--cold"));
+
+    // hover réteg
+    var hl = el("rect", {x:0, y:m.t, width:step, height:H - m.t - m.b, fill:css("--ink"), "fill-opacity":0, "pointer-events":"none"}, svg);
+    DAYS.forEach(function(d,i){
+      var hit = el("rect", {x:m.l + step*i, y:m.t - 18, width:step, height:H - m.t - m.b + 18 + 36, fill:"transparent", tabindex:0, "aria-label": d.dow + " " + d.date + ": csúcs " + rng(d.maxLo,d.maxHi) + ", hajnal " + rng(d.minLo,d.minHi)}, svg);
+      function on(){
+        hl.setAttribute("x", m.l + step*i); hl.setAttribute("fill-opacity", ".05");
+        var html = "<b>" + d.dow + ", " + d.date + "</b>" +
+          "<div class='row'><span class='sw' style='background:" + css("--warm") + "'></span>Csúcs: " + rng(d.maxLo,d.maxHi) + "</div>" +
+          "<div class='row'><span class='sw' style='background:" + css("--cold") + "'></span>Hajnal: " + rng(d.minLo,d.minHi) + (d.minEst ? " <span style='color:var(--muted)'>(felső érték becsült)</span>" : "") + "</div>" +
+          "<div class='note'>" + (d.st === "obs" ? "Lezajlott nap, a napi jelentések alapján." : d.st === "today" ? "Mai nap." : d.st === "out" ? "Kitekintés" + (d.note ? ": " + d.note : "") + "." : "Előrejelzés.") + "</div>";
+        showTip(box, html, x(i), y(mid(d.maxLo,d.maxHi)));
+      }
+      function off(){ hl.setAttribute("fill-opacity", "0"); hideTip(); }
+      hit.addEventListener("mouseenter", on); hit.addEventListener("focus", on);
+      hit.addEventListener("mouseleave", off); hit.addEventListener("blur", off);
+      hit.addEventListener("touchstart", on, {passive:true});
+    });
+  }
+
+  function fillTable(){
+    var t = document.getElementById("tempTable");
+    var h = "<thead><tr><th>Nap</th><th>Csúcs (°C)</th><th>Hajnal (°C)</th><th>Állapot</th></tr></thead><tbody>";
+    DAYS.forEach(function(d){
+      h += "<tr><td>" + d.dow + ", " + d.date + "</td><td class='n'>" + d.maxLo + "–" + d.maxHi + "</td><td class='n'>" +
+        (d.minLo === null ? "—" : d.minLo + "–" + d.minHi + (d.minEst ? "*" : "")) + "</td><td>" +
+        ({obs:"lezajlott", today:"ma", fc:"előrejelzés", out:"kitekintés"})[d.st] + "</td></tr>";
+    });
+    h += "</tbody>";
+    t.innerHTML = h + "<caption style='caption-side:bottom;text-align:left;font-size:.78rem;color:var(--muted);padding-top:8px'>* a felső érték becsült. Sokéves budapesti átlag (szept. 3. dekád): max ≈ 19 °C, min ≈ 10 °C.</caption>";
+  }
+
+  /* ---------- NAPI KÁRTYÁK ---------- */
+  function renderDays(){
+    var wrap = document.getElementById("days");
+    var html = "";
+    DAYS.filter(function(d){ return d.card; }).forEach(function(d){
+      var tag = d.st === "obs" ? "<span class='status-tag'>Lezajlott</span>"
+              : d.st === "today" ? "<span class='status-tag today'>Ma</span>"
+              : d.st === "out" ? "<span class='status-tag'>Jövő hét</span>"
+              : "<span class='status-tag'>Előrejelzés</span>";
+      var facts = "";
+      if (d.wind && d.wind !== "—") facts += "<li><svg aria-hidden='true'><use href='#i-wind'/></svg><span>" + d.wind + "</span></li>";
+      if (d.frost) facts += "<li><svg aria-hidden='true' style='color:var(--cold)'><use href='#i-frost'/></svg><span>" + d.frost + "</span></li>";
+      if (d.alert) facts += "<li><svg aria-hidden='true' style='color:var(--lv3)'><use href='#i-alert'/></svg><span>" + d.alert + "</span></li>";
+      if (!facts) facts = "<li><svg aria-hidden='true'><use href='#i-therm'/></svg><span>Nincs jelentős veszély</span></li>";
+      html += "<article class='day rg-" + d.rg + "'>" +
+        "<div class='day-head'><div class='day-top'><div><div class='day-name'>" + d.dow + "</div><div class='day-date'>" + d.date + " · " + tag + "</div></div>" +
+        "<svg class='day-ico' aria-hidden='true'><use href='#i-" + d.ico + "'/></svg></div>" +
+        "<span class='chip'>" + d.rgl + "</span></div>" +
+        "<div class='temps'><div><span class='cap'>Csúcs</span><span class='hi'>" + d.maxLo + "–" + d.maxHi + "°</span></div>" +
+        "<div><span class='cap'>Hajnal</span><span class='lo'>" + (d.minLo === null ? "—" : d.minLo + "–" + d.minHi + "°") + "</span></div></div>" +
+        "<p>" + d.txt + "</p>" +
+        "<ul class='facts'>" + facts + "</ul></article>";
+    });
+    wrap.innerHTML = html;
+  }
+
+  /* ---------- KOCKÁZATI MÁTRIX ---------- */
+  function renderMatrix(){
+    var cols = DAYS.filter(function(d){ return d.card; });
+    var h = "<thead><tr><th></th>";
+    cols.forEach(function(d){ h += "<th" + (d.st === "today" ? " class='today'" : "") + ">" + d.sh + "<small>" + d.date + "</small></th>"; });
+    h += "</tr></thead><tbody>";
+    HAZ.forEach(function(r){
+      h += "<tr><th scope='row'>" + r.name + "</th>";
+      r.lv.forEach(function(l,i){
+        var note = r.notes[i] ? r.notes[i] : LV_LABEL[l];
+        var icon = l === 3 ? "<svg aria-hidden='true'><use href='#i-alert'/></svg>" : "";
+        h += "<td><div class='cell l" + l + "' title='" + cols[i].dow + ": " + note + "'>" + icon + LV_LABEL[l] + "</div></td>";
+      });
+      h += "</tr>";
+    });
+    document.getElementById("matrix").innerHTML = h + "</tbody>";
+  }
+
+  /* ---------- NAPPALHOSSZ ---------- */
+  function drawDay(){
+    var box = document.getElementById("dayChart");
+    var W = Math.max(box.clientWidth, 280), H = 200;
+    box.innerHTML = "";
+    var svg = el("svg", {viewBox:"0 0 " + W + " " + H, role:"img", "aria-label":"A nappalok hossza Budapesten szeptember 19-én 12 óra 23 perc, 28-án 11 óra 52 perc"}, box);
+    var m = {l:48, r:16, t:22, b:34};
+    var lo = 705, hi = 750;
+    var n = SUN.length;
+    var x = function(i){ return m.l + i * (W - m.l - m.r) / (n - 1); };
+    var y = function(v){ return m.t + (hi - v) / (hi - lo) * (H - m.t - m.b); };
+    [710, 720, 730, 740, 750].forEach(function(v){
+      el("line", {x1:m.l, x2:W - m.r, y1:y(v), y2:y(v), stroke:css("--hair"), "stroke-width":1}, svg);
+      txt(svg, m.l - 8, y(v) + 4, Math.floor(v/60) + ":" + String(v%60).padStart(2,"0"), "tick", "end");
+    });
+    // 12 óra
+    el("line", {x1:m.l, x2:W - m.r, y1:y(720), y2:y(720), stroke:css("--muted"), "stroke-width":1}, svg);
+    // napéjegyenlőség (23.) és telihold (26.)
+    var ie = 4, im = 7;
+    el("line", {x1:x(ie), x2:x(ie), y1:m.t - 4, y2:H - m.b, stroke:css("--axis"), "stroke-width":1}, svg);
+    txt(svg, x(ie) + 5, m.t + 4, "napéjegyenlőség", "dlabel-2", "start");
+    el("circle", {cx:x(im), cy:m.t - 6, r:5, fill:"#F2D98A", stroke:css("--card"), "stroke-width":2}, svg);
+    txt(svg, x(im) + 10, m.t - 2, "telihold", "dlabel-2", "start");
+    var area = SUN.map(function(s,i){ return (i ? "L" : "M") + x(i) + " " + y(s.len); }).join(" ");
+    el("path", {d: area + " L" + x(n-1) + " " + (H - m.b) + " L" + x(0) + " " + (H - m.b) + " Z", fill:css("--cold-wash")}, svg);
+    el("path", {d:area, fill:"none", stroke:css("--cold"), "stroke-width":2, "stroke-linejoin":"round"}, svg);
+    SUN.forEach(function(s,i){
+      el("circle", {cx:x(i), cy:y(s.len), r:(i === 0 || i === n-1) ? 4.5 : 3, fill:css("--cold"), stroke:css("--card"), "stroke-width":2}, svg);
+      if (i % (W < 420 ? 3 : 1) === 0 || i === n-1) txt(svg, x(i), H - m.b + 18, s.d + ".", "xsub");
+    });
+    txt(svg, x(0) + 6, y(SUN[0].len) - 10, fmtLen(SUN[0].len), "dlabel", "start");
+    txt(svg, x(n-1) - 4, y(SUN[n-1].len) + 20, fmtLen(SUN[n-1].len), "dlabel", "end");
+
+    SUN.forEach(function(s,i){
+      var w = (W - m.l - m.r) / (n - 1);
+      var hit = el("rect", {x:x(i) - w/2, y:m.t, width:w, height:H - m.t - m.b, fill:"transparent", tabindex:0, "aria-label":"szept. " + s.d + ".: napkelte " + s.rise + ", napnyugta " + s.set}, svg);
+      function on(){ showTip(box, "<b>szept. " + s.d + ".</b><div>Napkelte: " + s.rise + "</div><div>Napnyugta: " + s.set + "</div><div class='note'>Nappal: " + fmtLen(s.len) + "</div>", x(i), y(s.len)); }
+      hit.addEventListener("mouseenter", on); hit.addEventListener("focus", on);
+      hit.addEventListener("mouseleave", hideTip); hit.addEventListener("blur", hideTip);
+      hit.addEventListener("touchstart", on, {passive:true});
+    });
+  }
+
+  function drawAll(){ drawHero(); drawTemp(); drawDay(); }
+
+  renderDays();
+  renderMatrix();
+  fillTable();
+  drawAll();
+
+  var raf = null;
+  function redraw(){ if (raf) cancelAnimationFrame(raf); raf = requestAnimationFrame(drawAll); }
+  if ("ResizeObserver" in window){
+    var ro = new ResizeObserver(redraw);
+    ro.observe(document.getElementById("tempChart"));
+  } else {
+    window.addEventListener("resize", redraw);
+  }
+  // téma váltásakor újraszínezés
+  try{
+    new MutationObserver(redraw).observe(document.documentElement, {attributes:true, attributeFilter:["data-theme"]});
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", redraw);
+  }catch(e){}
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(redraw);
+})();
+</script>
+</body>
+</html>
