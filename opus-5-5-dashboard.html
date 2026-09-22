@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Claude Opus 5.5 modellprofil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --ground:#eef1f4;
+    --surface:#ffffff;
+    --surface-2:#f5f7f9;
+    --ink:#121820;
+    --ink-2:#4b5663;
+    --muted:#66707c;
+    --line:#e1e5ea;
+    --axis:#b9c1ca;
+    --accent:#2447c9;
+    --accent-soft:#e7ecfb;
+    --hl:rgba(36,71,201,0.055);
+    --s1:#2a78d6;
+    --s2:#eb6834;
+    --base:#a9b2bc;
+    --good:#0ca30c;
+    --good-text:#006300;
+    --warn:#fab219;
+    --warn-text:#835500;
+    --crit:#d03b3b;
+    --crit-text:#b02a2a;
+    --code-bg:#f3f5f8;
+    --tok-str:#8a3b12;
+    --tok-com:#5d6b78;
+    --tok-key:#2447c9;
+    --shadow:0 1px 2px rgba(18,24,32,.05), 0 10px 30px -12px rgba(18,24,32,.12);
+    --f-display:"Bricolage Grotesque", "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --f-body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --f-mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme:dark;
+      --ground:#0d1116;
+      --surface:#161b22;
+      --surface-2:#1b2129;
+      --ink:#eef2f6;
+      --ink-2:#b3bdc8;
+      --muted:#8d97a3;
+      --line:#262e38;
+      --axis:#3d4753;
+      --accent:#8ea8ff;
+      --accent-soft:#1c2645;
+      --hl:rgba(142,168,255,0.07);
+      --s1:#3987e5;
+      --s2:#d95926;
+      --base:#56606c;
+      --good-text:#3fcf3f;
+      --warn-text:#fab219;
+      --crit-text:#f07a7a;
+      --code-bg:#11161c;
+      --tok-str:#f0a57a;
+      --tok-com:#7f8b98;
+      --tok-key:#8ea8ff;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --ground:#0d1116;
+    --surface:#161b22;
+    --surface-2:#1b2129;
+    --ink:#eef2f6;
+    --ink-2:#b3bdc8;
+    --muted:#8d97a3;
+    --line:#262e38;
+    --axis:#3d4753;
+    --accent:#8ea8ff;
+    --accent-soft:#1c2645;
+    --hl:rgba(142,168,255,0.07);
+    --s1:#3987e5;
+    --s2:#d95926;
+    --base:#56606c;
+    --good-text:#3fcf3f;
+    --warn-text:#fab219;
+    --crit-text:#f07a7a;
+    --code-bg:#11161c;
+    --tok-str:#f0a57a;
+    --tok-com:#7f8b98;
+    --tok-key:#8ea8ff;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px -12px rgba(0,0,0,.5);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--ink);
+    font-family:var(--f-body);
+    font-size:15px;
+    line-height:1.55;
+    padding-inline:clamp(16px, 4vw, 40px);
+    padding-block:0 56px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px;margin:0 auto;}
+  h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-0.01em;}
+  h2{font-size:1.45rem;font-weight:700;line-height:1.2;}
+  h3{font-size:1.08rem;font-weight:700;line-height:1.3;}
+  p{margin:0;}
+  code,.mono{font-family:var(--f-mono);font-size:0.88em;}
+  a{color:var(--accent);}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px;}
+
+  /* ---------- Header ---------- */
+  .masthead{padding-block:40px 28px;display:grid;gap:18px;}
+  .eyebrow{font-size:0.8rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);}
+  .masthead h1{font-size:clamp(2.5rem, 7vw, 4.4rem);font-weight:700;line-height:0.98;letter-spacing:-0.03em;}
+  .masthead h1 .ver{color:var(--accent);}
+  .lede{max-width:66ch;font-size:1.08rem;color:var(--ink-2);}
+  .lede strong{color:var(--ink);font-weight:600;}
+  .idrow{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;}
+  .idchip{
+    display:inline-flex;align-items:center;gap:0;border:1px solid var(--line);border-radius:8px;
+    background:var(--surface);overflow:hidden;
+  }
+  .idchip code{padding:7px 12px;font-size:0.92rem;color:var(--ink);user-select:all;}
+  .idchip button{
+    border:0;border-left:1px solid var(--line);background:var(--surface-2);color:var(--ink-2);
+    font:500 0.82rem var(--f-body);padding:8px 12px;cursor:pointer;
+  }
+  .idchip button:hover{color:var(--ink);background:var(--accent-soft);}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:0.88rem;color:var(--ink-2);}
+  .meta b{font-weight:600;color:var(--ink);}
+  .disclaimer{font-size:0.82rem;color:var(--muted);max-width:80ch;}
+
+  /* ---------- Spec strip (KPI) ---------- */
+  .spec{
+    display:grid;grid-template-columns:repeat(6, minmax(0,1fr));gap:1px;
+    background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;
+    box-shadow:var(--shadow);
+  }
+  .spec > div{background:var(--surface);padding:16px 18px 18px;display:flex;flex-direction:column;gap:2px;min-width:0;}
+  .spec .k{font-size:0.8rem;color:var(--ink-2);font-weight:500;}
+  .spec .v{font-family:var(--f-display);font-weight:700;font-size:1.9rem;line-height:1.1;letter-spacing:-0.02em;margin-top:4px;}
+  .spec .v small{font-family:var(--f-body);font-size:0.78rem;font-weight:500;color:var(--muted);letter-spacing:0;margin-left:3px;}
+  .spec .d{font-size:0.8rem;color:var(--muted);margin-top:auto;padding-top:6px;}
+  .spec .d.up{color:var(--good-text);font-weight:600;}
+  @media (max-width: 1000px){ .spec{grid-template-columns:repeat(3, minmax(0,1fr));} }
+  @media (max-width: 560px){ .spec{grid-template-columns:repeat(2, minmax(0,1fr));} .spec .v{font-size:1.6rem;} }
+
+  /* ---------- Nav ---------- */
+  .nav{
+    position:sticky;top:env(safe-area-inset-top, 0px);z-index:20;margin-block:28px 8px;
+    background:color-mix(in srgb, var(--ground) 88%, transparent);
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-block:8px;}
+  .nav-inner::-webkit-scrollbar{display:none;}
+  .nav a{
+    flex:none;text-decoration:none;color:var(--ink-2);font-size:0.9rem;font-weight:500;
+    padding:6px 12px;border-radius:6px;
+  }
+  .nav a:hover{background:var(--surface);color:var(--ink);}
+
+  /* ---------- Panels ---------- */
+  section{scroll-margin-top:64px;}
+  .block{margin-top:28px;}
+  .block-head{display:grid;gap:6px;margin-bottom:16px;}
+  .block-head p{color:var(--ink-2);max-width:72ch;}
+  .panel{
+    background:var(--surface);border:1px solid var(--line);border-radius:12px;
+    padding:22px clamp(16px, 2.4vw, 26px);box-shadow:var(--shadow);min-width:0;
+  }
+  .panel-head{display:grid;gap:4px;margin-bottom:16px;}
+  .panel-head p{color:var(--ink-2);font-size:0.92rem;max-width:62ch;}
+  .two{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:20px;align-items:start;}
+  @media (max-width: 900px){ .two{grid-template-columns:minmax(0,1fr);} }
+
+  /* ---------- Charts ---------- */
+  .legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:0.84rem;color:var(--ink-2);margin-bottom:12px;}
+  .legend span{display:inline-flex;align-items:center;gap:7px;}
+  .legend i{width:12px;height:12px;border-radius:3px;display:inline-block;}
+  .chart{--lw:96px;display:grid;gap:0;}
+  .crow{display:grid;grid-template-columns:var(--lw) minmax(0,1fr);align-items:center;column-gap:12px;padding-block:6px;border-radius:6px;}
+  .crow.hl{background:var(--hl);}
+  .crow.top{grid-template-columns:minmax(0,1fr);row-gap:6px;padding-block:10px;}
+  .rlabel{font-size:0.9rem;font-weight:500;line-height:1.25;padding-left:8px;min-width:0;}
+  .crow.top .rlabel{padding-left:0;}
+  .crow.hl .rlabel{font-weight:700;}
+  .rlabel small{display:block;font-size:0.78rem;font-weight:400;color:var(--muted);margin-top:2px;}
+  .track{position:relative;padding-block:3px;min-width:0;}
+  .gl{position:absolute;top:0;bottom:0;width:1px;background:var(--line);}
+  .gl.zero{background:var(--axis);}
+  .gl.ref{background:var(--ink-2);opacity:.55;}
+  .bars{position:relative;display:grid;gap:2px;}
+  .barline{display:flex;align-items:center;gap:6px;min-height:14px;}
+  .bar{
+    flex:none;height:14px;border-radius:0 4px 4px 0;cursor:default;
+    transition:filter .15s ease, width .35s ease;
+  }
+  .bar.s1{background:var(--s1);}
+  .bar.s2{background:var(--s2);}
+  .bar.base{background:var(--base);}
+  .bar:hover,.bar:focus-visible{filter:brightness(1.12) saturate(1.05);}
+  .bar:focus-visible{outline:2px solid var(--ink);outline-offset:1px;border-radius:0 4px 4px 0;}
+  .val{font-size:0.8rem;color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .crow.hl .val{color:var(--ink);font-weight:600;}
+  .axisrow{padding-block:2px 0;}
+  .ticks{height:20px;padding:0;}
+  .tick{position:absolute;top:2px;font-size:0.75rem;color:var(--muted);transform:translateX(-50%);white-space:nowrap;font-variant-numeric:tabular-nums;}
+  .tick.first{transform:none;}
+  .tick.ref{color:var(--ink-2);font-weight:600;}
+  .chart-note{font-size:0.8rem;color:var(--muted);margin-top:12px;}
+
+  details.tableview{margin-top:14px;border-top:1px solid var(--line);padding-top:10px;}
+  details.tableview summary{cursor:pointer;font-size:0.85rem;color:var(--ink-2);font-weight:500;}
+  details.tableview summary:hover{color:var(--ink);}
+  .tbl-wrap{overflow-x:auto;margin-top:10px;}
+  table{border-collapse:collapse;width:100%;font-size:0.86rem;}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{font-weight:600;color:var(--ink-2);font-size:0.8rem;}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+
+  /* tooltip */
+  .tip{
+    position:fixed;z-index:50;pointer-events:none;min-width:150px;max-width:260px;
+    background:var(--surface);border:1px solid var(--line);border-radius:8px;
+    box-shadow:0 8px 24px rgba(0,0,0,.18);padding:9px 11px;font-size:0.8rem;
+  }
+  .tip .tt{color:var(--ink-2);margin-bottom:6px;font-weight:500;}
+  .tip .tr{display:flex;align-items:center;gap:8px;margin-top:3px;}
+  .tip .tr i{width:12px;height:2px;border-radius:1px;flex:none;}
+  .tip .tr b{font-size:0.95rem;color:var(--ink);font-variant-numeric:tabular-nums;}
+  .tip .tr span{color:var(--muted);}
+
+  /* ---------- Price extras ---------- */
+  .minis{display:grid;grid-template-columns:repeat(auto-fit, minmax(125px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:16px;}
+  .minis > div{background:var(--surface-2);padding:10px 12px;}
+  .minis .k{font-size:0.76rem;color:var(--muted);}
+  .minis .v{font-weight:600;font-variant-numeric:tabular-nums;}
+
+  /* ---------- Calculator ---------- */
+  .seg{display:inline-flex;flex-wrap:wrap;gap:2px;padding:3px;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;}
+  .seg button{
+    border:0;background:transparent;color:var(--ink-2);font:500 0.84rem var(--f-body);
+    padding:6px 11px;border-radius:6px;cursor:pointer;
+  }
+  .seg button:hover{color:var(--ink);background:var(--surface);}
+  .seg button[aria-pressed="true"],.seg button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12);font-weight:600;}
+  .fields{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;margin-top:16px;}
+  @media (max-width: 480px){ .fields{grid-template-columns:1fr;} }
+  .field{display:grid;gap:5px;min-width:0;}
+  .field.wide{grid-column:1 / -1;}
+  .field label{font-size:0.82rem;color:var(--ink-2);font-weight:500;display:flex;justify-content:space-between;gap:8px;}
+  .field label output{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums;}
+  .field input[type="number"]{
+    width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);
+    color:var(--ink);font:500 0.95rem var(--f-body);font-variant-numeric:tabular-nums;
+  }
+  .field input[type="range"]{width:100%;accent-color:var(--accent);}
+  .field .hint{font-size:0.76rem;color:var(--muted);}
+  .result{margin-top:18px;border-top:1px solid var(--line);padding-top:16px;display:grid;gap:14px;}
+  .saving{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;}
+  .saving .big{font-family:var(--f-display);font-weight:700;font-size:2.6rem;line-height:1;letter-spacing:-0.02em;color:var(--good-text);}
+  .saving .big.neg{color:var(--crit-text);}
+  .saving .sub{color:var(--ink-2);font-size:0.9rem;}
+  .saving .sub b{color:var(--ink);font-variant-numeric:tabular-nums;}
+  .cmp .crow{--lw:92px;}
+
+  /* ---------- Strengths ---------- */
+  .strengths{display:grid;grid-template-columns:repeat(2, minmax(0,1fr));gap:20px;}
+  @media (max-width: 820px){ .strengths{grid-template-columns:minmax(0,1fr);} }
+  .strength .tag{display:inline-block;font-size:0.76rem;font-weight:600;color:var(--accent);background:var(--accent-soft);border-radius:4px;padding:2px 7px;margin-bottom:10px;}
+  .strength ul{margin:12px 0 0;padding-left:18px;display:grid;gap:8px;color:var(--ink-2);font-size:0.93rem;}
+  .strength li::marker{color:var(--axis);}
+  .strength li strong{color:var(--ink);font-weight:600;}
+  .strength .fig{display:flex;gap:10px;align-items:baseline;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);}
+  .strength .fig b{font-family:var(--f-display);font-size:1.5rem;font-weight:700;letter-spacing:-0.02em;}
+  .strength .fig span{font-size:0.84rem;color:var(--ink-2);}
+
+  /* ---------- Effort ---------- */
+  .effort-panel{margin-top:16px;display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:22px;align-items:start;}
+  @media (max-width: 640px){ .effort-panel{grid-template-columns:minmax(0,1fr);} }
+  .effort-name{font-family:var(--f-mono);font-size:1.6rem;font-weight:500;}
+  .default-chip{display:inline-block;margin-left:8px;font-family:var(--f-body);font-size:0.74rem;font-weight:600;vertical-align:middle;color:var(--accent);background:var(--accent-soft);border-radius:4px;padding:2px 7px;}
+  .meter{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin-top:12px;}
+  .meter i{height:8px;border-radius:2px;background:var(--line);}
+  .meter i.on{background:var(--s1);}
+  .meter-cap{display:flex;justify-content:space-between;font-size:0.74rem;color:var(--muted);margin-top:5px;}
+  .effort-text{display:grid;gap:10px;}
+  .effort-text .lbl{font-size:0.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;}
+  .effort-text p{color:var(--ink-2);}
+  .effort-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);font-size:0.88rem;color:var(--ink-2);}
+
+  /* ---------- Compare table ---------- */
+  .cmp-table th:first-child,.cmp-table td:first-child{color:var(--ink-2);font-weight:500;white-space:nowrap;}
+  .cmp-table thead th{font-family:var(--f-display);font-size:0.95rem;color:var(--ink);font-weight:700;white-space:nowrap;}
+  .cmp-table .me{background:var(--hl);}
+  .cmp-table thead th.me{color:var(--accent);}
+  .cmp-table td{min-width:120px;}
+  .cmp-table td code{white-space:nowrap;}
+  .yes{color:var(--good-text);font-weight:600;}
+  .no{color:var(--crit-text);font-weight:600;}
+
+  /* ---------- Dev ---------- */
+  .changes{display:grid;gap:0;}
+  .change{display:grid;grid-template-columns:118px minmax(0,1fr);gap:14px;padding-block:14px;border-bottom:1px solid var(--line);}
+  .change:first-child{padding-top:0;}
+  .change:last-child{border-bottom:0;padding-bottom:0;}
+  @media (max-width: 520px){ .change{grid-template-columns:minmax(0,1fr);gap:6px;} }
+  .status{display:inline-flex;align-items:center;gap:6px;font-size:0.78rem;font-weight:600;align-self:start;white-space:nowrap;}
+  .status svg{width:14px;height:14px;flex:none;}
+  .status.crit{color:var(--crit-text);}
+  .status.warn{color:var(--warn-text);}
+  .status.good{color:var(--good-text);}
+  .change h3{font-family:var(--f-body);font-size:0.97rem;font-weight:600;}
+  .change p{color:var(--ink-2);font-size:0.9rem;margin-top:3px;}
+  .codebox{position:relative;background:var(--code-bg);border:1px solid var(--line);border-radius:10px;}
+  .codebox pre{margin:0;padding:16px 16px 18px;overflow-x:auto;font-family:var(--f-mono);font-size:0.82rem;line-height:1.6;color:var(--ink);}
+  .codebox .copy{
+    position:absolute;top:8px;right:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);
+    font:500 0.78rem var(--f-body);padding:4px 10px;border-radius:6px;cursor:pointer;
+  }
+  .codebox .copy:hover{color:var(--ink);}
+  .t-s{color:var(--tok-str);} .t-c{color:var(--tok-com);} .t-k{color:var(--tok-key);font-weight:500;}
+  .tips{margin:0;padding-left:18px;display:grid;gap:8px;color:var(--ink-2);font-size:0.92rem;}
+  .tips strong{color:var(--ink);font-weight:600;}
+  .stack{display:grid;gap:20px;}
+
+  /* ---------- Availability & choose ---------- */
+  .plat{display:grid;gap:0;}
+  .plat > div{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;padding-block:10px;border-bottom:1px solid var(--line);}
+  .plat > div:last-child{border-bottom:0;}
+  .plat b{font-weight:600;}
+  .plat code{color:var(--ink-2);}
+  .plat .note{flex-basis:100%;font-size:0.8rem;color:var(--muted);}
+  .choose{display:grid;gap:0;}
+  .choose > div{display:grid;grid-template-columns:110px minmax(0,1fr);gap:12px;padding-block:11px;border-bottom:1px solid var(--line);}
+  .choose > div:last-child{border-bottom:0;}
+  .choose b{font-family:var(--f-display);font-weight:700;}
+  .choose .me b{color:var(--accent);}
+  .choose p{color:var(--ink-2);font-size:0.9rem;}
+  @media (max-width: 420px){ .choose > div{grid-template-columns:minmax(0,1fr);gap:2px;} }
+
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+  footer{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);font-size:0.8rem;color:var(--muted);display:grid;gap:6px;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;scroll-behavior:auto !important;}
+  }
+  html{scroll-behavior:smooth;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead" id="attekintes">
+    <div class="eyebrow">Modellprofil · 2026. szeptember</div>
+    <h1>Claude Opus <span class="ver">5.5</span></h1>
+    <p class="lede">Az Opus 5 utódja hosszan futó, ágensalapú kódoláshoz és tudásmunkához – <strong>alacsonyabb áron</strong>. Az Anthropic tesztjeiben már az alapértelmezett <strong>medium</strong> szinten felülmúlja az Opus 5 <strong>high</strong> szintjét kódolásban és tudásmunkában, és ehhez kevesebb tokent használ.</p>
+    <div class="idrow">
+      <span class="idchip"><code id="modelId">claude-opus-5-5</code><button type="button" id="copyId">Másolás</button></span>
+      <div class="meta">
+        <span>Elődje: <b>Claude Opus 5</b></span>
+        <span>Tudáshatár: <b>2026. június</b></span>
+        <span>Tokenizáló: <b>azonos az Opus 5-tel</b></span>
+      </div>
+    </div>
+    <p class="disclaimer">Nem hivatalos összefoglaló az Anthropic API-dokumentációja és Opus 5.5 migrációs útmutatója alapján. Az arányok az Anthropic saját tesztjeiből származó közelítések, nem független benchmarkok.</p>
+  </header>
+
+  <div class="spec" role="list" aria-label="Fő műszaki adatok">
+    <div role="listitem"><span class="k">Kontextusablak</span><span class="v">1M<small>token</small></span><span class="d">alapértelmezett és maximum</span></div>
+    <div role="listitem"><span class="k">Max. kimenet</span><span class="v">128K<small>token</small></span><span class="d">nagy értéknél streaminggel</span></div>
+    <div role="listitem"><span class="k">Input ár</span><span class="v">$4<small>/ MTok</small></span><span class="d up">−20% az Opus 5-höz képest</span></div>
+    <div role="listitem"><span class="k">Output ár</span><span class="v">$20<small>/ MTok</small></span><span class="d up">−20% az Opus 5-höz képest</span></div>
+    <div role="listitem"><span class="k">Cache-olvasás</span><span class="v">$0,20<small>/ MTok</small></span><span class="d up">−60% az Opus 5-höz képest</span></div>
+    <div role="listitem"><span class="k">Alapértelmezett effort</span><span class="v">medium</span><span class="d">Opus 5: high</span></div>
+  </div>
+
+  <nav class="nav" aria-label="Szakaszok">
+    <div class="nav-inner">
+      <a href="#arak">Árak</a>
+      <a href="#hatekonysag">Hatékonyság</a>
+      <a href="#erossegek">Erősségek</a>
+      <a href="#effort">Effort szintek</a>
+      <a href="#osszevetes">Összevetés</a>
+      <a href="#fejlesztoknek">Fejlesztőknek</a>
+      <a href="#elerhetoseg">Elérhetőség</a>
+    </div>
+  </nav>
+
+  <!-- ============ Árak ============ -->
+  <section class="block" id="arak">
+    <div class="two">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Listaár a Claude-családban</h2>
+          <p>USD millió tokenenként. Az Opus 5.5 a legolcsóbb Opus: 20%-kal olcsóbb az Opus 5-nél, és feleannyiba kerül, mint a Fable 5.1.</p>
+        </div>
+        <div class="legend" aria-hidden="true">
+          <span><i style="background:var(--s1)"></i>Input</span>
+          <span><i style="background:var(--s2)"></i>Output</span>
+        </div>
+        <div class="chart" id="priceChart" role="group" aria-label="Listaárak modellenként, input és output, dollár per millió token"></div>
+        <div class="minis">
+          <div><div class="k">Batch (−50%)</div><div class="v">$2 / $10</div></div>
+          <div><div class="k">Cache-írás, 5 perc</div><div class="v">$5 †</div></div>
+          <div><div class="k">Cache-írás, 1 óra</div><div class="v">$8 †</div></div>
+          <div><div class="k">Fast mode (csak Claude API)</div><div class="v">$8 / $40 †</div></div>
+        </div>
+        <details class="tableview">
+          <summary>Adatok táblázatban</summary>
+          <div class="tbl-wrap"><table id="priceTable"></table></div>
+        </details>
+      </div>
+
+      <div class="panel" id="calc">
+        <div class="panel-head">
+          <h2>Havi költség: Opus 5 vagy 5.5?</h2>
+          <p>Ugyanaz a terhelés a két modellen, listaáron. Állítsd a saját forgalmadra, vagy indulj egy példából.</p>
+        </div>
+        <div class="seg" role="group" aria-label="Példa terhelések">
+          <button type="button" data-preset="list" aria-pressed="true">Csak listaár</button>
+          <button type="button" data-preset="agent" aria-pressed="false">Kódoló ágens (példa)</button>
+          <button type="button" data-preset="analyst" aria-pressed="false">Elemzések (példa)</button>
+        </div>
+        <div class="fields">
+          <div class="field">
+            <label for="inTok">Bemeneti token / hó <span>millió</span></label>
+            <input type="number" id="inTok" min="0" step="10" value="500">
+          </div>
+          <div class="field">
+            <label for="outTok">Kimeneti token / hó <span>millió</span></label>
+            <input type="number" id="outTok" min="0" step="5" value="50">
+          </div>
+          <div class="field wide">
+            <label for="cacheHit">Cache-ből olvasott bemenet <output id="cacheOut" for="cacheHit">60%</output></label>
+            <input type="range" id="cacheHit" min="0" max="95" step="5" value="60">
+          </div>
+          <div class="field wide">
+            <label for="tokSave">Kevesebb kimeneti token az Opus 5.5-tel <output id="saveOut" for="tokSave">0%</output></label>
+            <input type="range" id="tokSave" min="0" max="60" step="5" value="0">
+            <span class="hint">Az Anthropic szerint kódolásnál kb. 50%, hosszú elemzéseknél kb. 40% a megtakarítás. 0% = tisztán az árkülönbség.</span>
+          </div>
+        </div>
+        <div class="result" aria-live="polite">
+          <div class="saving">
+            <span class="big" id="savePct">−22,5%</span>
+            <span class="sub">megtakarítás: <b id="saveMonth">$540</b> / hó · <b id="saveYear">$6 480</b> / év</span>
+          </div>
+          <div class="chart cmp" id="calcChart" role="group" aria-label="Havi költség összevetése"></div>
+          <p class="chart-note">A számítás a nem cache-elt bemenetet, a cache-olvasást és a kimenetet tartalmazza; a cache-írás, a batch-kedvezmény és az adók nincsenek benne.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Hatékonyság ============ -->
+  <section class="block" id="hatekonysag">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Kevesebb token ugyanarra a munkára</h2>
+        <p>Az Opus 5.5 tokenfelhasználása az Opus 5-höz képest (Opus 5 = 100%), azonos vagy jobb eredmény mellett. A becsült költség a tokenarányt a 20%-kal alacsonyabb kimeneti árral szorozza.</p>
+      </div>
+      <div class="legend" aria-hidden="true">
+        <span><i style="background:var(--s1)"></i>Tokenfelhasználás</span>
+        <span><i style="background:var(--s2)"></i>Becsült kimeneti költség</span>
+      </div>
+      <div class="chart" id="effChart" role="group" aria-label="Tokenfelhasználás és becsült költség az Opus 5 százalékában"></div>
+      <p class="chart-note">≈ közelítő értékek az Anthropic saját tesztjeiből („kb. feleannyi”, „kb. 40%-kal kevesebb”, „kb. tizedannyi”). A költségbecslés a bemeneti tokeneket és a cache-t nem tartalmazza.</p>
+      <details class="tableview">
+        <summary>Adatok táblázatban</summary>
+        <div class="tbl-wrap"><table id="effTable"></table></div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ============ Erősségek ============ -->
+  <section class="block" id="erossegek">
+    <div class="block-head">
+      <h2>Erősségek</h2>
+      <p>Nem csak tokenenként olcsóbb, hanem megoldott feladatonként is: sok kódolási, elemzési és vizuális feladaton alapbeállításon hozza vagy veri az Opus 5-öt, kevesebb tokennel.</p>
+    </div>
+    <div class="strengths">
+      <article class="panel strength">
+        <span class="tag">Legnagyobb mért javulás</span>
+        <h3>Ágensalapú kódolás és kódreview</h3>
+        <ul>
+          <li><strong>Többlépéses munka valós kódbázisban</strong> – egy változtatást nagy repón visz végig, amíg a tesztek át nem mennek. Medium szinten hozza vagy veri az Opus 5 high eredményét, kevesebb lépésben.</li>
+          <li><strong>Kódreview:</strong> több hibát talál, kevesebb téves riasztással.</li>
+          <li><strong>Közérthetően magyarázza el</strong> a változtatásait, így könnyebb átnézni és megbízni a munkájában.</li>
+        </ul>
+        <div class="fig"><b>≈ ½</b><span>annyi token, mint az Opus 5 high szinten</span></div>
+      </article>
+
+      <article class="panel strength">
+        <span class="tag">Megbízhatóbb elemző</span>
+        <h3>Tudásmunka és elemzés</h3>
+        <ul>
+          <li><strong>Sokkal ritkábban állít olyan számot vagy forrást</strong>, amelyet a bemenet nem támaszt alá; a hivatkozások jóval gyakrabban mutatnak a helyes forrásra.</li>
+          <li><strong>Jobb hosszú elemző anyagok</strong> medium szinten, mint az Opus 5-é high szinten.</li>
+          <li><strong>Pénzügyi modellek</strong> építésében és auditálásában is erősebb.</li>
+          <li><strong>Részletorientált nagy bemeneteken:</strong> kiszúrja a rossz napra eső dátumot egy hosszú levélláncban vagy a számokkal nem egyező diagramot egy prezentációban – több téves jelzés nélkül.</li>
+        </ul>
+        <div class="fig"><b>≈ −40%</b><span>kimeneti token hosszú elemzéseknél</span></div>
+      </article>
+
+      <article class="panel strength">
+        <span class="tag">Extra eszközök nélkül</span>
+        <h3>Diagramok, ábrák, képernyőképek, computer use</h3>
+        <ul>
+          <li><strong>Minden effort szinten pontosabban olvas</strong> vizuális anyagot: sűrű diagramok értékeit és a pozíciótól függő jelentést (melyik dobozt köti össze egy nyíl, mi változott két diagramverzió között, pontosan mikor kezdődik egy megbeszélés egy naptár-képernyőképen).</li>
+          <li><strong>Már low szinten jobban olvas diagramot</strong>, mint az Opus 5 a legmagasabb szintjén – amely ehhez kódot futtatott a vágáshoz, nagyításhoz, méréshez.</li>
+          <li><strong>Többlépéses computer use:</strong> alapbeállításon hozza azt a sikerességet, amit az Opus 5 csak jóval magasabb szinten ért el, kevesebb lépésben, kb. 40%-kal kevesebb tokennel.</li>
+        </ul>
+        <div class="fig"><b>≈ 1/10</b><span>kimeneti token diagramonként</span></div>
+      </article>
+
+      <article class="panel strength">
+        <span class="tag">Érthetőbb beszámolók</span>
+        <h3>Kommunikáció és írás</h3>
+        <ul>
+          <li><strong>Tisztább próza</strong>, a legszembetűnőbben az ágensmunkáról szóló beszámolókban.</li>
+          <li><strong>Munka közbeni frissítései és záró összefoglalója</strong> kimondja, mit csinált, mit talált és mire van szüksége tőled.</li>
+          <li><strong>Kevesebb szakzsargon</strong> és kevesebb sablonos fordulat.</li>
+        </ul>
+        <div class="fig"><b>3 kérdés</b><span>minden beszámolóban: mit tett, mit talált, mi kell tőled</span></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ Effort ============ -->
+  <section class="block" id="effort">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Effort szintek</h2>
+        <p>Az Opus 5.5-nél a gondolkodás mindig be van kapcsolva; az <code>output_config.effort</code> a fő szabályzó az intelligencia, a késleltetés és a költség között. Válassz szintet:</p>
+      </div>
+      <div class="seg" role="tablist" aria-label="Effort szint" id="effortTabs">
+        <button type="button" role="tab" id="tab-low" data-level="low" aria-selected="false" aria-controls="effortPanel" tabindex="-1">low</button>
+        <button type="button" role="tab" id="tab-medium" data-level="medium" aria-selected="true" aria-controls="effortPanel">medium</button>
+        <button type="button" role="tab" id="tab-high" data-level="high" aria-selected="false" aria-controls="effortPanel" tabindex="-1">high</button>
+        <button type="button" role="tab" id="tab-xhigh" data-level="xhigh" aria-selected="false" aria-controls="effortPanel" tabindex="-1">xhigh</button>
+        <button type="button" role="tab" id="tab-max" data-level="max" aria-selected="false" aria-controls="effortPanel" tabindex="-1">max</button>
+      </div>
+      <div class="effort-panel" id="effortPanel" role="tabpanel" aria-labelledby="tab-medium">
+        <div>
+          <div class="effort-name"><span id="effName">medium</span><span class="default-chip" id="effDefault">alapértelmezett</span></div>
+          <div class="meter" id="effMeter" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="meter-cap"><span>kevesebb gondolkodás</span><span>több</span></div>
+        </div>
+        <div class="effort-text">
+          <div><div class="lbl">Mikor?</div><p id="effWhen"></p></div>
+          <div><div class="lbl">Mit érdemes tudni</div><p id="effNote"></p></div>
+        </div>
+      </div>
+      <p class="effort-foot">Azonos effort-név nem jelent azonos gondolkodást a két modellnél: ugyanazon a szinten az Opus 5.5 körönként többet gondolkodik, mint az Opus 5. Ha kevesebb gondolkodás kell, előbb az effortot csökkentsd, és csak utána írj „gondolkodj kevesebbet” típusú utasítást.</p>
+    </div>
+  </section>
+
+  <!-- ============ Összevetés ============ -->
+  <section class="block" id="osszevetes">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Összevetés a jelenlegi modellekkel</h2>
+        <p>Az Opus 5.5 oszlopa kiemelve. Az árak USD / millió token.</p>
+      </div>
+      <div class="tbl-wrap">
+        <table class="cmp-table">
+          <thead>
+            <tr><th scope="col"><span class="sr">Tulajdonság</span></th><th scope="col" class="me">Opus 5.5</th><th scope="col">Opus 5</th><th scope="col">Fable 5.1</th><th scope="col">Sonnet 5</th><th scope="col">Haiku 4.5</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Modellazonosító</th><td class="me"><code>claude-opus-5-5</code></td><td><code>claude-opus-5</code></td><td><code>claude-fable-5-1</code></td><td><code>claude-sonnet-5</code></td><td><code>claude-haiku-4-5</code></td></tr>
+            <tr><th scope="row">Szerep</th><td class="me">Opus-szint, jobb ár/érték</td><td>Az előd</td><td>A legképesebb széles körben elérhető</td><td>Sebesség + intelligencia</td><td>Gyors, olcsó</td></tr>
+            <tr><th scope="row">Kontextus</th><td class="me">1M</td><td>1M</td><td>1M</td><td>1M</td><td>200K</td></tr>
+            <tr><th scope="row">Max. kimenet</th><td class="me">128K</td><td>128K</td><td>128K</td><td>128K</td><td>64K</td></tr>
+            <tr><th scope="row">Input / output</th><td class="me"><b>$4 / $20</b></td><td>$5 / $25</td><td>$10 / $50</td><td>$2 / $10</td><td>$1 / $5</td></tr>
+            <tr><th scope="row">Cache-olvasás</th><td class="me"><b>$0,20</b></td><td>$0,50</td><td>$0,25</td><td>–</td><td>–</td></tr>
+            <tr><th scope="row">Alapértelmezett effort</th><td class="me">medium</td><td>high</td><td>high</td><td>high</td><td>nincs effort</td></tr>
+            <tr><th scope="row">Gondolkodás kikapcsolható</th><td class="me"><span class="no">Nem</span> – mindig be</td><td><span class="yes">Igen</span> – high szintig</td><td><span class="no">Nem</span></td><td><span class="yes">Igen</span></td><td>Alapból ki (<code>budget_tokens</code>)</td></tr>
+            <tr><th scope="row">Kényszerített <code>tool_choice</code></th><td class="me"><span class="no">Nem</span></td><td><span class="yes">Igen</span></td><td><span class="no">Nem</span></td><td><span class="yes">Igen</span></td><td><span class="yes">Igen</span></td></tr>
+            <tr><th scope="row">Fast mode</th><td class="me"><span class="yes">Igen</span> – $8 / $40 †</td><td><span class="yes">Igen</span> – $10 / $50</td><td><span class="no">Nem</span></td><td><span class="no">Nem</span></td><td><span class="no">Nem</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="chart-note">– = a forrásként használt dokumentáció nem adja meg. A fast mode kutatási előzetes, csak a Claude API-n.</p>
+    </div>
+  </section>
+
+  <!-- ============ Fejlesztőknek ============ -->
+  <section class="block" id="fejlesztoknek">
+    <div class="block-head">
+      <h2>Fejlesztőknek: mi változik az Opus 5-höz képest</h2>
+      <p>A meglévő Opus 5 promptok alapból jól működnek, de négy API-szintű törő változás van. A többi funkció (tömörítés, task budget, batch, Files API, PDF, képi bemenet, strukturált kimenet) változatlanul megmarad.</p>
+    </div>
+    <div class="two">
+      <div class="panel">
+        <div class="changes">
+          <div class="change">
+            <span class="status crit"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="currentColor"/><path d="M8 4.2v4.6M8 10.9v.9" stroke="var(--surface)" stroke-width="1.8" stroke-linecap="round"/></svg>Törő változás</span>
+            <div><h3>A gondolkodás nem kapcsolható ki</h3><p>A <code>thinking: {type: "disabled"}</code> és a <code>budget_tokens</code> minden effort szinten 400-as hibát ad. Hagyd el a <code>thinking</code> mezőt, és az effortot állítsd.</p></div>
+          </div>
+          <div class="change">
+            <span class="status crit"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="currentColor"/><path d="M8 4.2v4.6M8 10.9v.9" stroke="var(--surface)" stroke-width="1.8" stroke-linecap="round"/></svg>Törő változás</span>
+            <div><h3>Nincs kényszerített eszközhasználat</h3><p>A <code>tool_choice</code> <code>any</code> / <code>tool</code> 400-at ad (a <code>count_tokens</code> és a Batches végponton is). Helyette <code>auto</code> + <code>strict: true</code> + utasítás a promptban, vagy strukturált kimenet.</p></div>
+          </div>
+          <div class="change">
+            <span class="status crit"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="currentColor"/><path d="M8 4.2v4.6M8 10.9v.9" stroke="var(--surface)" stroke-width="1.8" stroke-linecap="round"/></svg>Törő változás</span>
+            <div><h3>A gondolkodási blokkok a modellhez és a beszélgetéshez kötöttek</h3><p>„Preserved thinking”: a korábbi üzenetek, a system prompt vagy az eszközlista utólagos módosítása érvényteleníti a blokkokat, ezért csak hozzáfűzős előzményt építs. A 2026. augusztus 31. után létrehozott fiókoknál alapból kikényszerítve.</p></div>
+          </div>
+          <div class="change">
+            <span class="status crit"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="currentColor"/><path d="M8 4.2v4.6M8 10.9v.9" stroke="var(--surface)" stroke-width="1.8" stroke-linecap="round"/></svg>Törő változás</span>
+            <div><h3>Computer use csak toolsettel</h3><p>Csak a <code>computer_toolset_20260801</code> működik (béta fejléc, név és képernyőméret megadása nélkül); a <code>computer_20251124</code> 400-at ad.</p></div>
+          </div>
+          <div class="change">
+            <span class="status warn"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5 15 14H1z" fill="currentColor"/><path d="M8 6v3.6M8 11.6v.6" stroke="var(--surface)" stroke-width="1.7" stroke-linecap="round"/></svg>Hangolás</span>
+            <div><h3>Az alapértelmezett effort medium lett</h3><p>Az Opus 5-nél high volt. Állítsd be kifejezetten, és mérd újra a szinteket, ahelyett hogy átvinnéd a régi beállítást.</p></div>
+          </div>
+          <div class="change">
+            <span class="status warn"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5 15 14H1z" fill="currentColor"/><path d="M8 6v3.6M8 11.6v.6" stroke="var(--surface)" stroke-width="1.7" stroke-linecap="round"/></svg>Hangolás</span>
+            <div><h3>Az eszközhívások közti szöveg <code>thinking</code> blokkban jön</h3><p>Alapból üres szöveggel. A felületen való megjelenítéshez: <code>thinking.display: "updates"</code> (béta), és a nem üres blokkokat mutasd a hozzájuk tartozó eszközhívás előtt.</p></div>
+          </div>
+          <div class="change">
+            <span class="status good"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="currentColor"/><path d="M8 7.3v4.2M8 4.6v.6" stroke="var(--surface)" stroke-width="1.8" stroke-linecap="round"/></svg>Új</span>
+            <div><h3>Bővebb biztonsági osztályozók</h3><p>A <code>cyber</code> mellé bekerült a <code>bio</code> és a <code>reasoning_extraction</code>. Mindig ellenőrizd a <code>stop_reason: "refusal"</code> értéket, és kapcsold be a fallbacket.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="panel">
+          <div class="panel-head"><h3>Minimális hívás (Python)</h3></div>
+          <div class="codebox">
+            <button type="button" class="copy" id="copyCode">Másolás</button>
+<pre id="codeSample"><span class="t-k">import</span> anthropic
+
+client = anthropic.Anthropic()
+
+<span class="t-k">with</span> client.messages.stream(
+    model=<span class="t-s">"claude-opus-5-5"</span>,
+    max_tokens=<span class="t-s">64000</span>,  <span class="t-c"># a gondolkodásnak is kell hely</span>
+    output_config={<span class="t-s">"effort"</span>: <span class="t-s">"medium"</span>},  <span class="t-c"># legyen explicit</span>
+    messages=[{<span class="t-s">"role"</span>: <span class="t-s">"user"</span>, <span class="t-s">"content"</span>: <span class="t-s">"Nézd át ezt a PR-t."</span>}],
+) <span class="t-k">as</span> stream:
+    message = stream.get_final_message()
+
+<span class="t-k">if</span> message.stop_reason == <span class="t-s">"refusal"</span>:
+    ...  <span class="t-c"># osztályozó utasította el: fallback</span>
+<span class="t-k">else</span>:
+    print(<span class="t-s">""</span>.join(b.text <span class="t-k">for</span> b <span class="t-k">in</span> message.content <span class="t-k">if</span> b.type == <span class="t-s">"text"</span>))</pre>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>Promptolási tippek</h3></div>
+          <ul class="tips">
+            <li><strong>A <code>max_tokens</code> a gondolkodást is fedezze</strong> – hosszú ágenskörökhöz 64K jó kiindulópont.</li>
+            <li><strong>Az Opus 5-re hangolt utasításokat teszteld újra</strong> (bőbeszédűség, túlellenőrzés, hatókör) – lehet, hogy már nem kellenek.</li>
+            <li><strong>Frontend-munkánál nevezd meg konkrétan a kerülendő mintákat</strong>; az általános „ne legyen generikus” kérés csak egy alapstílust cserél egy másikra.</li>
+            <li><strong>A képi bemenetekhez épített segédállványzat</strong> (vágás, nagyítás) lehet, hogy felesleges – teszteld újra. A legsűrűbb ábráknál a nagyobb felbontás és a képfeldolgozó eszközök még mindig segítenek.</li>
+            <li><strong>Ha rendszeres munka közbeni frissítést szeretnél</strong>, írd le a system promptban, mikor és mit tartalmazzon.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Elérhetőség ============ -->
+  <section class="block" id="elerhetoseg">
+    <div class="two">
+      <div class="panel">
+        <div class="panel-head"><h2>Elérhetőség</h2><p>Indulástól minden nagy platformon; az Opus 5 mindenhol elérhető marad.</p></div>
+        <div class="plat">
+          <div><b>Claude API</b><code>claude-opus-5-5</code><span class="note">Itt érhető el a fast mode is (kutatási előzetes).</span></div>
+          <div><b>Amazon Bedrock</b><code>anthropic.claude-opus-5-5</code></div>
+          <div><b>Claude Platform on AWS</b><code>claude-opus-5-5</code></div>
+          <div><b>Google Cloud (Vertex AI)</b><code>claude-opus-5-5</code></div>
+          <div><b>Microsoft Foundry</b><code>claude-opus-5-5</code><span class="note">Anthropic és Microsoft által üzemeltetett útvonalon is.</span></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h2>Mikor melyiket?</h2><p>Rövid döntési segédlet a jelenlegi családhoz.</p></div>
+        <div class="choose">
+          <div class="me"><b>Opus 5.5</b><p>Hosszan futó ágensalapú kódolás, kódreview, elemzés, vizuális bemenetek – Opus-szintű minőség kedvezőbb áron.</p></div>
+          <div><b>Fable 5.1</b><p>A legnehezebb érvelési és hosszú távú ágensfeladatok, ahol a maximális képesség fontosabb a költségnél.</p></div>
+          <div><b>Sonnet 5</b><p>Nagy volumen, gyorsaság és ár; közel Opus-szintű kódolás és ágensmunka.</p></div>
+          <div><b>Haiku 4.5</b><p>Egyszerű, gyors és olcsó részfeladatok, alügynökök.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>† Az indulás idején még megerősítendő érték (a dokumentáció szerint a cache-írási díjak a szokásos 1,25× / 2× szorzóból származnak; a fast mode ára a modell indulása után frissül).</span>
+    <span>Források: Anthropic Claude API dokumentáció – modelltábla és „Migrating to Claude Opus 5.5” útmutató (2026). Nem hivatalos, tájékoztató jellegű összefoglaló.</span>
+  </footer>
+</div>
+
+<div class="tip" id="tip" hidden></div>
+
+<script>
+(function(){
+  "use strict";
+
+  var nf0 = new Intl.NumberFormat("hu-HU", {maximumFractionDigits:0});
+  function usd(v){
+    var dec = v < 1 && v > 0 ? 2 : 0;
+    return "$" + v.toLocaleString("hu-HU", {minimumFractionDigits:dec, maximumFractionDigits:dec});
+  }
+  function pct(v){ return v.toLocaleString("hu-HU", {maximumFractionDigits:1}) + "%"; }
+
+  function el(tag, cls, text){
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+
+  /* ---------- Tooltip ---------- */
+  var tip = document.getElementById("tip");
+  function showTip(title, rows, x, y){
+    tip.textContent = "";
+    tip.appendChild(el("div", "tt", title));
+    rows.forEach(function(r){
+      var row = el("div", "tr");
+      var key = el("i"); key.style.background = r.color;
+      row.appendChild(key);
+      row.appendChild(el("b", null, r.value));
+      row.appendChild(el("span", null, r.name));
+      tip.appendChild(row);
+    });
+    tip.hidden = false;
+    var w = tip.offsetWidth, h = tip.offsetHeight;
+    var left = x + 14, top = y + 14;
+    if (left + w > window.innerWidth - 8) left = x - w - 14;
+    if (top + h > window.innerHeight - 8) top = y - h - 14;
+    tip.style.left = Math.max(8, left) + "px";
+    tip.style.top = Math.max(8, top) + "px";
+  }
+  function hideTip(){ tip.hidden = true; }
+
+  /* ---------- Generic horizontal bar chart ---------- */
+  function renderBars(host, cfg){
+    host.textContent = "";
+    if (cfg.labelWidth) host.style.setProperty("--lw", cfg.labelWidth);
+    function addGrid(track){
+      cfg.ticks.forEach(function(t, i){
+        var g = el("div", "gl" + (i === 0 ? " zero" : "") + (cfg.ref === t ? " ref" : ""));
+        g.style.left = (t / cfg.max * 100) + "%";
+        track.appendChild(g);
+      });
+    }
+    cfg.rows.forEach(function(r){
+      var row = el("div", "crow" + (r.hl ? " hl" : "") + (cfg.top ? " top" : ""));
+      var lab = el("div", "rlabel", r.label);
+      if (r.sub) lab.appendChild(el("small", null, r.sub));
+      row.appendChild(lab);
+      var track = el("div", "track");
+      addGrid(track);
+      var bars = el("div", "bars");
+      var tipRows = cfg.series.map(function(s){
+        return {color:"var(--" + s.cls + ")", value:cfg.fmt(r.values[s.key]), name:s.name};
+      });
+      cfg.series.forEach(function(s){
+        var v = r.values[s.key];
+        var line = el("div", "barline");
+        var b = el("span", "bar " + s.cls);
+        b.style.width = Math.max(0.6, v / cfg.max * 100) + "%";
+        b.tabIndex = 0;
+        b.setAttribute("role", "img");
+        b.setAttribute("aria-label", r.label + ", " + s.name + ": " + cfg.fmt(v));
+        function over(e){ showTip(r.label, tipRows, e.clientX, e.clientY); }
+        b.addEventListener("pointermove", over);
+        b.addEventListener("pointerleave", hideTip);
+        b.addEventListener("focus", function(){
+          var rc = b.getBoundingClientRect();
+          showTip(r.label, tipRows, rc.right, rc.top);
+        });
+        b.addEventListener("blur", hideTip);
+        line.appendChild(b);
+        line.appendChild(el("span", "val", cfg.fmt(v)));
+        bars.appendChild(line);
+      });
+      track.appendChild(bars);
+      row.appendChild(track);
+      host.appendChild(row);
+    });
+    if (cfg.axis !== false){
+      var ax = el("div", "crow axisrow" + (cfg.top ? " top" : ""));
+      if (!cfg.top) ax.appendChild(el("div", "rlabel"));
+      var tr = el("div", "track ticks");
+      cfg.ticks.forEach(function(t, i){
+        var lbl = cfg.ref === t && cfg.refLabel ? cfg.refLabel : cfg.tickFmt(t);
+        var tk = el("span", "tick" + (i === 0 ? " first" : "") + (cfg.ref === t ? " ref" : ""), lbl);
+        tk.style.left = (t / cfg.max * 100) + "%";
+        tr.appendChild(tk);
+      });
+      ax.appendChild(tr);
+      host.appendChild(ax);
+    }
+  }
+
+  function renderTable(tbl, head, rows){
+    tbl.textContent = "";
+    var thead = el("thead"), hr = el("tr");
+    head.forEach(function(h, i){ var th = el("th", i ? "num" : null, h); th.scope = "col"; hr.appendChild(th); });
+    thead.appendChild(hr); tbl.appendChild(thead);
+    var tb = el("tbody");
+    rows.forEach(function(r){
+      var tr = el("tr");
+      r.forEach(function(c, i){ tr.appendChild(el(i ? "td" : "th", i ? "num" : null, c)); });
+      tb.appendChild(tr);
+    });
+    tbl.appendChild(tb);
+  }
+
+  /* ---------- Price chart ---------- */
+  var priceSeries = [
+    {key:"in", name:"Input", cls:"s1"},
+    {key:"out", name:"Output", cls:"s2"}
+  ];
+  var priceRows = [
+    {label:"Haiku 4.5", values:{"in":1, out:5}},
+    {label:"Sonnet 5", values:{"in":2, out:10}},
+    {label:"Opus 5.5", values:{"in":4, out:20}, hl:true},
+    {label:"Opus 5", values:{"in":5, out:25}},
+    {label:"Fable 5.1", values:{"in":10, out:50}}
+  ];
+  renderBars(document.getElementById("priceChart"), {
+    rows:priceRows, series:priceSeries, max:57, ticks:[0,10,20,30,40,50],
+    fmt:usd, tickFmt:function(t){ return "$" + t; }, labelWidth:"84px"
+  });
+  renderTable(document.getElementById("priceTable"),
+    ["Modell", "Input ($/MTok)", "Output ($/MTok)"],
+    priceRows.map(function(r){ return [r.label, usd(r.values["in"]), usd(r.values.out)]; }));
+
+  /* ---------- Efficiency chart ---------- */
+  var effSeries = [
+    {key:"tok", name:"Tokenfelhasználás", cls:"s1"},
+    {key:"cost", name:"Becsült kimeneti költség", cls:"s2"}
+  ];
+  var effRows = [
+    {label:"Ágensalapú kódolás valós repóban", sub:"5.5 medium vs. 5 high · tesztek zöldre", values:{tok:50, cost:40}},
+    {label:"Hosszú elemző anyagok", sub:"5.5 medium vs. 5 high · kimeneti tokenek", values:{tok:60, cost:48}},
+    {label:"Többlépéses computer use", sub:"5.5 alapbeállítás vs. 5 jóval magasabb effort", values:{tok:60, cost:48}},
+    {label:"Diagramok olvasása", sub:"5.5 low vs. 5 legmagasabb effort · diagramonként", values:{tok:10, cost:8}}
+  ];
+  var effFmt = function(v){ return "≈ " + pct(v); };
+  renderBars(document.getElementById("effChart"), {
+    rows:effRows, series:effSeries, max:112, ticks:[0,25,50,75,100], ref:100,
+    refLabel:"Opus 5 = 100%", fmt:effFmt, tickFmt:function(t){ return t + "%"; }, top:true
+  });
+  renderTable(document.getElementById("effTable"),
+    ["Feladat", "Tokenfelhasználás", "Becsült kimeneti költség"],
+    effRows.map(function(r){ return [r.label + " (" + r.sub + ")", effFmt(r.values.tok), effFmt(r.values.cost)]; }));
+
+  /* ---------- Calculator ---------- */
+  var P5  = {inp:5, cache:0.50, out:25};
+  var P55 = {inp:4, cache:0.20, out:20};
+  var inTok = document.getElementById("inTok"),
+      outTok = document.getElementById("outTok"),
+      cacheHit = document.getElementById("cacheHit"),
+      tokSave = document.getElementById("tokSave");
+  var presets = {
+    list:{inTok:500, outTok:50, cache:60, save:0},
+    agent:{inTok:800, outTok:60, cache:85, save:50},
+    analyst:{inTok:200, outTok:40, cache:50, save:40}
+  };
+  function num(input){ var v = parseFloat(input.value); return isFinite(v) && v > 0 ? v : 0; }
+  function cost(p, inM, outM, c, s){
+    var uncached = inM * (1 - c), cached = inM * c;
+    return {inp:uncached * p.inp, cache:cached * p.cache, out:outM * (1 - s) * p.out};
+  }
+  function total(o){ return o.inp + o.cache + o.out; }
+  function updateCalc(){
+    var inM = num(inTok), outM = num(outTok), c = (+cacheHit.value) / 100, s = (+tokSave.value) / 100;
+    document.getElementById("cacheOut").textContent = cacheHit.value + "%";
+    document.getElementById("saveOut").textContent = tokSave.value + "%";
+    var a = cost(P5, inM, outM, c, 0), b = cost(P55, inM, outM, c, s);
+    var ta = total(a), tb = total(b), diff = ta - tb;
+    var p = ta > 0 ? diff / ta * 100 : 0;
+    var big = document.getElementById("savePct");
+    big.textContent = (p >= 0 ? "−" : "+") + pct(Math.abs(p));
+    big.classList.toggle("neg", p < 0);
+    document.getElementById("saveMonth").textContent = "$" + nf0.format(Math.abs(diff));
+    document.getElementById("saveYear").textContent = "$" + nf0.format(Math.abs(diff) * 12);
+    var mx = Math.max(ta, tb, 1);
+    var step = niceStep(mx / 4);
+    var ticks = []; for (var t = 0; t <= mx + 0.0001; t += step) ticks.push(t);
+    renderBars(document.getElementById("calcChart"), {
+      rows:[
+        {label:"Opus 5", values:{v:ta}, sub:"$" + nf0.format(a.inp) + " + $" + nf0.format(a.cache) + " + $" + nf0.format(a.out)},
+        {label:"Opus 5.5", values:{v:tb}, hl:true, sub:"$" + nf0.format(b.inp) + " + $" + nf0.format(b.cache) + " + $" + nf0.format(b.out)}
+      ],
+      series:[{key:"v", name:"Havi költség", cls:"s1"}],
+      max:mx * 1.22, ticks:ticks, fmt:function(v){ return "$" + nf0.format(v); },
+      tickFmt:function(t){ return "$" + nf0.format(t); }, top:true
+    });
+    // Opus 5 is the baseline: neutral bar
+    var first = document.querySelector("#calcChart .crow .bar");
+    if (first){ first.classList.remove("s1"); first.classList.add("base"); }
+  }
+  function niceStep(raw){
+    var pow = Math.pow(10, Math.floor(Math.log10(raw || 1)));
+    var n = raw / pow;
+    return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10) * pow;
+  }
+  var presetBtns = document.querySelectorAll("[data-preset]");
+  presetBtns.forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var pr = presets[btn.getAttribute("data-preset")];
+      inTok.value = pr.inTok; outTok.value = pr.outTok; cacheHit.value = pr.cache; tokSave.value = pr.save;
+      presetBtns.forEach(function(o){ o.setAttribute("aria-pressed", String(o === btn)); });
+      updateCalc();
+    });
+  });
+  [inTok, outTok, cacheHit, tokSave].forEach(function(i){
+    i.addEventListener("input", function(){
+      presetBtns.forEach(function(o){ o.setAttribute("aria-pressed", "false"); });
+      updateCalc();
+    });
+  });
+  updateCalc();
+
+  /* ---------- Effort selector ---------- */
+  var effort = {
+    low:{d:1, when:"Késleltetésérzékeny útvonalak, alügynökök, egyszerű feladatok – ahol az első token ideje számít.",
+         note:"Rövid gondolkodás, alacsony késleltetés és költség. Több kódolási teszten megközelíti az Opus 5 high eredményét, jóval olcsóbban; diagramolvasásban már itt jobb, mint az Opus 5 a legmagasabb szintjén."},
+    medium:{d:2, def:true, when:"Kiindulópont a legtöbb kódolási és tudásmunka-feladathoz.",
+         note:"Az Anthropic tesztjeiben kódolásban és tudásmunkában felülmúlja az Opus 5 high szintjét. Innen érdemes a szomszédos szinteket kipróbálni és mérni."},
+    high:{d:3, when:"Intelligenciára érzékeny munka, ahol a minőség fontosabb a sebességnél.",
+         note:"Azonos szinten az Opus 5.5 körönként többet gondolkodik, mint az Opus 5 – ha a régi high beállítást viszed át, hosszabb körökre és több kimeneti tokenre számíts."},
+    xhigh:{d:4, when:"Csak ott, ahol mérhető minőségi nyereséget hoz.",
+         note:"A körök érezhetően hosszabbak, mint az Opus 5-nél: tervezz időkorláttal, streaminggel és folyamatjelzéssel a felületen."},
+    max:{d:5, when:"Amikor a helyesség fontosabb a költségnél.",
+         note:"Felső korlát nélküli gondolkodás. Csak mérés alapján kapcsold be, és hagyj bőven helyet a max_tokens értékben."}
+  };
+  var tabs = Array.prototype.slice.call(document.querySelectorAll("#effortTabs [role=tab]"));
+  var panel = document.getElementById("effortPanel");
+  function selectEffort(level, focus){
+    var e = effort[level];
+    tabs.forEach(function(t){
+      var on = t.getAttribute("data-level") === level;
+      t.setAttribute("aria-selected", String(on));
+      t.tabIndex = on ? 0 : -1;
+      if (on){ panel.setAttribute("aria-labelledby", t.id); if (focus) t.focus(); }
+    });
+    document.getElementById("effName").textContent = level;
+    document.getElementById("effDefault").hidden = !e.def;
+    document.getElementById("effWhen").textContent = e.when;
+    document.getElementById("effNote").textContent = e.note;
+    Array.prototype.forEach.call(document.querySelectorAll("#effMeter i"), function(i, idx){
+      i.classList.toggle("on", idx < e.d);
+    });
+  }
+  tabs.forEach(function(t, idx){
+    t.addEventListener("click", function(){ selectEffort(t.getAttribute("data-level")); });
+    t.addEventListener("keydown", function(ev){
+      var n = null;
+      if (ev.key === "ArrowRight") n = tabs[(idx + 1) % tabs.length];
+      if (ev.key === "ArrowLeft") n = tabs[(idx - 1 + tabs.length) % tabs.length];
+      if (n){ ev.preventDefault(); selectEffort(n.getAttribute("data-level"), true); }
+    });
+  });
+  selectEffort("medium");
+
+  /* ---------- Copy buttons ---------- */
+  function copy(text, btn, sourceEl){
+    var done = function(){ var o = btn.textContent; btn.textContent = "Másolva"; setTimeout(function(){ btn.textContent = o; }, 1400); };
+    var fallback = function(){
+      var r = document.createRange(); r.selectNodeContents(sourceEl);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      btn.textContent = "Kijelölve – Ctrl+C";
+      setTimeout(function(){ btn.textContent = "Másolás"; }, 1800);
+    };
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done, fallback);
+      } else { fallback(); }
+    } catch (e){ fallback(); }
+  }
+  var idEl = document.getElementById("modelId");
+  document.getElementById("copyId").addEventListener("click", function(){ copy(idEl.textContent, this, idEl); });
+  var codeEl = document.getElementById("codeSample");
+  document.getElementById("copyCode").addEventListener("click", function(){ copy(codeEl.textContent, this, codeEl); });
+
+  window.addEventListener("scroll", hideTip, {passive:true});
+})();
+</script>
+</body>
+</html>
