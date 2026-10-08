@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>A 39. hét időjárása</title>
+<title>A 41. hét időjárása</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -376,6 +376,20 @@
   .srcs li{margin-bottom:5px;break-inside:avoid;}
   .method{margin-top:14px;padding-top:12px;border-top:1px solid var(--hair);color:var(--muted);font-size:.8rem;}
 
+  /* ---------- DROUGHT ---------- */
+  .grid-2.inner{gap:28px;}
+  .sub-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 14px;margin-bottom:10px;}
+  .sub-head h3{font-size:.95rem;}
+  .key-sw{width:12px;height:12px;border-radius:3px;display:inline-block;}
+  .dstats{display:grid;grid-template-columns:repeat(4, minmax(0,1fr));gap:10px;margin-top:18px;}
+  @media (max-width: 900px){ .dstats{grid-template-columns:repeat(2, minmax(0,1fr));} }
+  @media (max-width: 460px){ .dstats{grid-template-columns:1fr;} }
+  .dstat{background:var(--t-warm);border-radius:14px;padding:12px 14px;}
+  .dstat .v{font-size:1.2rem;font-weight:700;color:var(--c-warm);}
+  .dstat .s{font-size:.8rem;color:var(--ink-2);}
+  .callout.cool{background:var(--t-cool);}
+  .callout.cool b{color:var(--c-cool);}
+
   @media (prefers-reduced-motion: no-preference){
     .day, .kpi, .card{animation:rise .5s ease both;}
     @keyframes rise{from{transform:translateY(6px);}to{transform:none;}}
@@ -403,6 +417,10 @@
     <symbol id="i-storm" viewBox="0 0 32 32">
       <path d="M8 20h15a6 6 0 0 0 .6-11.97A8 8 0 0 0 7.2 9.6 5.2 5.2 0 0 0 8 20z" style="fill:var(--cloud-dark)"/>
       <path d="M17 17l-5 7h4l-2 6 7-9h-4.2l2.2-4z" style="fill:var(--sunc)"/>
+    </symbol>
+    <symbol id="i-rain" viewBox="0 0 32 32">
+      <path d="M8 19h15a6 6 0 0 0 .6-11.97A8 8 0 0 0 7.2 8.6 5.2 5.2 0 0 0 8 19z" style="fill:var(--cloud-dark)"/>
+      <path d="M10 22.5l-1.4 3.5M15 22.5l-1.4 3.5M20 22.5l-1.4 3.5M12.5 27l-1 2.5M17.5 27l-1 2.5" style="stroke:var(--cold)" stroke-width="2" stroke-linecap="round" fill="none"/>
     </symbol>
     <symbol id="i-wind" viewBox="0 0 24 24">
       <path d="M3 9h11a3 3 0 1 0-3-3M3 15h15a3 3 0 1 1-3 3M3 12h8" style="stroke:currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
@@ -446,42 +464,42 @@
   <!-- ===== HERO ===== -->
   <header class="hero">
     <div>
-      <div class="eyebrow">Heti időjárás-beszámoló · Magyarország · 2026. szeptember 21–27. · 39. hét</div>
-      <h1>Hidegfrontból <span class="cold">csípős hajnalok</span>, majd <span class="warm">vénasszonyok nyara</span></h1>
-      <p class="dek">Hétfőn viharos széllel söpört át a hidegfront, kedden 16–21 fokra esett vissza a nappali csúcs, a hét közepén pedig 2–4 fokos hajnalok és talaj menti fagy jöhet. A hétvégén visszatér a napsütés, jövő hét elején egy európai hőkupola peremén ismét 25 fok fölé emelkedhet a hőmérséklet.</p>
+      <div class="eyebrow">Heti időjárás-beszámoló · Magyarország · 2026. október 5–11. · 41. hét</div>
+      <h1>Napos, <span class="warm">26 fokos</span> hétköznapokból <span class="cold">esős, hűvös</span> hétvége</h1>
+      <p class="dek">Hétfőtől szerdáig folytatódott a vénasszonyok nyara: hideg hajnalok, szélcsendes, 22–28 fokos délutánok, egy csepp eső nélkül. Csütörtökön nyugatról hidegfront érkezik zivatarokkal, 11 vármegyére figyelmeztetéssel. A hétvégén egy mediterrán ciklon végre érdemi esőt hozhat, vasárnap estig 5–10, helyenként 15–20 mm-t. Ez rekordszáraz kilenc hónap és minden idők legalacsonyabb budapesti Duna-vízállása után érkezik.</p>
       <div class="meta">
-        <span>Kiadva: 2026. szept. 22., kedd</span>
+        <span>Kiadva: 2026. okt. 8., csütörtök</span>
         <span>7 nap + kitekintés</span>
         <span>5 meteorológiai platform összevetése</span>
       </div>
     </div>
-    <div class="arc" aria-label="A napi csúcshőmérséklet íve szeptember 19. és 28. között">
-      <div class="arc-head"><span><b>A hét íve</b> · napi csúcs, sávközép</span><span>szept. 19. → 28.</span></div>
-      <svg id="heroArc" role="img" aria-label="Csúcshőmérséklet: vasárnap 28,5 fok, kedden 18,5 fok, jövő hétfőn 24,5 fok (sávközepek)"></svg>
+    <div class="arc" aria-label="A napi csúcshőmérséklet íve október 3. és 12. között">
+      <div class="arc-head"><span><b>A hét íve</b> · napi csúcs, sávközép</span><span>okt. 3. → 12.</span></div>
+      <svg id="heroArc" role="img" aria-label="Csúcshőmérséklet: szerdán 25 fok, vasárnap 17 fok (sávközepek)"></svg>
     </div>
   </header>
 
   <!-- ===== KPI ===== -->
   <section class="kpis" aria-label="A hét számokban">
     <div class="kpi">
-      <div class="label"><span class="dot" style="background:var(--cold)"></span>Csúcshőmérséklet-zuhanás</div>
-      <div class="value">≈ −10<small>°C</small></div>
-      <div class="sub">vasárnap ~30 °C → kedd 16–21 °C</div>
+      <div class="label"><span class="dot" style="background:var(--cold)"></span>Várható eső vasárnap estig</div>
+      <div class="value">5–20<small>mm</small></div>
+      <div class="sub">hetek óta az első érdemi csapadék, a délkeleten a legtöbb</div>
     </div>
     <div class="kpi">
-      <div class="label"><span class="dot" style="background:#6FB7E9"></span>Leghidegebb hajnalok</div>
-      <div class="value">2–4<small>°C</small></div>
-      <div class="sub">kedd–szombat, fagyzugokban talaj menti fagy</div>
+      <div class="label"><span class="dot" style="background:var(--warm)"></span>Csúcshőmérséklet-zuhanás</div>
+      <div class="value">≈ −8<small>°C</small></div>
+      <div class="sub">szerda 22–28 °C → vasárnap 14–20 °C</div>
     </div>
     <div class="kpi">
-      <div class="label"><span class="dot" style="background:var(--lv3)"></span>Legerősebb széllökések</div>
-      <div class="value">60–80<small>km/h</small></div>
-      <div class="sub">hétfő, a front zivatarcelláiban</div>
+      <div class="label"><span class="dot" style="background:var(--lv3)"></span>Figyelmeztetett vármegyék</div>
+      <div class="value">11</div>
+      <div class="sub">csütörtök, elsőfokú zivatar-figyelmeztetés</div>
     </div>
     <div class="kpi">
-      <div class="label"><span class="dot" style="background:var(--warm)"></span>Figyelmeztetett vármegyék</div>
-      <div class="value">10</div>
-      <div class="sub">kedd, elsőfokú zivatar-figyelmeztetés</div>
+      <div class="label"><span class="dot" style="background:#6FB7E9"></span>Duna, Budapest (Vigadó tér)</div>
+      <div class="value">−2<small>cm</small></div>
+      <div class="sub">minden idők legalacsonyabb vízállása (okt. 1–2.)</div>
     </div>
   </section>
 
@@ -490,8 +508,8 @@
     <div class="card-head">
       <div>
         <div class="eyebrow">Hőmérséklet · országos tartomány</div>
-        <h2>Tíz nap alatt nyárból őszbe, majd vissza</h2>
-        <p>A sávok a források által közölt országos minimum- és maximumtartományt mutatják, a vonal a sáv közepét. A vízszintes vonalak a sokéves budapesti átlagot jelölik szeptember utolsó dekádjára.</p>
+        <h2>Fagyos hajnalok és nyárias délutánok után egységes lehűlés</h2>
+        <p>A sávok a források által közölt országos minimum- és maximumtartományt mutatják, a vonal a sáv közepét. A vízszintes vonalak a budapesti októberi sokéves átlagot jelölik (1991–2020, met.hu).</p>
       </div>
       <div class="legend" aria-hidden="true">
         <span><i class="key-band key-max"></i>Napi csúcs</span>
@@ -523,7 +541,7 @@
       <div>
         <div class="eyebrow">Veszélyek és kockázatok</div>
         <h2>Mikor mire figyeljünk?</h2>
-        <p>A hét elejét a szél és a zivatarok uralják, a közepét a fagyveszély, a végét a meleg. A „figyelmeztetés” szint a HungaroMet által ténylegesen kiadott elsőfokú (sárga) jelzést jelenti; a többi szint a források szöveges előrejelzéséből képzett összesítés.</p>
+        <p>A hét első felét a meleg és a szárazság uralja, csütörtököt a zivatarok, a hétvégét a ciklon esője és a szél. A „figyelmeztetés” szint a HungaroMet által ténylegesen kiadott elsőfokú (sárga) jelzést jelenti, a többi szint a források szöveges előrejelzéséből képzett összesítés.</p>
       </div>
     </div>
     <div class="tbl-wrap"><table class="matrix" id="matrix"></table></div>
@@ -532,6 +550,41 @@
       <span><i style="background:var(--lv1)"></i>enyhe</span>
       <span><i style="background:var(--lv2)"></i>jelentős</span>
       <span><i style="background:var(--lv3)"></i>figyelmeztetés (sárga)</span>
+    </div>
+  </section>
+
+  <!-- ===== DROUGHT ===== -->
+  <section class="card">
+    <div class="card-head">
+      <div>
+        <div class="eyebrow">Aszály-helyzetkép</div>
+        <h2>Jól jön az eső, de a hiányt nem pótolja</h2>
+        <p>Országosan 1901 óta nem volt ilyen száraz január–szeptember. A hétvégére várt 5–20 mm a 90 napos csapadékhiánynak legfeljebb töredéke, a talajnak tartós, áztató esőre van szüksége.</p>
+      </div>
+    </div>
+    <div class="grid-2 inner">
+      <div>
+        <div class="sub-head">
+          <h3>Várható eső a csapadékhiányhoz mérve</h3>
+          <div class="legend" aria-hidden="true">
+            <span><i class="key-sw" style="background:var(--cold)"></i>Várható csapadék</span>
+            <span><i class="key-sw" style="background:var(--warm)"></i>Csapadékhiány</span>
+          </div>
+        </div>
+        <div class="chart" id="rainChart"></div>
+      </div>
+      <div>
+        <div class="sub-head">
+          <h3>Egymás után megdőlt Duna-mélypontok, Budapest (cm)</h3>
+        </div>
+        <div class="chart" id="dunaChart"></div>
+      </div>
+    </div>
+    <div class="dstats">
+      <div class="dstat"><div class="v">1901 óta</div><div class="s">nem volt ilyen száraz január–szeptember országosan</div></div>
+      <div class="dstat"><div class="v">100–180 mm</div><div class="s">90 napos csapadékhiány (HungaroMet, okt. 2.)</div></div>
+      <div class="dstat"><div class="v">−74%</div><div class="s">Tolna vármegye szeptemberben: átlagosan 15,1 mm</div></div>
+      <div class="dstat"><div class="v">Rendkívüli</div><div class="s">aszály a Vízügy aszálymonitoringja szerint (okt. eleje)</div></div>
     </div>
   </section>
 
@@ -545,36 +598,35 @@
     </div>
     <div class="regions">
       <article class="region">
-        <div class="rtop"><span class="badge" style="background:#4638B0">ÉK</span><div><h3>Észak- és Kelet-Magyarország</h3><div class="cities">Miskolc · Debrecen · Nyíregyháza · Eger</div></div></div>
+        <div class="rtop"><span class="badge" style="background:#0F6894">DD</span><div><h3>Dunántúl</h3><div class="cities">Pécs · Kaposvár · Szekszárd · Zalaegerszeg · Hévíz</div></div></div>
         <ul>
-          <li>Hétfőn itt volt a legaktívabb a front: zivatar, 1 cm-nél kisebb jég, 60–75 km/h-s lökések; sárga figyelmeztetés Borsod-Abaúj-Zemplén, Hajdú-Bihar és Szabolcs-Szatmár-Bereg vármegyére.</li>
-          <li>Kedden újabb zivatarok jégdarával; szerdán is lehet kevés helyen zápor.</li>
-          <li>Kedd hajnalban itt a leghidegebb: 4–10 °C.</li>
+          <li>Csütörtök délután itt indulnak a zivatarok. Sárga figyelmeztetés szól Somogy, Baranya, Tolna, Zala és Veszprém vármegyére, 50–70 km/h-s lökésekkel és apró jéggel.</li>
+          <li>Szekszárd környékén 27 nap után ez az első érdemi eső.</li>
+          <li>Pénteken a délnyugati megyékben felhősebb marad az idő, hétvégén az északnyugat nagyrészt száraz maradhat.</li>
         </ul>
       </article>
       <article class="region">
-        <div class="rtop"><span class="badge" style="background:#0F6894">NY</span><div><h3>Dunántúl és Balaton</h3><div class="cities">Győr · Veszprém · Zalaegerszeg · Hévíz · Pécs</div></div></div>
+        <div class="rtop"><span class="badge" style="background:#27558F">KÖ</span><div><h3>Budapest és Közép-Magyarország</h3><div class="cities">Budapest · Pest · Fejér · Komárom-Esztergom</div></div></div>
         <ul>
-          <li>Hétfőn szélfigyelmeztetés Veszprém vármegyében.</li>
-          <li>Kedden erős, helyenként viharos északnyugati lökések, gyenge eső is előfordulhat.</li>
-          <li>Csütörtök délután nyugat felől felhősödés, elszórt zápor, zivatar.</li>
-          <li>A Balatonon hét elején kiemelten figyeljük a viharjelzést.</li>
+          <li>Csütörtökön Budapesten ~23 °C, ~9 °C-os reggel, este zivataros front, ~2,5 mm eső.</li>
+          <li>Zivatar-figyelmeztetés Pest, Fejér és Komárom-Esztergom vármegyére.</li>
+          <li>A Duna a Vigadó téren −1 cm körül áll. Az eső után a vízügy ~30 cm-es emelkedést vár, utána újra apadhat.</li>
         </ul>
       </article>
       <article class="region">
-        <div class="rtop"><span class="badge" style="background:#27558F">KÖ</span><div><h3>Budapest és Közép-Magyarország</h3><div class="cities">Budapest · Pest · Komárom-Esztergom · Nógrád</div></div></div>
+        <div class="rtop"><span class="badge" style="background:#4638B0">ÉK</span><div><h3>Észak és Északkelet</h3><div class="cities">Miskolc · Eger · Salgótarján · Nyíregyháza · Debrecen</div></div></div>
         <ul>
-          <li>Hétfőn Budapesten ~24 °C-os csúcs, ~15 °C-os reggel, erős szél.</li>
-          <li>Kedden zivatar-figyelmeztetés Pest, Komárom-Esztergom és Nógrád vármegyére.</li>
-          <li>Szerdától hűvös reggelek, a hétvégén 20–25 °C körüli, napos délutánok.</li>
+          <li>Nyírtass volt az ország fagyzuga: október 3-án hajnalban közel −3 °C-ot mértek.</li>
+          <li>Csütörtök este a Kaposvár–Ózd vonal mentén zivatarok. Figyelmeztetés szól Borsod-Abaúj-Zemplén, Heves és Nógrád vármegyére.</li>
+          <li>Szombaton északon lesz a legtöbb napsütés, vasárnap keleten hűvösebb az idő.</li>
         </ul>
       </article>
       <article class="region">
-        <div class="rtop"><span class="badge" style="background:#9A4C07">DA</span><div><h3>Alföld és Dél</h3><div class="cities">Szeged · Kecskemét · Szolnok · Békéscsaba</div></div></div>
+        <div class="rtop"><span class="badge" style="background:#9A4C07">DK</span><div><h3>Alföld és Délkelet</h3><div class="cities">Szeged · Békéscsaba · Kecskemét · Szolnok</div></div></div>
         <ul>
-          <li>Kedden zivatar-figyelmeztetés Békés, Csongrád-Csanád és Jász-Nagykun-Szolnok vármegyére.</li>
-          <li>A derült, szélcsendes síkvidéki fagyzugokban szerdától szombatig talaj menti fagy.</li>
-          <li>A hétvégén száraz, napos idő, jelentős napi hőingással.</li>
+          <li>Csütörtökön sokáig napos idő, a front csak éjjel ér ide.</li>
+          <li>A hétvégi ciklon itt hozhatja a legtöbb esőt, vasárnap estig helyenként 15–20 mm felett.</li>
+          <li>Vasárnap reggel még esik, aztán az eső kelet felé kivonul.</li>
         </ul>
       </article>
     </div>
@@ -585,35 +637,37 @@
     <section class="card">
       <div class="card-head">
         <div>
-          <div class="eyebrow">Visszatekintés · szept. 14–20.</div>
-          <h2>Az előző hét: még nyár volt</h2>
+          <div class="eyebrow">Visszatekintés · szept. 28. – okt. 4.</div>
+          <h2>Az előző hét: a vénasszonyok nyara csúcsa</h2>
         </div>
       </div>
       <ol class="tl">
-        <li><span class="when">szept. 9.</span><span class="what"><b>Három melegrekord dőlt meg</b> az Időkép adatai szerint – a hónap eleji kánikula háttere.</span></li>
-        <li><span class="when">hónap közepe</span><span class="what">Több alkalommal <b>28–30 °C közeli</b> csúcsértékek.</span></li>
-        <li><span class="when">szept. 16.</span><span class="what"><b>Hullámzó front</b> osztotta ketté a Kárpát-medencét, csapadékkal az egyik oldalán.</span></li>
-        <li><span class="when">szept. 19.</span><span class="what">Napos szombat elszórt záporral, zivatarral; délután <b>28–29 °C</b>.</span></li>
-        <li><span class="when">szept. 20.</span><span class="what">Anticiklonális, napos, száraz vasárnap, sokfelé <b>30 °C közelében</b>; reggelek 8–15 °C.</span></li>
-        <li><span class="when">szept. 20–21.</span><span class="what">Vasárnap este, éjjel megérkezett a <b>hidegfront</b>, hétfő délre elhagyta az országot.</span></li>
+        <li><span class="when">szept. 28.</span><span class="what">A napi előrejelzés <b>22–26 °C</b>-ot adott. A hőkupola itthon a visszafogottabb forgatókönyv szerint érkezett.</span></li>
+        <li><span class="when">okt. 1–2.</span><span class="what">A Duna Vigadó téri vízmércéje <b>−2 cm</b>-re süllyedt, ez a valaha mért legalacsonyabb budapesti érték.</span></li>
+        <li><span class="when">okt. 2.</span><span class="what">HungaroMet agrometeorológia: az elmúlt 30 nap csapadéka <b>30–60 mm</b>-rel, a 90 napé <b>100–180 mm</b>-rel marad el a szokásostól.</span></li>
+        <li><span class="when">okt. 2–3.</span><span class="what">Nyírtass az ország fagyzuga: −1,9 °C, majd szombat hajnalban <b>közel −3 °C</b>. Az ország nagy részén 1–5 °C volt hajnalban.</span></li>
+        <li><span class="when">okt. 3–4.</span><span class="what">Napos, szélcsendes, száraz hétvége <b>22–26 °C</b>-os délutánokkal.</span></li>
+        <li><span class="when">egész hét</span><span class="what">Blokkoló anticiklon, eső nélkül. Az ECMWF szeptember 30-i futása még október 12-ig szinte teljes csapadékhiányt mutatott.</span></li>
       </ol>
+      <div class="callout cool"><b>A 39. heti beszámoló ellenőrzése:</b> a hétfői hidegfront és az ősz első fagyos hajnala (szept. 23.) a jelzett módon érkezett. A hőkupola itthon a HungaroMet visszafogottabb, 22–27 °C-os forgatókönyve szerint jött, nem a 28–30 °C-os elemzések szerint.</div>
     </section>
 
     <section class="card">
       <div class="card-head">
         <div>
-          <div class="eyebrow">Kitekintés · szept. 28. – okt. 4.</div>
-          <h2>Hőkupola Európa fölött</h2>
+          <div class="eyebrow">Kitekintés · okt. 12–18.</div>
+          <h2>Hűvös, de újra szárazabb hét</h2>
         </div>
         <span class="conf"><i style="background:var(--lv2)"></i>Közepes bizonyosság</span>
       </div>
       <ol class="tl">
-        <li><span class="when">háttér</span><span class="what">Nagy kiterjedésű anticiklon délről szállít meleg levegőt; Európa nagy részén a hőmérséklet <b>10–14 fokkal</b> haladhatja meg a sokéves átlagot.</span></li>
-        <li><span class="when">Európa</span><span class="what">Közép-Európában a hétvégétől <b>27–30 °C</b>, az Ibériai-félszigeten <b>40 °C közeli</b> csúcsok.</span></li>
-        <li><span class="when">szept. 28.</span><span class="what">A HungaroMet <b>22–27 °C</b>-ot, a legmelegebb helyeken <b>28 °C</b>-ot jelez.</span></li>
-        <li><span class="when">okt. eleje</span><span class="what">Az Időkép szerint a meleg szeptember végéig tart, október első napjaitól <b>lassú csökkenés</b> jön, 25 °C körüli maximumokkal. A meleg a hónap elején Skandinávia felé tolódhat.</span></li>
+        <li><span class="when">okt. 12.</span><span class="what">A front után váltakozóan felhős, napos, száraz idő, <b>0–10 °C</b>-os hajnalokkal és <b>14–19 °C</b>-os délutánokkal (MetNet).</span></li>
+        <li><span class="when">okt. 13–14.</span><span class="what">Nyugat–délnyugat felől <b>anticiklon</b> húzódik fölénk: szárazabb napok, néhány fokos enyhüléssel.</span></li>
+        <li><span class="when">jövő hét</span><span class="what">A Köpönyeg szerint nem tér vissza a meleg: <b>20 °C körüli vagy alacsonyabb</b> csúcsok várhatók.</span></li>
+        <li><span class="when">okt. 12–18.</span><span class="what">MeteoPlaza: az Észak-Európa fölötti ciklon hidegfrontja <b>feloszolhat, mielőtt elér</b>. A hónap közepe változékony marad.</span></li>
+        <li><span class="when">Duna</span><span class="what">A vízügy szerint az eső után <b>~30 cm</b>-es emelkedés jöhet, utána ismét apadás.</span></li>
       </ol>
-      <div class="callout"><b>Eltérés a források között:</b> a HungaroMet hazai csúcsai (22–28 °C) visszafogottabbak, mint a hőkupoláról szóló, ECMWF-alapú elemzések 28–30 °C-os értékei. A pontos érték a jövő heti frissítésekben dől el.</div>
+      <div class="callout"><b>Nincs vége az aszálynak:</b> az Agrárágazat szerint október 10–15. között érdemibb eső is jöhet, de országos, tartós áztató esőre nincs garancia. A felső talajréteg gyorsan visszaszárad.</div>
     </section>
   </div>
 
@@ -623,15 +677,15 @@
       <div class="card-head">
         <div>
           <div class="eyebrow">Nap és Hold · Budapest</div>
-          <h2>Napéjegyenlőség a hét közepén</h2>
-          <p>A csillagászati ősz szeptember 23-án hajnalban kezdődik. A nappal és az éjszaka a légköri fénytörés miatt Budapesten valójában szeptember 26. körül lesz egyforma hosszú.</p>
+          <h2>Naponta 3–4 perccel rövidebb nappalok</h2>
+          <p>Október 3-án még 11 óra 35 perc, 12-én már csak 11 óra 5 perc a nappal. Október 25-én, vasárnap véget ér a nyári időszámítás.</p>
         </div>
       </div>
       <div class="chart" id="dayChart"></div>
       <div class="sunfacts">
-        <div class="sunfact"><div class="k">Napkelte</div><div class="v num">06:30 → 06:38</div><div class="s">szept. 22. → 28.</div></div>
-        <div class="sunfact"><div class="k">Napnyugta</div><div class="v num">18:43 → 18:30</div><div class="s">naponta ~2 perccel korábban</div></div>
-        <div class="sunfact"><div class="k">Telihold</div><div class="v">szept. 26.</div><div class="s">szüreti telihold, derült égen</div></div>
+        <div class="sunfact"><div class="k">Napkelte</div><div class="v num">06:48 → 06:57</div><div class="s">okt. 5. → 12.</div></div>
+        <div class="sunfact"><div class="k">Napnyugta</div><div class="v num">18:16 → 18:03</div><div class="s">naponta ~2 perccel korábban</div></div>
+        <div class="sunfact"><div class="k">Újhold</div><div class="v">okt. 10.</div><div class="s">holdfény nélküli, de felhős éjszakák</div></div>
       </div>
     </section>
 
@@ -645,19 +699,19 @@
       <div class="advice">
         <div class="adv">
           <div class="ai" style="background:var(--t-shower);color:var(--c-shower)"><svg><use href="#i-shirt"/></svg></div>
-          <div><h3>Réteges öltözet egész héten</h3><p>A hajnal és a délután között 15–20 fok is lehet a különbség, pénteken például 2–9 °C-ról 18–23 °C-ra melegszik a levegő.</p></div>
+          <div><h3>Esernyő és réteges öltözet</h3><p>Csütörtök délutántól és a hétvégén legyen kéznél esernyő. A csúcshőmérséklet szerdáról vasárnapra kb. 8 fokot esik, szombat hajnalban helyenként 0 °C is lehet.</p></div>
         </div>
         <div class="adv">
           <div class="ai" style="background:var(--t-crisp);color:var(--c-crisp)"><svg><use href="#i-leaf"/></svg></div>
-          <div><h3>Kert és mezőgazdaság</h3><p>Szerdától szombatig takarjuk le vagy vigyük be a fagyérzékeny növényeket. A száraz, napos hétvége kedvez a szüretnek és a betakarításnak.</p></div>
+          <div><h3>Kert és mezőgazdaság</h3><p>A hétvégi eső jól jön az őszi vetéseknek, de a mélyebb talajrétegek szárazak maradnak, ezért a kertben az öntözést ne hagyjuk abba. Szombat hajnalban a fagyzugokban óvjuk a fagyérzékeny növényeket.</p></div>
         </div>
         <div class="adv">
           <div class="ai" style="background:var(--t-front);color:var(--c-front)"><svg><use href="#i-car"/></svg></div>
-          <div><h3>Közlekedés és szabadtér</h3><p>Hétfőn és kedden a zivatarok környékén ne parkoljunk fák alá, a hirtelen lökések ágakat törhetnek. Balatoni vízre szállás előtt nézzük meg a viharjelzést.</p></div>
+          <div><h3>Közlekedés</h3><p>Csütörtök este, a zivatarok idején ne parkoljunk fák alá. A hetek óta száraz, poros utakon az első eső után csúszós lehet az útburkolat.</p></div>
         </div>
         <div class="adv">
           <div class="ai" style="background:var(--t-warm);color:var(--c-warm)"><svg><use href="#i-heart"/></svg></div>
-          <div><h3>Egészség, fronthatás</h3><p>A front utáni hűvös, szeles idő a Köpönyeg szerint fejfájást, migrént okozhat az érzékenyeknél. A jövő heti gyors felmelegedés újabb terhelést jelenthet.</p></div>
+          <div><h3>Egészség, fronthatás</h3><p>Csütörtökön és pénteken a hidegfront átvonulása fronthatással jár: az érzékenyeknél fejfájás, alvászavar, ízületi panaszok jelentkezhetnek.</p></div>
         </div>
       </div>
     </section>
@@ -669,24 +723,24 @@
       <div>
         <div class="eyebrow">Források összevetése</div>
         <h2>Mit mondanak a vezető meteorológiai platformok?</h2>
-        <p>A fő üzenetekben egyetértenek a források, a jövő heti meleg mértékében viszont eltérnek.</p>
+        <p>A front és a lehűlés kérdésében egyetértenek a források, a hétvégi eső helyében és mennyiségében viszont eltérnek.</p>
       </div>
     </div>
     <div class="agree">
-      <div class="ag"><div class="t">Hidegfront és lehűlés (H–K)</div><div class="v" style="color:var(--c-crisp)"><svg><use href="#i-check"/></svg><span style="color:var(--ink-2)">Teljes egyetértés</span></div></div>
-      <div class="ag"><div class="t">Hideg hajnalok, talaj menti fagy</div><div class="v" style="color:var(--c-crisp)"><svg><use href="#i-check"/></svg><span style="color:var(--ink-2)">Egyetértés</span></div></div>
-      <div class="ag"><div class="t">Hétvégi felmelegedés</div><div class="v" style="color:var(--c-crisp)"><svg><use href="#i-check"/></svg><span style="color:var(--ink-2)">Egyetértés</span></div></div>
-      <div class="ag"><div class="t">A jövő heti meleg mértéke</div><div class="v" style="color:var(--c-warm)"><svg><use href="#i-split"/></svg><span style="color:var(--ink-2)">Részben eltér: 22–28 vagy 28–30 °C</span></div></div>
+      <div class="ag"><div class="t">Csütörtöki hidegfront, zivatarok</div><div class="v" style="color:var(--c-crisp)"><svg><use href="#i-check"/></svg><span style="color:var(--ink-2)">Teljes egyetértés</span></div></div>
+      <div class="ag"><div class="t">Hétvégi lehűlés 14–21 °C-ra</div><div class="v" style="color:var(--c-crisp)"><svg><use href="#i-check"/></svg><span style="color:var(--ink-2)">Egyetértés</span></div></div>
+      <div class="ag"><div class="t">A hétvégi eső helye, mennyisége</div><div class="v" style="color:var(--c-warm)"><svg><use href="#i-split"/></svg><span style="color:var(--ink-2)">Részben eltér: csak a délkelet vagy az ország nagy része</span></div></div>
+      <div class="ag"><div class="t">Jövő hét: nem jön vissza a meleg</div><div class="v" style="color:var(--c-crisp)"><svg><use href="#i-check"/></svg><span style="color:var(--ink-2)">Egyetértés</span></div></div>
     </div>
     <div class="tbl-wrap">
       <table class="src-table">
         <thead><tr><th>Platform</th><th>A hétről</th><th>Hétvége és kitekintés</th></tr></thead>
         <tbody>
-          <tr><td>HungaroMet<span class="kind">hivatalos szolgálat · met.hu</span></td><td>Gyorsan átvonuló hidegfront hétfőn, 60–75 km/h-s lökések, jég; keddtől szombatig 2–4 °C-os leghidegebb hajnalok, talaj menti fagy; elsőfokú figyelmeztetések.</td><td>P 18–23 °C, Szo 19–24 °C, V 20–25 °C napos, száraz; szept. 28-án 22–27 °C, helyenként 28 °C.</td></tr>
-          <tr><td>Időkép<span class="kind">idokep.hu</span></td><td>Front utáni lehűlés; szeptember 9-én három melegrekord dőlt meg.</td><td>A meleg szeptember végéig tart, október elejétől lassú csökkenés 25 °C körüli csúcsokkal.</td></tr>
-          <tr><td>Köpönyeg<span class="kind">koponyeg.origo.hu</span></td><td>Drasztikus lehűlés, az ősz első talaj menti fagyai; front utáni biometeorológiai terhelés.</td><td>Hűvös, szeles kezdés után enyhülő második félhét.</td></tr>
-          <tr><td>Pártai &amp; Aigner<span class="kind">eumet.hu · 14 napos</span></td><td>A csillagászati ősz szeptember 23-án kezdődik.</td><td>Vénasszonyok nyara: hideg, párás reggelek, derült, kellemes délutánok, jellemzően szeptember második felében.</td></tr>
-          <tr><td>ECMWF-alapú elemzések<span class="kind">Portfolio · Origo · VG</span></td><td>Az európai középtávú modell szerint nagy kiterjedésű anticiklon épül ki.</td><td>Hőkupola: +10–14 °C-os anomália Európában, Közép-Európában 27–30 °C; itthon akár 28–30 °C, október elejéig.</td></tr>
+          <tr><td>HungaroMet<span class="kind">hivatalos szolgálat · met.hu</span></td><td>Csütörtökön hidegfront, 11 vármegyére elsőfokú zivatar-figyelmeztetés, 50–70 km/h-s lökések, 1–2 cm-nél kisebb jég. Pénteken 14–24, szombaton 15–21 °C.</td><td>Az Alpok térségében kialakuló mediterrán ciklon alakítja a hétvégét: délkeleten kiadósabb eső, az északnyugat nagyrészt száraz marad. Vasárnap 14–20 °C.</td></tr>
+          <tr><td>Időkép<span class="kind">idokep.hu</span></td><td>Kedd hajnalban köd az Alpokalján és délnyugaton, a minimum −2 és 10 °C között.</td><td>Szombat estétől kiadós eső az ország nagy részén, vasárnap estig 5–10, helyenként 15–20 mm felett.</td></tr>
+          <tr><td>Köpönyeg<span class="kind">koponyeg.origo.hu</span></td><td>A csütörtöki zivatarokkal „búcsút intünk a vénasszonyok nyarának”.</td><td>Jövő héten sem tér vissza a meleg, 20 °C körüli vagy alacsonyabb csúcsok jönnek.</td></tr>
+          <tr><td>MetNet<span class="kind">metnet.hu · 5 napos</span></td><td>A front után váltakozóan felhős, száraz hétfő, 0–10 °C-os hajnallal és 14–19 °C-os délutánnal.</td><td>Kedd–szerda táján nyugat–délnyugat felől anticiklon érkezik, néhány fokos enyhüléssel.</td></tr>
+          <tr><td>ECMWF · MeteoPlaza<span class="kind">középtáv · havi kitekintés</span></td><td>Az ECMWF szeptember 30-i futása még október 12-ig szinte teljes csapadékhiányt jelzett, ezt a front és a ciklon felülírta.</td><td>Október 12–18. között az észak-európai ciklon hidegfrontja feloszolhat, mielőtt elér. A hónap közepe változékony marad.</td></tr>
         </tbody>
       </table>
     </div>
@@ -698,24 +752,31 @@
     <ul class="srcs">
       <li><a href="https://www.met.hu/idojaras/elorejelzes/kozeptavu_elorejelzes/index.php" target="_blank" rel="noopener">HungaroMet – középtávú előrejelzés</a></li>
       <li><a href="https://www.met.hu/idojaras/veszelyjelzes/index.php" target="_blank" rel="noopener">HungaroMet – veszélyjelzés</a></li>
-      <li><a href="https://www.met.hu/idojaras/elorejelzes/modellek/ECMWF/main.php" target="_blank" rel="noopener">HungaroMet – ECMWF modelltermékek</a></li>
-      <li><a href="https://www.idokep.hu/" target="_blank" rel="noopener">Időkép</a></li>
-      <li><a href="https://koponyeg.origo.hu/elorejelzes" target="_blank" rel="noopener">Köpönyeg – előrejelzések</a></li>
-      <li><a href="https://www.eumet.hu/14-napos-elorejelzes/" target="_blank" rel="noopener">Pártai &amp; Aigner – 14 napos előrejelzés</a></li>
-      <li><a href="https://www.eumet.hu/hirek/vnyiny/" target="_blank" rel="noopener">Pártai &amp; Aigner – Vénasszonyok nyara vagy indián nyár?</a></li>
-      <li><a href="https://index.hu/belfold/2026/09/21/idojaras-hidegfront-felmelegedes-homerseklet-fagypont-radar/" target="_blank" rel="noopener">Index – fagyközeli hajnalok után újra nyár (szept. 21.)</a></li>
-      <li><a href="https://telex.hu/belfold/2026/09/21/idojaras-osz-szeptember-hidegfront-eros-szel" target="_blank" rel="noopener">Telex – megjött az igazi ősz (szept. 21.)</a></li>
-      <li><a href="https://444.hu/2026/09/21/viharos-szelekkel-rugja-rank-az-ajtot-az-osz" target="_blank" rel="noopener">444 – viharos szelekkel jön az ősz (szept. 21.)</a></li>
-      <li><a href="https://www.atv.hu/belfold/20260921/vihar-hetfo-jeg-zivatar-riasztas/" target="_blank" rel="noopener">ATV – 75 km/h-s szél és jég (szept. 21.)</a></li>
-      <li><a href="https://infostart.hu/belfold/2026/09/22/csipos-hajnal-utan-puloveres-ido-jon-16-21-fokkal" target="_blank" rel="noopener">Infostart – csípős hajnal, 16–21 fok (szept. 22.)</a></li>
-      <li><a href="https://www.portfolio.hu/gazdasag/20260922/idojaras-elorejelzes-viharos-szel-es-talaj-menti-fagy-erkezik-magyarorszagra-864356" target="_blank" rel="noopener">Portfolio – viharos szél és talaj menti fagy (szept. 22.)</a></li>
-      <li><a href="https://promotions.hu/idojaras/2026/09/22/legorveny-talajmenti-fagy-zivatar-jegeso-pest-bekes-borsod-abauj-zemplen-csongrad-csanad-hajdu-bihar-heves-komarom-esztergom-nograd-szabolcs-szatmar-bereg-jasz-nagykun-szolnok-varmegye" target="_blank" rel="noopener">Promotions.hu – légörvény, fagy, figyelmeztetések (szept. 22.)</a></li>
-      <li><a href="https://www.portfolio.hu/gazdasag/20260922/ujabb-hokupola-telepszik-europara-szeptember-vegen-864330" target="_blank" rel="noopener">Portfolio – újabb hőkupola szeptember végén (szept. 22.)</a></li>
-      <li><a href="https://www.origo.hu/nagyvilag/2026/09/hokupola-magyarorszag-meleg-idojaras" target="_blank" rel="noopener">Origo – hőkupola, közel 30 fok</a></li>
-      <li><a href="https://promotions.hu/idojaras/2026/09/19/hetvegi-idojaras-elorejelzes-szombat-vasarnap-30-fok-homerseklet-kulonbseg-eso-zapor" target="_blank" rel="noopener">Promotions.hu – hétvége 29–30 fok (szept. 19.)</a></li>
-      <li><a href="https://www.idojarasbudapest.com/" target="_blank" rel="noopener">Budapest – sokéves szeptemberi átlagok</a></li>
+      <li><a href="https://www.met.hu/idojaras/agrometeorologia/elemzes/" target="_blank" rel="noopener">HungaroMet – agrometeorológiai elemzés</a></li>
+      <li><a href="https://www.met.hu/eghajlat/magyarorszag_eghajlata/varosok_jellemzoi/Budapest/" target="_blank" rel="noopener">HungaroMet – Budapest éghajlati jellemzői (1991–2020)</a></li>
+      <li><a href="https://www.idokep.hu/hirek/nagyobb-eso-korvonalazodik-hetvegen" target="_blank" rel="noopener">Időkép – nagyobb eső körvonalazódik hétvégén</a></li>
+      <li><a href="https://koponyeg.origo.hu/elorejelzes/2026/10/holnapi-idojaras-elprejelzes-zivatarok" target="_blank" rel="noopener">Köpönyeg – búcsú a vénasszonyok nyarától</a></li>
+      <li><a href="https://www.metnet.hu/otnapos" target="_blank" rel="noopener">MetNet – 5 napos előrejelzés</a></li>
+      <li><a href="https://www.portfolio.hu/gazdasag/20261008/mediterran-ciklon-kozelit-magyarorszag-fele-ez-hatarozza-meg-a-hetvege-idojarasat-868434" target="_blank" rel="noopener">Portfolio – mediterrán ciklon a hétvégén (okt. 8.)</a></li>
+      <li><a href="https://444.hu/2026/10/08/lehules-es-eso-jon-a-hetvegen" target="_blank" rel="noopener">444 – lehűlés és eső jön a hétvégén (okt. 8.)</a></li>
+      <li><a href="https://promotions.hu/idojaras/2026/10/07/csutortoki-idojaras-elorejelzes-hidegfront-zivatar-riasztas-nograd-somogy-tolna-zala-megye" target="_blank" rel="noopener">Promotions.hu – 11 vármegyére figyelmeztetés (okt. 7.)</a></li>
+      <li><a href="https://www.sonline.hu/helyi-idojaras/2026/10/zivatarveszely-somogyban-sarga-figyelmeztetest-adott-ki-a-hungaromet" target="_blank" rel="noopener">Sonline – zivatarveszély Somogyban (okt. 8.)</a></li>
+      <li><a href="https://www.teol.hu/helyi-idojaras/2026/10/eso-tolna-megye-szekszard-hungaromet" target="_blank" rel="noopener">Teol – 27 napja nem volt ilyen eső Szekszárdon</a></li>
+      <li><a href="https://www.penzcentrum.hu/utazas/20261007/most-kozolte-a-hungaromet-kimeletlen-fordulat-jon-az-idojarasban-fagyos-hajnalokkal-tarol-le-a-hidegfront-1206811" target="_blank" rel="noopener">Pénzcentrum – HungaroMet: fagyos hajnalok, hidegfront (okt. 7.)</a></li>
+      <li><a href="https://index.hu/belfold/2026/10/06/idojaras-elorejelzes-napsutes-fatyolfelho-szel-homerseklet-radar/" target="_blank" rel="noopener">Index – keddi előrejelzés (okt. 6.)</a></li>
+      <li><a href="https://index.hu/belfold/2026/10/03/hungaromet-idojaras-radar-nyirtass-fagy-hajnal/" target="_blank" rel="noopener">Index – közel −3 °C Nyírtasson (okt. 3.)</a></li>
+      <li><a href="https://index.hu/belfold/2026/10/03/idojaras-elorejelzes-felho-homerseklet-fatyolfelho-radar-csapadek-szelcsend-levego/" target="_blank" rel="noopener">Index – napos, száraz októberi szombat (okt. 3.)</a></li>
+      <li><a href="https://www.origo.hu/itthon/2026/10/idojaras-vasarnap-napsutes-huvos-reggel-meleg-delutan" target="_blank" rel="noopener">Origo – vasárnap akár 26 fok (okt. 4.)</a></li>
+      <li><a href="https://nepszava.hu/3334064_duna-vizszint-aszaly" target="_blank" rel="noopener">Népszava – −2 cm a Dunán Budapestnél</a></li>
+      <li><a href="https://qubit.hu/2026/10/08/tortenelmi-melyponton-a-duna-szinte-a-teljes-hazai-szakaszon-negativ-rekordok-dolnek" target="_blank" rel="noopener">Qubit – negatív rekordok a teljes hazai Duna-szakaszon (okt. 8.)</a></li>
+      <li><a href="https://telex.hu/belfold/2026/10/02/duna-vizallas-apadas-negativ-rekord-orszagos-vizugyi-foigazgatosag" target="_blank" rel="noopener">Telex – tovább apadhat a Duna (okt. 2.)</a></li>
+      <li><a href="https://www.economx.hu/belfold/2026/08/04/duna-vizallas-budapest-tortenelmi-rekord-kisviz/" target="_blank" rel="noopener">Economx – a Duna nyári mélypontjai</a></li>
+      <li><a href="https://promotions.hu/idojaras/2026/09/30/idojaras-terkep-csapadekhiany-oktober-aszaly-elorejelzes-ecmwf" target="_blank" rel="noopener">Promotions.hu – ECMWF: csapadékhiány október 12-ig (szept. 30.)</a></li>
+      <li><a href="https://agraragazat.hu/hir/mezogazdasag-enyhulhet-az-aszaly/" target="_blank" rel="noopener">Agrárágazat – 10-e után érkeznek az esők</a></li>
+      <li><a href="https://www.agroinform.hu/idojaras_hirek/mikor-jon-vegre-az-aztato-eso-ezt-mutatja-az-oktoberi-elorejelzes-106099-001" target="_blank" rel="noopener">Agroinform – októberi kitekintés (MeteoPlaza)</a></li>
+      <li><a href="https://www.penzcentrum.hu/utazas/20260923/kesz-ennyi-volt-a-kellemes-idonek-megerkezett-az-osz-elso-fagyos-hajnala-ezen-a-telepulesen-mar-minuszok-vannak-1205979" target="_blank" rel="noopener">Pénzcentrum – az ősz első fagyos hajnala (szept. 23.)</a></li>
     </ul>
-    <p class="method"><b>Módszertan.</b> Az értékek a fenti források 2026. szeptember 19–22. között közzétett előrejelzéseiből és jelentéseiből készült összesítések. Ahol a források eltérnek, a diagram a közölt tartományok burkolóját mutatja. A péntek–vasárnapi minimumsávok felső értéke becslés, mert a források ezekre a napokra csak a leghidegebb értéket (2–4 °C) vagy „10 °C alatt helyenként” jellegű leírást közöltek; a hétfő 28-i minimumra nincs közölt adat. A napkelte, a napnyugta és a nappalhossz Budapestre számított érték (±1 perc), a holdfázis csillagászati számítás. Az előrejelzések változhatnak; a hivatalos figyelmeztetésekért mindig a met.hu-t kövesse.</p>
+    <p class="method"><b>Módszertan.</b> Az értékek a fenti források 2026. október 1–8. között közzétett előrejelzéseiből és jelentéseiből készült összesítések. Ahol a források eltérnek, a diagram a közölt tartományok burkolóját mutatja. A lezajlott napok (okt. 3–7.) értékei is a napi előrejelzésekből származnak, mért adat csak a nyírtassi minimum, a Duna-vízállás és a csapadékhiány. Az október 4-i és 5-i minimumsáv becslés, mert ezekre a napokra a források nem közöltek országos értéket. A napkelte, a napnyugta és a nappalhossz Budapestre számított érték (±1 perc). Az előrejelzések változhatnak, a hivatalos figyelmeztetésekért mindig a met.hu-t kövesse.</p>
   </footer>
 </main>
 
@@ -725,69 +786,87 @@
 
   /* ---------- EGYETLEN ADATFORRÁS ---------- */
   var DAYS = [
-    {k:"19", dow:"Szombat", sh:"Szo", date:"szept. 19.", maxLo:26, maxHi:29, minLo:8,  minHi:15, st:"obs"},
-    {k:"20", dow:"Vasárnap", sh:"V",  date:"szept. 20.", maxLo:27, maxHi:30, minLo:9,  minHi:15, st:"obs"},
-    {k:"21", dow:"Hétfő",   sh:"H",   date:"szept. 21.", maxLo:18, maxHi:24, minLo:10, minHi:17, st:"obs",
+    {k:"3",  dow:"Szombat",  sh:"Szo", date:"okt. 3.",  maxLo:22, maxHi:26, minLo:-3, minHi:5,  st:"obs"},
+    {k:"4",  dow:"Vasárnap", sh:"V",   date:"okt. 4.",  maxLo:22, maxHi:26, minLo:0,  minHi:8,  st:"obs", minEst:true},
+    {k:"5",  dow:"Hétfő",    sh:"H",   date:"okt. 5.",  maxLo:22, maxHi:26, minLo:1,  minHi:8,  st:"obs", minEst:true,
+      card:true, rg:"warm", rgl:"Vénasszonyok nyara", ico:"sun",
+      txt:"Nyugodt, száraz, napos idő, jelentős fronthatás nélkül. Délután 22–26 °C, estére gyorsan hűl a levegő.",
+      wind:"Gyenge, nagy területen szélcsend"},
+    {k:"6",  dow:"Kedd",     sh:"K",   date:"okt. 6.",  maxLo:22, maxHi:26, minLo:-2, minHi:10, st:"obs",
+      card:true, rg:"warm", rgl:"Ködös hajnal", ico:"sun",
+      txt:"Hajnalban az Alpokalján és délnyugaton foltokban párás, ködös idő, majd napos, szélcsendes délután.",
+      wind:"Szélcsend, gyenge légmozgás", frost:"Fagyzugokban gyenge fagy, −2 °C-ig"},
+    {k:"7",  dow:"Szerda",   sh:"Sze", date:"okt. 7.",  maxLo:22, maxHi:28, minLo:1,  minHi:10, st:"obs",
+      card:true, rg:"warm", rgl:"A hét csúcsa", ico:"partly",
+      txt:"Fátyolfelhős, napos idő, nyugatról átvonuló felhősávval, csapadék nélkül. A hét legmelegebb napja, helyenként 27–28 °C.",
+      wind:"Gyenge, mérsékelt", frost:"Szélvédett völgyekben gyenge fagy"},
+    {k:"8",  dow:"Csütörtök", sh:"Cs", date:"okt. 8.",  maxLo:22, maxHi:29, minLo:3,  minHi:10, st:"today",
       card:true, rg:"front", rgl:"Hidegfront", ico:"storm",
-      txt:"Nagy sebességgel vonult át a hidegfront, délre elhagyta az országot. Elszórt eső, zápor; északkeleten zivatar, 1 cm-nél kisebb jég.",
-      wind:"60–75 km/h, a zivatarcellákban 70–80 km/h", alert:"Sárga: BAZ, Hajdú-Bihar, Szabolcs (zivatar), Veszprém (szél)"},
-    {k:"22", dow:"Kedd",    sh:"K",   date:"szept. 22.", maxLo:16, maxHi:21, minLo:4,  minHi:10, st:"today",
-      card:true, rg:"shower", rgl:"Hűvös, szeles", ico:"shower",
-      txt:"Gomolyfelhős, napos idő elszórt záporokkal; keleten, északkeleten zivatar jégdarával. A Dunántúlon gyenge eső is lehet.",
-      wind:"ÉNy, a Dunántúlon erős, helyenként viharos lökések", alert:"10 vármegye: elsőfokú zivatar-figyelmeztetés"},
-    {k:"23", dow:"Szerda",  sh:"Sze", date:"szept. 23.", maxLo:16, maxHi:22, minLo:6,  minHi:11, st:"fc",
-      card:true, rg:"cool", rgl:"Napéjegyenlőség", ico:"partly",
-      txt:"Gomolyfelhős, napos idő; keleten, északkeleten kevés helyen zápor, zivatar. Hajnalban a szélvédett helyeken talaj menti fagy.",
-      wind:"Északi szél, élénk, néhol erős lökésekkel", frost:"Talaj menti fagy szélvédett helyeken"},
-    {k:"24", dow:"Csütörtök", sh:"Cs", date:"szept. 24.", maxLo:17, maxHi:24, minLo:2, minHi:10, st:"fc",
-      card:true, rg:"cool", rgl:"Felhősödés nyugatról", ico:"shower",
-      txt:"Reggel napos, délután nyugat, északnyugat felől megnövekszik a felhőzet; a nyugati országrészben elszórt zápor, zivatar.",
-      wind:"ÉNy, majd Ny szél, sokfelé megerősödik", frost:"Fagyzugokban talaj menti fagy"},
-    {k:"25", dow:"Péntek",  sh:"P",   date:"szept. 25.", maxLo:18, maxHi:23, minLo:2,  minHi:9,  st:"fc", minEst:true,
-      card:true, rg:"crisp", rgl:"Csípős reggel", ico:"sun",
-      txt:"Túlnyomóan napos, száraz idő. Az egyik leghidegebb hajnal: a fagyzugokban 2–4 °C, talaj menti fagy.",
-      wind:"Gyenge, mérsékelt (anticiklonális helyzet)", frost:"Leghidegebb hajnalok: 2–4 °C"},
-    {k:"26", dow:"Szombat", sh:"Szo", date:"szept. 26.", maxLo:19, maxHi:24, minLo:3,  minHi:10, st:"fc", minEst:true,
-      card:true, rg:"crisp", rgl:"Vénasszonyok nyara", ico:"sun",
-      txt:"Sok napsütés, száraz idő; kellemes délután, este gyorsan hűl a levegő. Éjjel szüreti telihold.",
-      wind:"Gyenge, mérsékelt", frost:"Fagyzugokban még talaj menti fagy"},
-    {k:"27", dow:"Vasárnap", sh:"V",  date:"szept. 27.", maxLo:20, maxHi:25, minLo:6,  minHi:12, st:"fc", minEst:true,
-      card:true, rg:"warm", rgl:"Napos, száraz", ico:"sun",
-      txt:"Napos, száraz, egyre melegebb idő. Reggel helyenként még 10 °C alatt.",
-      wind:"Gyenge, mérsékelt"},
-    {k:"28", dow:"Hétfő",   sh:"H",   date:"szept. 28.", maxLo:22, maxHi:27, minLo:null, minHi:null, st:"out",
-      card:true, rg:"warm", rgl:"Kitekintés", ico:"sun",
-      txt:"A hőkupola peremén nyárias meleg: 22–27 °C, a legmelegebb helyeken 28 °C.",
-      wind:"—", note:"helyenként 28 °C"}
+      txt:"Keleten sokáig napos idő, nyugatról hidegfront érkezik. Délutántól a Dél-Dunántúlon, este keletebbre, északkeletebbre zápor és zivatar, intenzív csapadékkal, apró jéggel.",
+      wind:"Déli szél élénk, zivatarban 60–80 km/h", alert:"11 vármegye: elsőfokú zivatar-figyelmeztetés"},
+    {k:"9",  dow:"Péntek",   sh:"P",   date:"okt. 9.",  maxLo:14, maxHi:24, minLo:10, minHi:16, st:"fc",
+      card:true, rg:"shower", rgl:"Lehűlés", ico:"shower",
+      txt:"Éjjel még eső, zápor, az északkeleti és a déli határ közelében zivatar. Délelőttre megszűnik a csapadék, a délnyugati megyék kivételével kisüt a nap.",
+      calm:"Nappal veszélyes jelenség nem várható"},
+    {k:"10", dow:"Szombat",  sh:"Szo", date:"okt. 10.", maxLo:14, maxHi:21, minLo:0,  minHi:12, st:"fc",
+      card:true, rg:"cool", rgl:"Mediterrán ciklon", ico:"shower",
+      txt:"Északon a legtöbb napsütés, délnyugatról sűrűsödő felhőzet, délről egyre több helyen eső, zápor. Estétől kiadósabb eső kezdődik.",
+      wind:"Gyenge, mérsékelt", frost:"Hajnalban helyenként 0 °C"},
+    {k:"11", dow:"Vasárnap", sh:"V",   date:"okt. 11.", maxLo:14, maxHi:20, minLo:7,  minHi:12, st:"fc",
+      card:true, rg:"shower", rgl:"Esős, szeles", ico:"rain",
+      txt:"Borongós reggel, eső a keleti, délkeleti országrészben, amely kelet felé kivonul. Nyugat felől szakadozik a felhőzet. Estig 5–10, helyenként 15–20 mm felett.",
+      wind:"ÉNy, Ny szél, élénk, helyenként erős"},
+    {k:"12", dow:"Hétfő",    sh:"H",   date:"okt. 12.", maxLo:14, maxHi:19, minLo:0,  minHi:10, st:"out",
+      card:true, rg:"crisp", rgl:"Kitekintés", ico:"partly",
+      txt:"A front után váltakozóan felhős, napos, száraz idő. Kedd–szerda felé anticiklon, néhány fokos enyhüléssel.",
+      calm:"Csapadék nem várható"}
   ];
-  var NORM_MAX = 19, NORM_MIN = 10;
+  var NORM_MAX = 16.4, NORM_MIN = 7.2;
+  var TODAY = 5;          // index a DAYS tömbben
+  var SPLIT = 5;          // ennyi lezajlott nap áll a diagram elején
 
   var HAZ = [
-    {name:"Széllökés",        ico:"i-wind",  lv:[3,2,1,1,0,0,0,0],
-      notes:["60–80 km/h, Veszprém: szélfigyelmeztetés","ÉNy, Dunántúlon viharos lökések","Északi szél, néhol erős lökések","ÉNy–Ny szél megerősödik","","","",""]},
-    {name:"Zivatar, jég",     ico:"i-storm", lv:[3,3,1,1,0,0,0,0],
-      notes:["3 ÉK-i vármegye: sárga, jég ≤ 1 cm","10 vármegye: sárga, jégdara, 50–70 km/h","Kevés helyen, főként keleten","Délután, főként nyugaton","","","",""]},
-    {name:"Csapadék",         ico:"i-shower",lv:[2,2,1,1,0,0,0,0],
-      notes:["Elszórt eső, zápor a fronttal","Elszórt zápor, Dunántúlon gyenge eső","Kevés helyen zápor","Elszórt zápor nyugaton","Száraz","Száraz","Száraz",""]},
-    {name:"Talaj menti fagy", ico:"i-frost", lv:[0,1,2,2,2,2,1,0],
-      notes:["","Éjjel helyenként","Szélvédett helyeken","Fagyzugokban","Leghidegebb: 2–4 °C","Fagyzugokban","Helyenként 10 °C alatt",""]},
-    {name:"Nyárias meleg",    ico:"i-therm", lv:[0,0,0,0,0,0,1,2],
-      notes:["","","","","","","20–25 °C","22–27, helyenként 28 °C"]}
+    {name:"Széllökés",        lv:[0,0,0,2,0,0,2,0],
+      notes:["Szélcsend","Szélcsend","Gyenge, mérsékelt","Zivatarban 60–80 km/h","","Gyenge, mérsékelt","ÉNy–Ny szél, helyenként erős",""]},
+    {name:"Zivatar, jég",     lv:[0,0,0,3,1,0,0,0],
+      notes:["","","","11 vármegye: sárga, jég < 1–2 cm","Éjjel ÉK-en és D-en","","",""]},
+    {name:"Csapadék",         lv:[0,0,0,2,1,2,2,0],
+      notes:["Száraz","Száraz","Száraz","Intenzív zivataros eső","Éjjel eső, zápor","Délről eső, estétől kiadós","5–10, helyenként 15–20 mm felett","Száraz"]},
+    {name:"Fagy (fagyzugokban)", lv:[0,1,1,1,0,1,0,1],
+      notes:["","−2 °C-ig","Völgyekben gyenge fagy","Fagyzugokban gyenge fagy","","Helyenként 0 °C","","Hajnal 0–10 °C"]},
+    {name:"Meleg (≥ 25 °C)",  lv:[1,1,2,2,0,0,0,0],
+      notes:["22–26 °C","22–26 °C","22–28 °C","22–29 °C","","","",""]}
   ];
   var LV_LABEL = ["nincs","enyhe","jelentős","figyelm."];
 
-  var SUN = [ // Budapest, számított
-    {d:19, rise:"06:26", set:"18:49", len:743},
-    {d:20, rise:"06:27", set:"18:47", len:740},
-    {d:21, rise:"06:28", set:"18:45", len:736},
-    {d:22, rise:"06:30", set:"18:43", len:733},
-    {d:23, rise:"06:31", set:"18:41", len:729},
-    {d:24, rise:"06:33", set:"18:39", len:726},
-    {d:25, rise:"06:34", set:"18:37", len:723},
-    {d:26, rise:"06:35", set:"18:34", len:719},
-    {d:27, rise:"06:37", set:"18:32", len:716},
-    {d:28, rise:"06:38", set:"18:30", len:712}
+  var RAIN = [
+    {label:"Várható eső vasárnap estig", lo:5,   hi:20,  kind:"rain", note:"Időkép: 5–10, helyenként 15–20 mm felett"},
+    {label:"Csapadékhiány, elmúlt 30 nap", lo:30,  hi:60,  kind:"def",  note:"HungaroMet, október 2."},
+    {label:"Csapadékhiány, elmúlt 90 nap", lo:100, hi:180, kind:"def",  note:"HungaroMet, október 2."}
   ];
+
+  var DUNA = [
+    {l:"júl. 29.",  v:25, note:"Megdőlt a 2018-as, 33 cm-es mélypont"},
+    {l:"aug. 2.",   v:9,  note:"Újabb negatív rekord"},
+    {l:"szept. 9.", v:0,  note:"A vízmérce nullpontja (más forrás szerint 1 cm)"},
+    {l:"okt. 1–2.", v:-2, note:"Minden idők legalacsonyabb budapesti értéke"},
+    {l:"okt. 7–8.", v:-1, note:"Az eső után ~30 cm-es emelkedés várható"}
+  ];
+  var DUNA_REF = 33;
+
+  var SUN = [ // Budapest, számított
+    {d:3,  rise:"06:45", set:"18:20", len:695},
+    {d:4,  rise:"06:46", set:"18:18", len:692},
+    {d:5,  rise:"06:48", set:"18:16", len:689},
+    {d:6,  rise:"06:49", set:"18:14", len:685},
+    {d:7,  rise:"06:50", set:"18:12", len:682},
+    {d:8,  rise:"06:52", set:"18:10", len:679},
+    {d:9,  rise:"06:53", set:"18:08", len:675},
+    {d:10, rise:"06:55", set:"18:06", len:672},
+    {d:11, rise:"06:56", set:"18:04", len:668},
+    {d:12, rise:"06:57", set:"18:03", len:665}
+  ];
+  var NEW_MOON = 10;
 
   var NS = "http://www.w3.org/2000/svg";
   function el(tag, attrs, parent){
@@ -800,14 +879,33 @@
     var t = el("text", {x:x, y:y, "class":cls, "text-anchor":anchor || "middle"}, parent);
     t.textContent = s; return t;
   }
-  function rng(a,b){ return a === null ? "nincs adat" : (a + "–" + b + " °C"); }
+  function deg(v){ return String(v).replace("-", "−"); }
+  function rng(a,b){ return a === null ? "nincs adat" : (deg(a) + "–" + deg(b) + " °C"); }
   function mid(a,b){ return a === null ? null : (a+b)/2; }
   function fmtLen(m){ return Math.floor(m/60) + " ó " + String(m%60).padStart(2,"0") + " p"; }
   function css(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
 
+  /* ---------- TOOLTIP ---------- */
+  var tip = null;
+  function showTip(container, html, px, py){
+    if (!tip){ tip = document.createElement("div"); tip.className = "tip"; tip.setAttribute("role","status"); }
+    if (tip.parentNode !== container) container.appendChild(tip);
+    tip.innerHTML = html; tip.hidden = false;
+    var cw = container.clientWidth, tw = tip.offsetWidth, th = tip.offsetHeight;
+    var left = px + 14; if (left + tw > cw) left = px - tw - 14; if (left < 0) left = 0;
+    var topp = py - th/2; if (topp < 0) topp = 0;
+    tip.style.left = left + "px"; tip.style.top = topp + "px";
+  }
+  function hideTip(){ if (tip) tip.hidden = true; }
+  function hover(node, on){
+    node.addEventListener("mouseenter", on); node.addEventListener("focus", on);
+    node.addEventListener("mouseleave", hideTip); node.addEventListener("blur", hideTip);
+    node.addEventListener("touchstart", on, {passive:true});
+  }
+
   /* ---------- HERO ÍV ---------- */
   function tempColor(t){
-    var stops = [[16,[92,170,245]],[21,[120,205,230]],[25,[245,205,95]],[30,[255,125,70]]];
+    var stops = [[14,[92,170,245]],[19,[120,205,230]],[24,[245,205,95]],[29,[255,125,70]]];
     if (t <= stops[0][0]) return "rgb(" + stops[0][1] + ")";
     for (var i=1;i<stops.length;i++){
       if (t <= stops[i][0]){
@@ -823,9 +921,9 @@
     var W = svg.clientWidth || 400, H = 170;
     svg.setAttribute("viewBox", "0 0 " + W + " " + H);
     svg.innerHTML = "";
-    var padL = 14, padR = 14, top = 28, bot = 30;
+    var padL = 14, padR = 14, top = 30, bot = 30;
     var vals = DAYS.map(function(d){ return mid(d.maxLo, d.maxHi); });
-    var lo = 15, hi = 31;
+    var lo = 13, hi = 28;
     var x = function(i){ return padL + i * (W - padL - padR) / (DAYS.length - 1); };
     var y = function(v){ return top + (hi - v) / (hi - lo) * (H - top - bot); };
     var defs = el("defs", {}, svg);
@@ -834,7 +932,7 @@
     var ga = el("linearGradient", {id:"arcFill", x1:"0", x2:"0", y1:"0", y2:"1"}, defs);
     el("stop", {offset:"0", "stop-color":"#ffffff", "stop-opacity":".16"}, ga);
     el("stop", {offset:"1", "stop-color":"#ffffff", "stop-opacity":"0"}, ga);
-    var d = "", area = "";
+    var d = "";
     vals.forEach(function(v,i){
       var px = x(i), py = y(v);
       if (i === 0){ d = "M" + px + " " + py; }
@@ -843,7 +941,7 @@
         d += " C" + cx + " " + p0y + " " + cx + " " + py + " " + px + " " + py;
       }
     });
-    area = d + " L" + x(vals.length-1) + " " + (H - bot) + " L" + x(0) + " " + (H - bot) + " Z";
+    var area = d + " L" + x(vals.length-1) + " " + (H - bot) + " L" + x(0) + " " + (H - bot) + " Z";
     el("path", {d:area, fill:"url(#arcFill)"}, svg);
     el("path", {d:d, fill:"none", stroke:"url(#arcGrad)", "stroke-width":"3.5", "stroke-linecap":"round"}, svg);
     vals.forEach(function(v,i){
@@ -851,59 +949,46 @@
       var lab = el("text", {x:x(i), y:H - 10, "text-anchor":"middle", fill:"#B7C8DE", "font-size":"10.5", "font-family":"Figtree, system-ui, sans-serif"}, svg);
       lab.textContent = DAYS[i].sh;
     });
-    [[1,"~30°"],[3,"16–21°"],[9,"22–27°"]].forEach(function(p){
+    [[4,"22–28°","middle"],[8,"14–20°","middle"]].forEach(function(p){
       var i = p[0];
-      var t = el("text", {x:x(i), y:y(vals[i]) - 12, "text-anchor": i === 9 ? "end" : "middle", fill:"#F3F7FC", "font-size":"12", "font-weight":"700", "font-family":"Figtree, system-ui, sans-serif"}, svg);
+      var t = el("text", {x:x(i), y:y(vals[i]) - 12, "text-anchor":p[2], fill:"#F3F7FC", "font-size":"12", "font-weight":"700", "font-family":"Figtree, system-ui, sans-serif"}, svg);
       t.textContent = p[1];
     });
   }
 
   /* ---------- HŐMÉRSÉKLET-DIAGRAM ---------- */
-  var tip = null;
-  function showTip(container, html, px, py){
-    if (!tip){ tip = document.createElement("div"); tip.className = "tip"; tip.setAttribute("role","status"); }
-    if (tip.parentNode !== container) container.appendChild(tip);
-    tip.innerHTML = html; tip.hidden = false;
-    var cw = container.clientWidth, tw = tip.offsetWidth, th = tip.offsetHeight;
-    var left = px + 14; if (left + tw > cw) left = px - tw - 14; if (left < 0) left = 0;
-    var topp = py - th/2; if (topp < 0) topp = 0;
-    tip.style.left = left + "px"; tip.style.top = topp + "px";
-  }
-  function hideTip(){ if (tip) tip.hidden = true; }
-
   function drawTemp(){
     var box = document.getElementById("tempChart");
     var W = Math.max(box.clientWidth, 300);
     var narrow = W < 560;
     var H = narrow ? 300 : 360;
     box.innerHTML = "";
-    var svg = el("svg", {viewBox:"0 0 " + W + " " + H, role:"img", "aria-label":"Napi minimum- és maximumhőmérséklet-tartományok szeptember 19. és 28. között"}, box);
-    var m = {l:34, r:narrow ? 12 : 66, t:30, b:44};
-    var lo = 0, hi = 32;
+    var svg = el("svg", {viewBox:"0 0 " + W + " " + H, role:"img", "aria-label":"Napi minimum- és maximumhőmérséklet-tartományok október 3. és 12. között"}, box);
+    var m = {l:34, r:narrow ? 12 : 84, t:30, b:44};
+    var lo = -4, hi = 30;
     var n = DAYS.length, step = (W - m.l - m.r) / n;
     var x = function(i){ return m.l + step * (i + .5); };
     var y = function(v){ return m.t + (hi - v) / (hi - lo) * (H - m.t - m.b); };
 
-    // háttérzónák: lezajlott / előrejelzés
-    var splitX = m.l + step * 3;
+    var splitX = m.l + step * SPLIT;
     el("rect", {x:m.l, y:m.t - 18, width:splitX - m.l, height:H - m.t - m.b + 18, fill:css("--card-sub")}, svg);
-    txt(svg, m.l + 8, m.t - 6, narrow ? "LEZAJLOTT" : "LEZAJLOTT", "zone", "start");
+    txt(svg, m.l + 8, m.t - 6, "LEZAJLOTT", "zone", "start");
     txt(svg, splitX + 8, m.t - 6, "ELŐREJELZÉS", "zone", "start");
 
-    // rács + tengely
     for (var v = 0; v <= 30; v += 5){
       el("line", {x1:m.l, x2:W - m.r, y1:y(v), y2:y(v), stroke:css("--hair"), "stroke-width":1}, svg);
       txt(svg, m.l - 8, y(v) + 4, v + "°", "tick", "end");
     }
-    el("line", {x1:m.l, x2:W - m.r, y1:y(0), y2:y(0), stroke:css("--axis"), "stroke-width":1}, svg);
+    // fagypont
+    el("line", {x1:m.l, x2:W - m.r, y1:y(0), y2:y(0), stroke:css("--cold"), "stroke-width":1, "stroke-opacity":.55}, svg);
+    if (!narrow) txt(svg, W - m.r + 6, y(0) + 4, "fagypont", "dlabel-2", "start");
+    el("line", {x1:m.l, x2:W - m.r, y1:y(lo), y2:y(lo), stroke:css("--axis"), "stroke-width":1}, svg);
 
-    // átlagvonalak
-    [[NORM_MAX,"átlag max 19°"],[NORM_MIN,"átlag min 10°"]].forEach(function(p){
+    [[NORM_MAX,"okt. átlag max 16,4°"],[NORM_MIN,"okt. átlag min 7,2°"]].forEach(function(p){
       el("line", {x1:m.l, x2:W - m.r, y1:y(p[0]), y2:y(p[0]), stroke:css("--muted"), "stroke-width":1, "stroke-opacity":.8}, svg);
       if (!narrow) txt(svg, W - m.r + 6, y(p[0]) + 4, p[1], "dlabel-2", "start");
     });
 
-    // sávok (area) + középvonal
     function band(keyLo, keyHi, wash, color){
       var pts = DAYS.map(function(d,i){ return d[keyLo] === null ? null : {i:i, lo:d[keyLo], hi:d[keyHi]}; }).filter(Boolean);
       var top = pts.map(function(p,j){ return (j ? "L" : "M") + x(p.i) + " " + y(p.hi); }).join(" ");
@@ -911,7 +996,6 @@
       el("path", {d: top + " " + bottom + " Z", fill:wash}, svg);
       var line = pts.map(function(p,j){ return (j ? "L" : "M") + x(p.i) + " " + y((p.lo + p.hi)/2); }).join(" ");
       el("path", {d:line, fill:"none", stroke:color, "stroke-width":2, "stroke-linejoin":"round", "stroke-linecap":"round"}, svg);
-      // vékony tartományjelző (range bar) naponta
       pts.forEach(function(p){
         el("rect", {x:x(p.i) - 3, y:y(p.hi), width:6, height:Math.max(y(p.lo) - y(p.hi), 2), rx:3, fill:color, "fill-opacity":.35}, svg);
       });
@@ -922,25 +1006,20 @@
     band("maxLo","maxHi", css("--warm-wash"), css("--warm"));
     band("minLo","minHi", css("--cold-wash"), css("--cold"));
 
-    // "ma" jelölő
-    var ti = 3;
-    el("line", {x1:x(ti), x2:x(ti), y1:m.t - 2, y2:H - m.b, stroke:css("--cold"), "stroke-width":1, "stroke-opacity":.6}, svg);
+    el("line", {x1:x(TODAY), x2:x(TODAY), y1:m.t - 2, y2:H - m.b, stroke:css("--cold"), "stroke-width":1, "stroke-opacity":.6}, svg);
 
     // szelektív címkék
-    txt(svg, x(1), y(30) - 10, "30°", "dlabel");
-    txt(svg, x(3), y(21) - 10, "16–21°", "dlabel");
-    txt(svg, x(5), y(2) + 18, "2°", "dlabel");
-    txt(svg, x(9), y(27) - 10, "27°", "dlabel");
+    txt(svg, x(4), y(28) - 10, "28°", "dlabel");
+    txt(svg, x(8), y(20) - 10, "14–20°", "dlabel");
+    txt(svg, x(0) + 9, y(-3) + 4, "−3°", "dlabel", "start");
 
-    // x tengely
     DAYS.forEach(function(d,i){
-      txt(svg, x(i), H - m.b + 18, d.sh, "xlab" + "");
-      txt(svg, x(i), H - m.b + 32, d.k + (narrow ? "" : "."), "xsub");
+      txt(svg, x(i), H - m.b + 18, d.sh, "xlab");
+      txt(svg, x(i), H - m.b + 32, d.k + ".", "xsub");
     });
-    var todayLab = txt(svg, x(ti), m.t - 22 < 0 ? 10 : m.t - 20, "MA", "zone");
+    var todayLab = txt(svg, x(TODAY), 10, "MA", "zone");
     todayLab.setAttribute("style", "fill:" + css("--cold"));
 
-    // hover réteg
     var hl = el("rect", {x:0, y:m.t, width:step, height:H - m.t - m.b, fill:css("--ink"), "fill-opacity":0, "pointer-events":"none"}, svg);
     DAYS.forEach(function(d,i){
       var hit = el("rect", {x:m.l + step*i, y:m.t - 18, width:step, height:H - m.t - m.b + 18 + 36, fill:"transparent", tabindex:0, "aria-label": d.dow + " " + d.date + ": csúcs " + rng(d.maxLo,d.maxHi) + ", hajnal " + rng(d.minLo,d.minHi)}, svg);
@@ -948,13 +1027,13 @@
         hl.setAttribute("x", m.l + step*i); hl.setAttribute("fill-opacity", ".05");
         var html = "<b>" + d.dow + ", " + d.date + "</b>" +
           "<div class='row'><span class='sw' style='background:" + css("--warm") + "'></span>Csúcs: " + rng(d.maxLo,d.maxHi) + "</div>" +
-          "<div class='row'><span class='sw' style='background:" + css("--cold") + "'></span>Hajnal: " + rng(d.minLo,d.minHi) + (d.minEst ? " <span style='color:var(--muted)'>(felső érték becsült)</span>" : "") + "</div>" +
-          "<div class='note'>" + (d.st === "obs" ? "Lezajlott nap, a napi jelentések alapján." : d.st === "today" ? "Mai nap." : d.st === "out" ? "Kitekintés" + (d.note ? ": " + d.note : "") + "." : "Előrejelzés.") + "</div>";
+          "<div class='row'><span class='sw' style='background:" + css("--cold") + "'></span>Hajnal: " + rng(d.minLo,d.minHi) + (d.minEst ? " <span style='color:var(--muted)'>(becslés)</span>" : "") + "</div>" +
+          "<div class='note'>" + (d.st === "obs" ? "Lezajlott nap, a napi jelentések alapján." : d.st === "today" ? "Mai nap." : d.st === "out" ? "Kitekintés." : "Előrejelzés.") + "</div>";
         showTip(box, html, x(i), y(mid(d.maxLo,d.maxHi)));
       }
-      function off(){ hl.setAttribute("fill-opacity", "0"); hideTip(); }
       hit.addEventListener("mouseenter", on); hit.addEventListener("focus", on);
-      hit.addEventListener("mouseleave", off); hit.addEventListener("blur", off);
+      hit.addEventListener("mouseleave", function(){ hl.setAttribute("fill-opacity","0"); hideTip(); });
+      hit.addEventListener("blur", function(){ hl.setAttribute("fill-opacity","0"); hideTip(); });
       hit.addEventListener("touchstart", on, {passive:true});
     });
   }
@@ -963,12 +1042,12 @@
     var t = document.getElementById("tempTable");
     var h = "<thead><tr><th>Nap</th><th>Csúcs (°C)</th><th>Hajnal (°C)</th><th>Állapot</th></tr></thead><tbody>";
     DAYS.forEach(function(d){
-      h += "<tr><td>" + d.dow + ", " + d.date + "</td><td class='n'>" + d.maxLo + "–" + d.maxHi + "</td><td class='n'>" +
-        (d.minLo === null ? "—" : d.minLo + "–" + d.minHi + (d.minEst ? "*" : "")) + "</td><td>" +
+      h += "<tr><td>" + d.dow + ", " + d.date + "</td><td class='n'>" + deg(d.maxLo) + "–" + deg(d.maxHi) + "</td><td class='n'>" +
+        (d.minLo === null ? "—" : deg(d.minLo) + "–" + deg(d.minHi) + (d.minEst ? "*" : "")) + "</td><td>" +
         ({obs:"lezajlott", today:"ma", fc:"előrejelzés", out:"kitekintés"})[d.st] + "</td></tr>";
     });
     h += "</tbody>";
-    t.innerHTML = h + "<caption style='caption-side:bottom;text-align:left;font-size:.78rem;color:var(--muted);padding-top:8px'>* a felső érték becsült. Sokéves budapesti átlag (szept. 3. dekád): max ≈ 19 °C, min ≈ 10 °C.</caption>";
+    t.innerHTML = h + "<caption style='caption-side:bottom;text-align:left;font-size:.78rem;color:var(--muted);padding-top:8px'>* becsült sáv. Budapest októberi sokéves átlaga (1991–2020, met.hu): max 16,4 °C, min 7,2 °C.</caption>";
   }
 
   /* ---------- NAPI KÁRTYÁK ---------- */
@@ -981,16 +1060,16 @@
               : d.st === "out" ? "<span class='status-tag'>Jövő hét</span>"
               : "<span class='status-tag'>Előrejelzés</span>";
       var facts = "";
-      if (d.wind && d.wind !== "—") facts += "<li><svg aria-hidden='true'><use href='#i-wind'/></svg><span>" + d.wind + "</span></li>";
+      if (d.wind) facts += "<li><svg aria-hidden='true'><use href='#i-wind'/></svg><span>" + d.wind + "</span></li>";
       if (d.frost) facts += "<li><svg aria-hidden='true' style='color:var(--cold)'><use href='#i-frost'/></svg><span>" + d.frost + "</span></li>";
       if (d.alert) facts += "<li><svg aria-hidden='true' style='color:var(--lv3)'><use href='#i-alert'/></svg><span>" + d.alert + "</span></li>";
-      if (!facts) facts = "<li><svg aria-hidden='true'><use href='#i-therm'/></svg><span>Nincs jelentős veszély</span></li>";
+      if (d.calm) facts += "<li><svg aria-hidden='true'><use href='#i-check'/></svg><span>" + d.calm + "</span></li>";
       html += "<article class='day rg-" + d.rg + "'>" +
         "<div class='day-head'><div class='day-top'><div><div class='day-name'>" + d.dow + "</div><div class='day-date'>" + d.date + " · " + tag + "</div></div>" +
         "<svg class='day-ico' aria-hidden='true'><use href='#i-" + d.ico + "'/></svg></div>" +
         "<span class='chip'>" + d.rgl + "</span></div>" +
         "<div class='temps'><div><span class='cap'>Csúcs</span><span class='hi'>" + d.maxLo + "–" + d.maxHi + "°</span></div>" +
-        "<div><span class='cap'>Hajnal</span><span class='lo'>" + (d.minLo === null ? "—" : d.minLo + "–" + d.minHi + "°") + "</span></div></div>" +
+        "<div><span class='cap'>Hajnal</span><span class='lo'>" + (d.minLo === null ? "—" : deg(d.minLo) + "–" + deg(d.minHi) + "°" + (d.minEst ? "*" : "")) + "</span></div></div>" +
         "<p>" + d.txt + "</p>" +
         "<ul class='facts'>" + facts + "</ul></article>";
     });
@@ -1015,50 +1094,112 @@
     document.getElementById("matrix").innerHTML = h + "</tbody>";
   }
 
+  /* ---------- ESŐ VS. HIÁNY ---------- */
+  function drawRain(){
+    var box = document.getElementById("rainChart");
+    var W = Math.max(box.clientWidth, 260);
+    var rowH = 58, m = {l:4, r:18, t:6, b:30};
+    var H = m.t + RAIN.length * rowH + m.b;
+    box.innerHTML = "";
+    var svg = el("svg", {viewBox:"0 0 " + W + " " + H, role:"img", "aria-label":"Várható eső 5–20 mm; csapadékhiány 30 nap alatt 30–60 mm, 90 nap alatt 100–180 mm"}, box);
+    var max = 200;
+    var x = function(v){ return m.l + v / max * (W - m.l - m.r); };
+    var plotB = m.t + RAIN.length * rowH;
+    [0,50,100,150,200].forEach(function(v){
+      el("line", {x1:x(v), x2:x(v), y1:m.t, y2:plotB, stroke:css("--hair"), "stroke-width":1}, svg);
+      txt(svg, x(v), plotB + 18, v + (v === 200 ? " mm" : ""), "tick", v === 0 ? "start" : (v === 200 ? "end" : "middle"));
+    });
+    RAIN.forEach(function(r,i){
+      var y0 = m.t + i * rowH;
+      txt(svg, m.l, y0 + 16, r.label, "xlab", "start");
+      var color = r.kind === "rain" ? css("--cold") : css("--warm");
+      var bx = x(r.lo), bw = Math.max(x(r.hi) - x(r.lo), 4);
+      el("rect", {x:bx, y:y0 + 26, width:bw, height:14, rx:4, fill:color}, svg);
+      var lab = r.lo + "–" + r.hi + " mm";
+      var endX = x(r.hi) + 8;
+      if (endX + 64 > W) txt(svg, bx - 8, y0 + 37, lab, "dlabel", "end");
+      else txt(svg, endX, y0 + 37, lab, "dlabel", "start");
+      var hit = el("rect", {x:m.l, y:y0, width:W - m.l - m.r, height:rowH, fill:"transparent", tabindex:0, "aria-label":r.label + ": " + lab}, svg);
+      hover(hit, function(){ showTip(box, "<b>" + r.label + "</b><div>" + lab + "</div><div class='note'>" + r.note + "</div>", x(r.hi), y0 + 33); });
+    });
+  }
+
+  /* ---------- DUNA ---------- */
+  function colPath(x, base, end, w){
+    var h = Math.abs(end - base);
+    if (h < 2){ return "M" + x + " " + (base - 1) + " h" + w + " v2 h" + (-w) + " Z"; }
+    var r = Math.min(4, h/2);
+    if (end < base){
+      return "M" + x + " " + base + " V" + (end + r) + " Q" + x + " " + end + " " + (x + r) + " " + end +
+        " H" + (x + w - r) + " Q" + (x + w) + " " + end + " " + (x + w) + " " + (end + r) + " V" + base + " Z";
+    }
+    return "M" + x + " " + base + " V" + (end - r) + " Q" + x + " " + end + " " + (x + r) + " " + end +
+      " H" + (x + w - r) + " Q" + (x + w) + " " + end + " " + (x + w) + " " + (end - r) + " V" + base + " Z";
+  }
+  function drawDuna(){
+    var box = document.getElementById("dunaChart");
+    var W = Math.max(box.clientWidth, 260), H = 214;
+    box.innerHTML = "";
+    var svg = el("svg", {viewBox:"0 0 " + W + " " + H, role:"img", "aria-label":"A Duna budapesti mélypontjai: július 29. 25 cm, augusztus 2. 9 cm, szeptember 9. 0 cm, október 1–2. mínusz 2 cm, október 7–8. mínusz 1 cm"}, box);
+    var m = {l:36, r:10, t:24, b:34};
+    var lo = -8, hi = 40;
+    var n = DUNA.length, step = (W - m.l - m.r) / n;
+    var x = function(i){ return m.l + step * (i + .5); };
+    var y = function(v){ return m.t + (hi - v) / (hi - lo) * (H - m.t - m.b); };
+    [-5,0,10,20,30,40].forEach(function(v){
+      el("line", {x1:m.l, x2:W - m.r, y1:y(v), y2:y(v), stroke:v === 0 ? css("--axis") : css("--hair"), "stroke-width":1}, svg);
+      txt(svg, m.l - 6, y(v) + 4, deg(v), "tick", "end");
+    });
+    el("line", {x1:m.l, x2:W - m.r, y1:y(DUNA_REF), y2:y(DUNA_REF), stroke:css("--muted"), "stroke-width":1}, svg);
+    txt(svg, W - m.r, y(DUNA_REF) - 6, "2018-as rekord: 33 cm", "dlabel-2", "end");
+    var cw = Math.min(24, step * .45);
+    DUNA.forEach(function(d,i){
+      el("path", {d:colPath(x(i) - cw/2, y(0), y(d.v), cw), fill:css("--cold")}, svg);
+      var ly = d.v >= 0 ? y(d.v) - 8 : y(d.v) + 16;
+      txt(svg, x(i), ly, deg(d.v), "dlabel");
+      txt(svg, x(i), H - 10, d.l, "xsub");
+      var hit = el("rect", {x:m.l + step*i, y:m.t, width:step, height:H - m.t - 20, fill:"transparent", tabindex:0, "aria-label":d.l + ": " + deg(d.v) + " cm"}, svg);
+      hover(hit, function(){ showTip(box, "<b>" + d.l + "</b><div>Vigadó tér: " + deg(d.v) + " cm</div><div class='note'>" + d.note + "</div>", x(i), y(d.v)); });
+    });
+  }
+
   /* ---------- NAPPALHOSSZ ---------- */
   function drawDay(){
     var box = document.getElementById("dayChart");
     var W = Math.max(box.clientWidth, 280), H = 200;
     box.innerHTML = "";
-    var svg = el("svg", {viewBox:"0 0 " + W + " " + H, role:"img", "aria-label":"A nappalok hossza Budapesten szeptember 19-én 12 óra 23 perc, 28-án 11 óra 52 perc"}, box);
+    var svg = el("svg", {viewBox:"0 0 " + W + " " + H, role:"img", "aria-label":"A nappalok hossza Budapesten október 3-án 11 óra 35 perc, 12-én 11 óra 5 perc"}, box);
     var m = {l:48, r:16, t:22, b:34};
-    var lo = 705, hi = 750;
+    var lo = 660, hi = 700;
     var n = SUN.length;
     var x = function(i){ return m.l + i * (W - m.l - m.r) / (n - 1); };
     var y = function(v){ return m.t + (hi - v) / (hi - lo) * (H - m.t - m.b); };
-    [710, 720, 730, 740, 750].forEach(function(v){
+    [660, 670, 680, 690, 700].forEach(function(v){
       el("line", {x1:m.l, x2:W - m.r, y1:y(v), y2:y(v), stroke:css("--hair"), "stroke-width":1}, svg);
       txt(svg, m.l - 8, y(v) + 4, Math.floor(v/60) + ":" + String(v%60).padStart(2,"0"), "tick", "end");
     });
-    // 12 óra
-    el("line", {x1:m.l, x2:W - m.r, y1:y(720), y2:y(720), stroke:css("--muted"), "stroke-width":1}, svg);
-    // napéjegyenlőség (23.) és telihold (26.)
-    var ie = 4, im = 7;
-    el("line", {x1:x(ie), x2:x(ie), y1:m.t - 4, y2:H - m.b, stroke:css("--axis"), "stroke-width":1}, svg);
-    txt(svg, x(ie) + 5, m.t + 4, "napéjegyenlőség", "dlabel-2", "start");
-    el("circle", {cx:x(im), cy:m.t - 6, r:5, fill:"#F2D98A", stroke:css("--card"), "stroke-width":2}, svg);
-    txt(svg, x(im) + 10, m.t - 2, "telihold", "dlabel-2", "start");
-    var area = SUN.map(function(s,i){ return (i ? "L" : "M") + x(i) + " " + y(s.len); }).join(" ");
-    el("path", {d: area + " L" + x(n-1) + " " + (H - m.b) + " L" + x(0) + " " + (H - m.b) + " Z", fill:css("--cold-wash")}, svg);
-    el("path", {d:area, fill:"none", stroke:css("--cold"), "stroke-width":2, "stroke-linejoin":"round"}, svg);
+    var im = SUN.findIndex(function(s){ return s.d === NEW_MOON; });
+    el("line", {x1:x(im), x2:x(im), y1:m.t - 4, y2:H - m.b, stroke:css("--axis"), "stroke-width":1}, svg);
+    el("circle", {cx:x(im), cy:m.t - 6, r:5, fill:css("--ink-2"), stroke:css("--card"), "stroke-width":2}, svg);
+    txt(svg, x(im) - 10, m.t - 2, "újhold", "dlabel-2", "end");
+    var line = SUN.map(function(s,i){ return (i ? "L" : "M") + x(i) + " " + y(s.len); }).join(" ");
+    el("path", {d: line + " L" + x(n-1) + " " + (H - m.b) + " L" + x(0) + " " + (H - m.b) + " Z", fill:css("--cold-wash")}, svg);
+    el("path", {d:line, fill:"none", stroke:css("--cold"), "stroke-width":2, "stroke-linejoin":"round"}, svg);
     SUN.forEach(function(s,i){
       el("circle", {cx:x(i), cy:y(s.len), r:(i === 0 || i === n-1) ? 4.5 : 3, fill:css("--cold"), stroke:css("--card"), "stroke-width":2}, svg);
       if (i % (W < 420 ? 3 : 1) === 0 || i === n-1) txt(svg, x(i), H - m.b + 18, s.d + ".", "xsub");
     });
     txt(svg, x(0) + 6, y(SUN[0].len) - 10, fmtLen(SUN[0].len), "dlabel", "start");
-    txt(svg, x(n-1) - 4, y(SUN[n-1].len) + 20, fmtLen(SUN[n-1].len), "dlabel", "end");
+    txt(svg, x(n-1) - 4, y(SUN[n-1].len) - 12, fmtLen(SUN[n-1].len), "dlabel", "end");
 
     SUN.forEach(function(s,i){
       var w = (W - m.l - m.r) / (n - 1);
-      var hit = el("rect", {x:x(i) - w/2, y:m.t, width:w, height:H - m.t - m.b, fill:"transparent", tabindex:0, "aria-label":"szept. " + s.d + ".: napkelte " + s.rise + ", napnyugta " + s.set}, svg);
-      function on(){ showTip(box, "<b>szept. " + s.d + ".</b><div>Napkelte: " + s.rise + "</div><div>Napnyugta: " + s.set + "</div><div class='note'>Nappal: " + fmtLen(s.len) + "</div>", x(i), y(s.len)); }
-      hit.addEventListener("mouseenter", on); hit.addEventListener("focus", on);
-      hit.addEventListener("mouseleave", hideTip); hit.addEventListener("blur", hideTip);
-      hit.addEventListener("touchstart", on, {passive:true});
+      var hit = el("rect", {x:x(i) - w/2, y:m.t, width:w, height:H - m.t - m.b, fill:"transparent", tabindex:0, "aria-label":"okt. " + s.d + ".: napkelte " + s.rise + ", napnyugta " + s.set}, svg);
+      hover(hit, function(){ showTip(box, "<b>okt. " + s.d + ".</b><div>Napkelte: " + s.rise + "</div><div>Napnyugta: " + s.set + "</div><div class='note'>Nappal: " + fmtLen(s.len) + "</div>", x(i), y(s.len)); });
     });
   }
 
-  function drawAll(){ drawHero(); drawTemp(); drawDay(); }
+  function drawAll(){ drawHero(); drawTemp(); drawRain(); drawDuna(); drawDay(); }
 
   renderDays();
   renderMatrix();
@@ -1073,7 +1214,6 @@
   } else {
     window.addEventListener("resize", redraw);
   }
-  // téma váltásakor újraszínezés
   try{
     new MutationObserver(redraw).observe(document.documentElement, {attributes:true, attributeFilter:["data-theme"]});
     window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", redraw);
