@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Novemberi postaláda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Elrendezés: bal oldalon szűrők és KPI-k, alatta két oszlopban a diagramok, a lap alján a levéllista. */
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --ink:#14202b; --muted:#566677; --line:#dce2e9; --accent:#0b62c4; --accent-soft:#e3eefb;
+  --g-pen:#1f5fae; --g-ker:#c96a12; --g-szol:#14806a; --g-tech:#7552bd; --g-media:#b83a76; --g-pers:#4a5563; --g-allas:#8a7410;
+  --unread:#d6452d;
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"Instrument Sans","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e141a; --surface:#161f28; --ink:#e7edf3; --muted:#9aabbb; --line:#27333f; --accent:#5aa4f0; --accent-soft:#1a2c40;
+    --g-pen:#5b9be6; --g-ker:#eb9246; --g-szol:#3dc2a3; --g-tech:#a78be6; --g-media:#e66fa4; --g-pers:#a3afbd; --g-allas:#cfb53f;
+    --unread:#ff7a62; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e141a; --surface:#161f28; --ink:#e7edf3; --muted:#9aabbb; --line:#27333f; --accent:#5aa4f0; --accent-soft:#1a2c40;
+  --g-pen:#5b9be6; --g-ker:#eb9246; --g-szol:#3dc2a3; --g-tech:#a78be6; --g-media:#e66fa4; --g-pers:#a3afbd; --g-allas:#cfb53f;
+  --unread:#ff7a62; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);
+  padding-block:28px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+h1,h2{font-family:var(--f-display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:clamp(1.7rem,4vw,2.4rem);line-height:1.1}
+h2{font-size:1.05rem}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px}
+header p{margin:6px 0 0;color:var(--muted);max-width:60ch}
+.sub{font-size:.85rem;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
+.card h2{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:12px}
+.card h2 small{font:400 .78rem var(--f-body);color:var(--muted)}
+
+/* szűrősáv */
+.filters{display:flex;flex-direction:column;gap:12px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--surface);color:var(--ink);
+  padding:6px 11px;border-radius:999px;font:500 .85rem var(--f-body);cursor:pointer}
+.chip:hover{border-color:var(--accent)}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent)}
+.chip i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.chip b{font:500 .78rem var(--f-mono);color:var(--muted)}
+input[type=search],select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 10px;min-width:0}
+input[type=search]{flex:1 1 200px}
+label.tgl{display:inline-flex;gap:6px;align-items:center;font-size:.88rem;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.active{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.85rem;color:var(--muted)}
+.tag{background:var(--accent-soft);border:1px solid var(--accent);color:var(--ink);border-radius:6px;padding:2px 8px;cursor:pointer;font-size:.82rem}
+.tag::after{content:" ×"}
+button.link{background:none;border:0;color:var(--accent);font:inherit;cursor:pointer;padding:0;text-decoration:underline}
+
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
+.kpi span{display:block;font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.kpi strong{display:block;font:700 1.9rem/1.2 var(--f-display);margin-top:2px;overflow-wrap:anywhere}
+.kpi em{font-style:normal;font-size:.82rem;color:var(--muted)}
+
+/* diagramok */
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+@media (max-width:820px){.grid{grid-template-columns:minmax(0,1fr)}}
+svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{fill:var(--muted);font:11px var(--f-mono)}
+svg .grid-l{stroke:var(--line);stroke-width:1}
+svg .hit{cursor:pointer}
+.bars{display:flex;flex-direction:column;gap:4px}
+.bar{display:grid;grid-template-columns:minmax(90px,150px) minmax(0,1fr) 34px;gap:10px;align-items:center;width:100%;
+  background:none;border:0;padding:4px 0;color:var(--ink);font:inherit;text-align:left;cursor:pointer;border-radius:6px}
+.bar:hover{background:var(--bg)}
+.bar .lab{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.88rem}
+.bar .track{height:14px;background:transparent;position:relative}
+.bar .fill{position:absolute;inset:0 auto 0 0;border-radius:0 4px 4px 0;min-width:3px}
+.bar .val{font:500 .85rem var(--f-mono);text-align:right}
+.bar.dim{opacity:.35}
+.empty{color:var(--muted);padding:18px 0;font-size:.9rem}
+
+/* táblázat */
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:.88rem}
+th{font:600 .72rem var(--f-body);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--surface)}
+td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td.r,th.r{text-align:right}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;padding:2px 8px;border:1px solid var(--line);border-radius:999px;white-space:nowrap}
+.pill i{width:8px;height:8px;border-radius:2px;display:inline-block}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--unread);margin-right:6px;vertical-align:middle}
+.dot.read{background:transparent;border:1.5px solid var(--muted)}
+.sender-btn{background:none;border:0;font:inherit;color:var(--accent);cursor:pointer;padding:0;text-align:left}
+.sender-btn:hover{text-decoration:underline}
+.more{display:flex;justify-content:center;padding-top:12px}
+.btn{font:500 .88rem var(--f-body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+#tip{position:fixed;z-index:50;pointer-events:none;background:var(--ink);color:var(--bg);font-size:.8rem;padding:6px 9px;border-radius:6px;max-width:240px;opacity:0;transition:opacity .08s;white-space:pre-line}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Novemberi postaláda</h1>
+      <p id="lead"></p>
+    </div>
+    <div class="sub" id="range"></div>
+  </header>
+
+  <section class="card filters" aria-label="Szűrők">
+    <div class="row" id="groupChips" role="group" aria-label="Téma szerint"></div>
+    <div class="row">
+      <input type="search" id="q" placeholder="Keresés küldő szerint…" aria-label="Keresés küldő szerint">
+      <select id="cat" aria-label="Gmail kategória">
+        <option value="">Minden kategória</option>
+        <option value="P">Promóciók</option>
+        <option value="U">Frissítések</option>
+        <option value="E">Személyes</option>
+        <option value="S">Közösségi</option>
+      </select>
+      <label class="tgl" for="unread"><input type="checkbox" id="unread"> Csak olvasatlan</label>
+    </div>
+    <div class="active" id="active" hidden></div>
+  </section>
+
+  <section class="kpis" id="kpis" aria-live="polite"></section>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Napi levélszám <small>téma szerint, helyi idő</small></h2>
+      <div id="daily"></div>
+      <p class="sub" style="margin:8px 0 0">A mai nap (11.04.) még nem ért véget. Kattints egy oszlopra a nap szűréséhez.</p>
+    </section>
+    <section class="card">
+      <h2>Mikor jönnek a levelek? <small>óránként, helyi idő</small></h2>
+      <div id="hourly"></div>
+    </section>
+    <section class="card">
+      <h2>Témák <small>kattintásra szűr</small></h2>
+      <div class="bars" id="groups"></div>
+    </section>
+    <section class="card">
+      <h2>Legtöbbet író küldők <small>top 10</small></h2>
+      <div class="bars" id="senders"></div>
+    </section>
+  </div>
+
+  <section class="card">
+    <h2>Levelek <small id="listCount"></small></h2>
+    <div class="tbl"><table>
+      <thead><tr><th>Időpont</th><th>Küldő</th><th>Téma</th><th>Kategória</th><th class="r">Méret</th><th>Állapot</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table></div>
+    <div class="more"><button class="btn" id="moreBtn" hidden>Még 40 levél</button></div>
+  </section>
+  <p class="sub">Az adatok a Gmail fiókod novemberi leveleinek fejlécéből készültek (küldő, időpont, kategória, olvasottság, méret). A levelek tartalmát és tárgyát a diagram nem használja. Az időpontok magyar idő szerint (UTC+1) szerepelnek.</p>
+</div>
+<div id="tip" role="tooltip"></div>
+
+<script>
+/* ---------- adatok: időpont (UTC) | küldő | Gmail kategória | olvasatlan | méret (KB) ---------- */
+const RAW = `
+04T16:39|superzebra|U|1|20
+04T16:57|younity|U|1|48
+04T17:03|rtl|P|1|55
+04T16:46|jobescape|P|1|25
+04T15:55|mvm|U|1|6
+04T15:54|vizcenter|E|1|98
+04T15:54|simplepay|U|1|61
+04T15:51|simple|U|1|71
+04T15:50|telekom|U|1|93
+04T15:37|tudatos|P|1|72
+04T14:53|szerencse|P|1|33
+04T14:20|generali|P|1|42
+04T14:51|revolut|U|1|105
+04T13:35|molmove|P|1|45
+04T12:39|tipranks|U|1|161
+04T13:14|tiktok|U|1|29
+04T13:01|telekom|U|1|117
+04T10:34|molmove|P|1|29
+04T10:28|prime|U|1|52
+04T10:01|telekom|U|0|61
+04T09:48|kfc|P|1|44
+04T07:43|superzebra|U|1|21
+04T08:09|lightyear|U|1|52
+04T07:30|takko|P|1|97
+04T07:14|ibolya|E|1|196
+04T06:30|biotech|P|1|61
+04T06:27|gerilla|U|1|57
+04T06:17|aiegyetem|P|1|28
+04T06:05|amazingai|P|1|47
+04T05:11|fundamenta|U|1|68
+03T23:30|composio|U|1|107
+03T22:56|wsj|U|1|89
+03T19:15|instagram|P|1|23
+03T19:14|magica|U|1|161
+03T18:00|youtube|S|1|29
+03T17:47|google|U|1|83
+03T17:15|aiegyetem|P|0|26
+03T16:55|zoom|U|0|25
+03T16:46|jobescape|P|1|24
+03T16:29|auchan|P|1|54
+03T16:37|superzebra|U|1|21
+03T16:39|linkedin|S|1|128
+03T15:40|molmove|P|1|37
+03T15:36|revolut|U|1|117
+03T15:19|naptar|U|1|28
+03T15:17|kreta|E|0|70
+03T14:29|linkedin|U|0|26
+03T13:12|auchan|P|1|39
+03T13:30|googleplay|U|1|100
+03T13:03|mcdonalds|P|1|86
+03T12:37|tipranks|U|0|162
+03T12:56|kreta|E|1|70
+03T11:57|kreta|E|0|70
+03T07:52|superzebra|U|1|22
+03T09:58|electrolux|P|1|355
+03T09:57|pcx|E|1|213
+03T09:57|kfc|P|1|43
+03T09:23|bk|P|1|46
+03T09:06|olympics|P|1|137
+03T09:04|cashflow|U|1|26
+03T08:55|aiboost|U|1|46
+03T08:06|skyshowtime|P|0|188
+03T08:05|xtb|P|1|81
+02T15:33|bkk|U|1|33
+03T06:30|biotech|P|1|66
+03T06:15|aiegyetem|P|1|29
+03T06:05|amazingai|P|1|50
+03T04:57|younity|U|1|52
+02T22:45|wsj|U|1|88
+02T22:36|composio|E|1|22
+02T21:18|tripadvisor|P|1|43
+02T20:35|magica|U|1|143
+02T20:05|kh|U|1|42
+02T18:48|linkedin|U|0|61
+02T18:13|zoom|U|1|25
+02T18:04|cashflow|U|1|26
+02T17:47|ibolya|E|0|3898
+02T17:39|composio|E|0|17
+02T17:36|google|U|1|81
+02T17:31|googleplay|U|1|101
+02T17:23|laptop|U|1|138
+02T16:39|superzebra|U|1|21
+02T16:46|jobescape|P|1|24
+02T16:34|supershop|P|1|68
+02T16:40|molmove|P|1|35
+02T16:09|trading212|U|1|66
+02T16:01|vonroc|P|1|137
+02T14:19|wsj|P|1|94
+02T14:14|facer|P|1|58
+02T14:03|rtl|P|1|36
+02T12:41|tipranks|U|1|154
+02T12:07|tiktok|U|1|29
+02T06:05|amazingai|U|1|65
+02T10:36|trading212|U|1|65
+02T10:33|kfc|P|1|43
+02T08:14|gpay|U|0|159
+02T08:14|takko|P|1|76
+02T07:39|superzebra|U|1|21
+02T06:34|gerilla|U|1|81
+02T06:33|otp|U|1|683
+02T06:01|aiegyetem|P|1|27
+01T19:02|cashflow|U|1|26
+01T18:51|aiegyetem|P|1|38
+01T17:36|instagram|U|1|23
+01T17:05|wsj|U|1|76
+01T16:46|jobescape|P|1|20
+01T16:39|superzebra|U|1|21
+01T16:21|younity|U|1|45
+01T16:07|villany|U|1|105
+01T14:54|instagram|U|1|62
+01T12:50|luminar|P|1|88
+01T12:34|tipranks|U|1|152
+01T12:50|zoom|U|1|31
+01T12:50|zoom|U|1|31
+01T12:49|aiegyetem|P|1|12
+01T09:23|laptop|U|1|104
+01T07:51|bk|P|1|45
+01T07:39|superzebra|U|1|23
+01T07:30|biotech|P|1|85
+01T05:16|fundamenta|U|1|182
+`.trim().split('\n');
+
+const NAMES = {superzebra:'SuperZebra',younity:'younity Hungary',rtl:'RTL+',jobescape:'Jobescape',mvm:'MVM Next',vizcenter:'VízCenter',simplepay:'SimplePay',simple:'Simple',telekom:'Telekom',tudatos:'Tudatos Könyvelés',szerencse:'Szerencsejáték Zrt.',generali:'Generali',revolut:'Revolut',molmove:'MOL Move',tipranks:'TipRanks',tiktok:'TikTok',prime:'Prime Video',kfc:'KFC',lightyear:'Lightyear',takko:'TAKKO',ibolya:'Ibolya Lázárné',biotech:'BioTechUSA',gerilla:'Gerilla Önéletrajz',aiegyetem:'AI egyetem',amazingai:'Amazing AI',fundamenta:'Fundamenta',composio:'Composio',wsj:'Wall Street Journal',instagram:'Instagram',magica:'Magica (galaxy.ai)',youtube:'YouTube',google:'Google',zoom:'Zoom',auchan:'Auchan',linkedin:'LinkedIn',naptar:'Google Naptár',kreta:'e-KRÉTA',googleplay:'Google Play',mcdonalds:"McDonald's",electrolux:'Electrolux',pcx:'PCX',bk:'Burger King',olympics:'Olympics',cashflow:'Cashflow Mérnök',aiboost:'AI Boost',skyshowtime:'SkyShowtime',xtb:'XTB',bkk:'BKK',tripadvisor:'Tripadvisor',kh:'K&H',supershop:'SuperShop',trading212:'Trading 212',vonroc:'VONROC',facer:'Facer',gpay:'Google Payments',otp:'OTP Egészségpénztár',villany:'Villanyautósok.hu',luminar:'Luminar',laptop:'Laptophardware'};
+const GROUPS = {
+  pen:{n:'Pénzügy',k:['revolut','trading212','tipranks','lightyear','xtb','fundamenta','kh','otp','gpay','szerencse','generali','simplepay','simple','tudatos']},
+  ker:{n:'Vásárlás és akciók',k:['kfc','bk','mcdonalds','auchan','takko','electrolux','superzebra','supershop','vonroc','laptop','pcx','biotech','villany','tripadvisor']},
+  szol:{n:'Szolgáltatók',k:['telekom','mvm','vizcenter','bkk','molmove','kreta']},
+  tech:{n:'Tech és AI',k:['aiegyetem','amazingai','aiboost','magica','composio','cashflow','younity','zoom','google','googleplay','naptar','facer','luminar']},
+  media:{n:'Média és közösségi',k:['instagram','tiktok','youtube','linkedin','rtl','prime','skyshowtime','olympics','wsj']},
+  allas:{n:'Állás',k:['jobescape','gerilla']},
+  pers:{n:'Személyes',k:['ibolya']}
+};
+const CATS = {P:'Promóciók',U:'Frissítések',E:'Személyes',S:'Közösségi'};
+const GKEYS = Object.keys(GROUPS);
+const grpOf = {}; GKEYS.forEach(g => GROUPS[g].k.forEach(k => grpOf[k] = g));
+const WD = ['v','h','k','sze','cs','p','szo'];
+
+const DATA = RAW.map(l => {
+  const [t,s,c,u,kb] = l.split('|');
+  const d = +t.slice(0,2), h = +t.slice(3,5), m = +t.slice(6,8);
+  const loc = new Date(Date.UTC(2026,10,d,h,m) + 3600000);
+  return {ts:loc.getTime(), day:loc.getUTCDate(), hour:loc.getUTCHours(), min:loc.getUTCMinutes(),
+          s, g:grpOf[s], c, u:u==='1', kb:+kb};
+}).sort((a,b) => b.ts - a.ts);
+
+/* ---------- állapot ---------- */
+const st = {group:null, sender:null, day:null, cat:'', unread:false, q:'', shown:40};
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2,'0');
+const fmtKB = kb => kb >= 1024 ? (kb/1024).toFixed(1).replace('.',',') + ' MB' : Math.round(kb) + ' KB';
+const nf = n => n.toLocaleString('hu-HU');
+const gcol = g => `var(--g-${g})`;
+
+function filt(skip){
+  const q = st.q.trim().toLowerCase();
+  return DATA.filter(r =>
+    (skip==='group'  || !st.group  || r.g===st.group) &&
+    (skip==='sender' || !st.sender || r.s===st.sender) &&
+    (skip==='day'    || !st.day    || r.day===st.day) &&
+    (!st.cat || r.c===st.cat) && (!st.unread || r.u) &&
+    (!q || NAMES[r.s].toLowerCase().includes(q)));
+}
+const countBy = (arr,f) => { const m={}; arr.forEach(r => { const k=f(r); m[k]=(m[k]||0)+1; }); return m; };
+
+/* ---------- tooltip ---------- */
+const tip = $('tip');
+document.addEventListener('pointermove', e => {
+  const el = e.target.closest && e.target.closest('[data-tip]');
+  if(!el){ tip.style.opacity = 0; return; }
+  tip.textContent = el.getAttribute('data-tip');
+  tip.style.opacity = 1;
+  const w = tip.offsetWidth, x = Math.min(e.clientX + 14, innerWidth - w - 8);
+  tip.style.left = Math.max(8,x) + 'px';
+  tip.style.top = (e.clientY + 16) + 'px';
+});
+document.addEventListener('pointerleave', () => tip.style.opacity = 0);
+
+/* ---------- renderelés ---------- */
+function renderChips(){
+  const base = countBy(filt('group'), r => r.g);
+  const total = Object.values(base).reduce((a,b)=>a+b,0);
+  $('groupChips').innerHTML =
+    `<button class="chip" data-g="" aria-pressed="${!st.group}">Mind <b>${total}</b></button>` +
+    GKEYS.map(g => `<button class="chip" data-g="${g}" aria-pressed="${st.group===g}"><i style="background:${gcol(g)}"></i>${GROUPS[g].n} <b>${base[g]||0}</b></button>`).join('');
+}
+
+function renderKpis(){
+  const rows = filt(), n = rows.length;
+  const unread = rows.filter(r => r.u).length;
+  const days = new Set(rows.map(r => r.day)).size || 1;
+  const bySender = countBy(rows, r => r.s);
+  const top = Object.entries(bySender).sort((a,b) => b[1]-a[1])[0];
+  const big = rows.slice().sort((a,b) => b.kb-a.kb)[0];
+  const tot = rows.reduce((a,r) => a + r.kb, 0);
+  $('kpis').innerHTML = `
+    <div class="kpi"><span>Levelek</span><strong class="num">${nf(n)}</strong><em>${days} nap, átlag ${(n/days).toFixed(1).replace('.',',')} / nap</em></div>
+    <div class="kpi"><span>Olvasatlan</span><strong class="num">${nf(unread)}</strong><em>${n ? Math.round(unread/n*100) : 0}% a levelekből</em></div>
+    <div class="kpi"><span>Legtöbbet író</span><strong>${top ? NAMES[top[0]] : '–'}</strong><em>${top ? top[1] + ' levél' : ''}</em></div>
+    <div class="kpi"><span>Összméret</span><strong class="num">${fmtKB(tot)}</strong><em>${big ? 'legnagyobb: ' + fmtKB(big.kb) + ', ' + NAMES[big.s] : ''}</em></div>`;
+}
+
+function niceStep(max){ for(const s of [1,2,5,10,20,25,50]) if(max/s <= 5) return s; return 100; }
+
+function renderDaily(){
+  const rows = filt('day');
+  const days = [1,2,3,4];
+  const W=560,H=240,L=34,R=8,T=14,B=34;
+  const per = days.map(d => { const o={}; GKEYS.forEach(g => o[g]=0); rows.filter(r => r.day===d).forEach(r => o[r.g]++); return o; });
+  const tots = per.map(o => GKEYS.reduce((a,g) => a+o[g],0));
+  const max = Math.max(5, ...tots), step = niceStep(max), top = Math.ceil(max/step)*step;
+  const y = v => T + (H-T-B) * (1 - v/top);
+  const bw = (W-L-R)/days.length, barW = Math.min(76, bw*.6);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Napi levélszám témák szerint">`;
+  for(let v=0; v<=top; v+=step) s += `<line class="grid-l" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"/><text x="${L-6}" y="${y(v)+4}" text-anchor="end">${v}</text>`;
+  days.forEach((d,i) => {
+    const cx = L + bw*i + bw/2, x0 = cx - barW/2;
+    let acc = 0;
+    const dim = st.day && st.day!==d ? .35 : 1;
+    GKEYS.forEach(g => {
+      const v = per[i][g]; if(!v) return;
+      const y1 = y(acc+v), y0 = y(acc);
+      s += `<rect x="${x0}" y="${y1}" width="${barW}" height="${Math.max(0,y0-y1)}" rx="2" style="fill:${gcol(g)};stroke:var(--surface);stroke-width:1.5;opacity:${dim}" data-tip="11.${pad(d)}. ${GROUPS[g].n}: ${v} levél"/>`;
+      acc += v;
+    });
+    if(tots[i]) s += `<text x="${cx}" y="${y(tots[i])-5}" text-anchor="middle" style="fill:var(--ink)">${tots[i]}</text>`;
+    const wd = WD[new Date(Date.UTC(2026,10,d)).getUTCDay()];
+    s += `<text x="${cx}" y="${H-12}" text-anchor="middle" style="fill:${st.day===d?'var(--ink)':'var(--muted)'}">11.${pad(d)}. ${wd}${d===4?'*':''}</text>`;
+    s += `<rect class="hit" data-day="${d}" x="${L+bw*i}" y="${T}" width="${bw}" height="${H-T}" fill="transparent" data-tip="11.${pad(d)}.: ${tots[i]} levél${d===4?' (részleges nap)':''}"/>`;
+  });
+  s += `</svg>`;
+  $('daily').innerHTML = s;
+}
+
+function renderHourly(){
+  const rows = filt();
+  const W=560,H=190,L=30,R=6,T=12,B=28;
+  const c = new Array(24).fill(0); rows.forEach(r => c[r.hour]++);
+  const max = Math.max(4, ...c), step = niceStep(max), top = Math.ceil(max/step)*step;
+  const y = v => T + (H-T-B) * (1 - v/top), bw = (W-L-R)/24;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Levelek óránkénti eloszlása">`;
+  for(let v=0; v<=top; v+=step) s += `<line class="grid-l" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"/><text x="${L-6}" y="${y(v)+4}" text-anchor="end">${v}</text>`;
+  const peak = Math.max(...c);
+  c.forEach((v,h) => {
+    const x = L + bw*h + 2;
+    if(v) s += `<rect x="${x}" y="${y(v)}" width="${bw-4}" height="${y(0)-y(v)}" rx="2" style="fill:var(--accent);opacity:${v===peak?1:.62}"/>`;
+    s += `<rect x="${L+bw*h}" y="${T}" width="${bw}" height="${H-T-B}" fill="transparent" data-tip="${pad(h)}:00–${pad(h)}:59: ${v} levél"/>`;
+    if(h%3===0) s += `<text x="${L+bw*h+bw/2}" y="${H-10}" text-anchor="middle">${pad(h)}</text>`;
+  });
+  s += `</svg>`;
+  $('hourly').innerHTML = s;
+}
+
+function renderBars(){
+  const gb = countBy(filt('group'), r => r.g);
+  const gMax = Math.max(1, ...GKEYS.map(g => gb[g]||0));
+  $('groups').innerHTML = GKEYS.slice().sort((a,b) => (gb[b]||0)-(gb[a]||0)).map(g => {
+    const v = gb[g]||0;
+    return `<button class="bar ${st.group && st.group!==g ? 'dim':''}" data-g="${g}" data-tip="${GROUPS[g].n}: ${v} levél"><span class="lab">${GROUPS[g].n}</span><span class="track"><span class="fill" style="width:${v/gMax*100}%;background:${gcol(g)}"></span></span><span class="val">${v}</span></button>`;
+  }).join('');
+
+  const sb = Object.entries(countBy(filt('sender'), r => r.s)).sort((a,b) => b[1]-a[1]).slice(0,10);
+  if(!sb.length){ $('senders').innerHTML = '<div class="empty">Nincs találat a jelenlegi szűrőkre.</div>'; return; }
+  const sMax = sb[0][1];
+  $('senders').innerHTML = sb.map(([k,v]) =>
+    `<button class="bar ${st.sender && st.sender!==k ? 'dim':''}" data-s="${k}" data-tip="${NAMES[k]} (${GROUPS[grpOf[k]].n}): ${v} levél"><span class="lab">${NAMES[k]}</span><span class="track"><span class="fill" style="width:${v/sMax*100}%;background:${gcol(grpOf[k])}"></span></span><span class="val">${v}</span></button>`).join('');
+}
+
+function renderTable(){
+  const rows = filt();
+  $('listCount').textContent = `${rows.length} találat`;
+  $('rows').innerHTML = rows.slice(0, st.shown).map(r =>
+    `<tr><td class="num">11.${pad(r.day)}. ${pad(r.hour)}:${pad(r.min)}</td>
+     <td><button class="sender-btn" data-s="${r.s}">${NAMES[r.s]}</button></td>
+     <td><span class="pill"><i style="background:${gcol(r.g)}"></i>${GROUPS[r.g].n}</span></td>
+     <td>${CATS[r.c]}</td><td class="num r">${fmtKB(r.kb)}</td>
+     <td><span class="dot ${r.u?'':'read'}"></span>${r.u?'olvasatlan':'olvasott'}</td></tr>`).join('')
+    || '<tr><td colspan="6" class="empty">Nincs találat a jelenlegi szűrőkre.</td></tr>';
+  $('moreBtn').hidden = rows.length <= st.shown;
+}
+
+function renderActive(){
+  const tags = [];
+  if(st.group) tags.push(['group', GROUPS[st.group].n]);
+  if(st.sender) tags.push(['sender', NAMES[st.sender]]);
+  if(st.day) tags.push(['day', `11.${pad(st.day)}.`]);
+  const box = $('active');
+  box.hidden = !tags.length;
+  box.innerHTML = tags.length ? 'Aktív szűrő: ' + tags.map(([k,t]) => `<button class="tag" data-clear="${k}">${t}</button>`).join('') + ' <button class="link" data-clear="all">összes törlése</button>' : '';
+}
+
+function render(){
+  renderChips(); renderActive(); renderKpis(); renderDaily(); renderHourly(); renderBars(); renderTable();
+}
+
+/* ---------- események ---------- */
+const toggle = (k,v) => { st[k] = st[k]===v ? null : v; st.shown = 40; render(); };
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-g],[data-s],[data-day],[data-clear]');
+  if(!t) return;
+  if(t.dataset.clear){
+    if(t.dataset.clear==='all'){ st.group = st.sender = st.day = null; st.shown = 40; render(); }
+    else { st[t.dataset.clear] = null; render(); }
+  }
+  else if(t.dataset.g !== undefined) { t.dataset.g==='' ? (st.group=null, render()) : toggle('group', t.dataset.g); }
+  else if(t.dataset.s) toggle('sender', t.dataset.s);
+  else if(t.dataset.day) toggle('day', +t.dataset.day);
+});
+$('q').addEventListener('input', e => { st.q = e.target.value; st.shown = 40; render(); });
+$('cat').addEventListener('change', e => { st.cat = e.target.value; st.shown = 40; render(); });
+$('unread').addEventListener('change', e => { st.unread = e.target.checked; st.shown = 40; render(); });
+$('moreBtn').addEventListener('click', () => { st.shown += 40; renderTable(); });
+
+/* fejléc */
+(function(){
+  const n = DATA.length, u = DATA.filter(r=>r.u).length;
+  $('lead').textContent = `${n} levél érkezett november 1. és 4. között. Ebből ${u} még olvasatlan, a legtöbb promóció vagy értesítés.`;
+  $('range').textContent = 'Állapot: 2026. november 4.';
+})();
+render();
+</script>
+</body>
+</html>
