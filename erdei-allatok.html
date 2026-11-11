@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Erdei Állatok – Őz, Szarvas, Róka</title>
+<style>
+  :root {
+    --bg: #f4f1e8;
+    --panel: #ffffff;
+    --text: #2b2a24;
+    --muted: #6b6858;
+    --accent: #3f6b3a;
+    --accent-2: #c8611f;
+    --border: #e2ddcc;
+    --shadow: 0 6px 24px rgba(40, 35, 20, .10);
+  }
+  body.night {
+    --bg: #12161f;
+    --panel: #1c2230;
+    --text: #e8e6de;
+    --muted: #a3a6b0;
+    --accent: #8fc387;
+    --accent-2: #f19a52;
+    --border: #2c3446;
+    --shadow: 0 6px 24px rgba(0, 0, 0, .4);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: background .8s, color .8s;
+    line-height: 1.5;
+  }
+  header { text-align: center; padding: 28px 16px 8px; }
+  header h1 { margin: 0; font-size: clamp(1.7rem, 4vw, 2.6rem); letter-spacing: .5px; }
+  header p { margin: 6px 0 0; color: var(--muted); }
+  main { max-width: 1200px; margin: 0 auto; padding: 16px; }
+
+  .toolbar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 12px 0 16px; }
+  button {
+    font: inherit; cursor: pointer; border: 1px solid var(--border);
+    background: var(--panel); color: var(--text);
+    padding: 8px 14px; border-radius: 999px; box-shadow: var(--shadow);
+    transition: transform .15s, background .3s;
+  }
+  button:hover { transform: translateY(-2px); }
+  button.primary { background: var(--accent); color: #fff; border-color: transparent; }
+  .counter { align-self: center; color: var(--muted); font-size: .95rem; padding: 0 6px; }
+
+  .stage { display: grid; grid-template-columns: 1fr 320px; gap: 16px; align-items: start; }
+  @media (max-width: 900px) { .stage { grid-template-columns: 1fr; } }
+
+  .scene-wrap {
+    border-radius: 18px; overflow: hidden; box-shadow: var(--shadow);
+    border: 1px solid var(--border); position: relative; background: #9fd3f0;
+  }
+  svg#scene { display: block; width: 100%; height: auto; cursor: crosshair; user-select: none; }
+  .hint {
+    position: absolute; left: 12px; bottom: 10px; font-size: .8rem;
+    background: rgba(0,0,0,.45); color: #fff; padding: 4px 10px; border-radius: 999px;
+    pointer-events: none;
+  }
+
+  .animal { cursor: pointer; }
+  .animal .inner { transition: filter .3s; }
+  .animal:hover .inner { animation: bob .6s ease-in-out infinite alternate; filter: drop-shadow(0 0 8px rgba(255,255,200,.9)); }
+  .animal.jump .inner { animation: jump .6s ease-out; }
+  .animal.selected .inner { filter: drop-shadow(0 0 10px rgba(255,230,120,1)); }
+  @keyframes bob { from { transform: translateY(0); } to { transform: translateY(-6px); } }
+  @keyframes jump {
+    0% { transform: translateY(0); } 40% { transform: translateY(-50px); }
+    70% { transform: translateY(0); } 85% { transform: translateY(-10px); } 100% { transform: translateY(0); }
+  }
+  .tail-flick { transform-box: fill-box; transform-origin: right center; animation: flick 3s ease-in-out infinite; }
+  @keyframes flick { 0%,85%,100% { transform: rotate(0); } 90% { transform: rotate(-18deg); } 95% { transform: rotate(10deg); } }
+  .ear-twitch { transform-box: fill-box; transform-origin: bottom center; animation: twitch 4s ease-in-out infinite; }
+  @keyframes twitch { 0%,90%,100% { transform: rotate(0); } 94% { transform: rotate(-15deg); } }
+
+  .day-only, .night-only { transition: opacity 1.2s; }
+  .night-only { opacity: 0; }
+  body.night .night-only { opacity: 1; }
+  body.night .day-only { opacity: 0; }
+  .fox-eye { transition: fill .8s; }
+  body.night .fox-eye { fill: #fff36b; filter: drop-shadow(0 0 4px #fff36b); }
+  .firefly { animation: glow 2s ease-in-out infinite alternate; }
+  @keyframes glow { from { opacity: .15; } to { opacity: 1; } }
+
+  .float { animation: floatUp 1.4s ease-out forwards; pointer-events: none; }
+  @keyframes floatUp { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-70px); } }
+  .flower { animation: grow .5s ease-out; transform-box: fill-box; transform-origin: bottom center; }
+  @keyframes grow { from { transform: scale(0); } to { transform: scale(1); } }
+
+  .info {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 18px;
+    box-shadow: var(--shadow); padding: 20px; transition: background .8s;
+  }
+  .info h2 { margin: 0 0 2px; font-size: 1.6rem; }
+  .info .latin { font-style: italic; color: var(--muted); margin-bottom: 12px; }
+  .info ul { padding-left: 18px; margin: 10px 0; }
+  .info li { margin-bottom: 6px; }
+  .info .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
+  .info .stat { background: var(--bg); border-radius: 10px; padding: 8px 10px; transition: background .8s; }
+  .info .stat b { display: block; font-size: 1.05rem; }
+  .info .stat span { font-size: .78rem; color: var(--muted); }
+  .info .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .info .empty { color: var(--muted); text-align: center; padding: 30px 6px; }
+  .info .empty .big { font-size: 3rem; }
+
+  section.block { margin-top: 32px; }
+  section.block > h2 { text-align: center; margin-bottom: 16px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 16px;
+    padding: 18px; box-shadow: var(--shadow); cursor: pointer; transition: transform .2s, background .8s;
+    border-top: 6px solid var(--c);
+  }
+  .card:hover { transform: translateY(-4px); }
+  .card h3 { margin: 0 0 6px; }
+  .card p { margin: 0; color: var(--muted); font-size: .95rem; }
+  .card .seen { float: right; font-size: .8rem; color: var(--accent); }
+
+  .compare { width: 100%; border-collapse: collapse; background: var(--panel); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); }
+  .compare th, .compare td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left; font-size: .95rem; }
+  .compare th { background: var(--accent); color: #fff; }
+  .table-wrap { overflow-x: auto; }
+
+  .quiz { background: var(--panel); border: 1px solid var(--border); border-radius: 18px; padding: 22px; box-shadow: var(--shadow); max-width: 720px; margin: 0 auto; text-align: center; }
+  .quiz .q { font-size: 1.2rem; margin: 10px 0 16px; min-height: 3em; }
+  .quiz .opts { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .quiz .opts button { min-width: 120px; font-size: 1.05rem; }
+  .quiz .opts button.ok { background: #3f8f3a; color: #fff; }
+  .quiz .opts button.bad { background: #b83a2e; color: #fff; }
+  .quiz .progress { color: var(--muted); font-size: .9rem; }
+  .quiz .feedback { min-height: 1.6em; margin-top: 12px; font-weight: 600; }
+
+  footer { text-align: center; color: var(--muted); padding: 30px 16px; font-size: .9rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🌲 Az erdő lakói 🌲</h1>
+  <p>Ismerd meg az őzet, a szarvast és a rókát! Kattints az állatokra a képen.</p>
+</header>
+
+<main>
+  <div class="toolbar">
+    <button id="btnNight" class="primary">🌙 Éjszaka</button>
+    <button id="btnSound">🔊 Hang: be</button>
+    <button data-pick="oz">🦌 Őz</button>
+    <button data-pick="szarvas">🦌 Szarvas</button>
+    <button data-pick="roka">🦊 Róka</button>
+    <button id="btnClear">🧹 Virágok törlése</button>
+    <span class="counter" id="counter">Felfedezve: 0 / 3</span>
+  </div>
+
+  <div class="stage">
+    <div class="scene-wrap">
+      <svg id="scene" viewBox="0 0 1200 600" aria-label="Erdei jelenet őzzel, szarvassal és rókával">
+        <defs>
+          <linearGradient id="skyDay" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#7cc4ef"/><stop offset="1" stop-color="#d9f0fb"/>
+          </linearGradient>
+          <linearGradient id="skyNight" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#0b1026"/><stop offset="1" stop-color="#2b3a66"/>
+          </linearGradient>
+          <linearGradient id="grass" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#7fb24a"/><stop offset="1" stop-color="#4c7d2c"/>
+          </linearGradient>
+          <radialGradient id="sunGlow">
+            <stop offset="0" stop-color="#fff6b0"/><stop offset=".5" stop-color="#ffd54a"/><stop offset="1" stop-color="#ffd54a" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <!-- Égbolt -->
+        <rect width="1200" height="600" fill="url(#skyDay)"/>
+        <rect class="night-only" width="1200" height="600" fill="url(#skyNight)"/>
+
+        <!-- Nap / Hold -->
+        <g class="day-only"><circle cx="1040" cy="100" r="90" fill="url(#sunGlow)"/><circle cx="1040" cy="100" r="42" fill="#ffe066"/></g>
+        <g class="night-only">
+          <circle cx="1040" cy="100" r="38" fill="#f4f1d0"/>
+          <circle cx="1055" cy="90" r="34" fill="#10173a"/>
+        </g>
+        <g class="night-only" id="stars" fill="#fff"></g>
+
+        <!-- Felhők -->
+        <g class="day-only" fill="#fff" opacity=".9">
+          <g id="cloud1"><ellipse cx="200" cy="90" rx="60" ry="22"/><ellipse cx="240" cy="75" rx="40" ry="25"/><ellipse cx="170" cy="80" rx="30" ry="18"/></g>
+          <g id="cloud2"><ellipse cx="620" cy="60" rx="70" ry="20"/><ellipse cx="660" cy="48" rx="38" ry="22"/></g>
+        </g>
+
+        <!-- Távoli dombok -->
+        <path d="M0,330 Q150,250 320,310 T650,300 T950,290 T1200,300 V600 H0 Z" fill="#9cc77a" opacity=".8"/>
+        <path d="M0,380 Q200,320 420,370 T850,360 T1200,370 V600 H0 Z" fill="#86b862"/>
+
+        <!-- Fák a háttérben -->
+        <g id="trees"></g>
+
+        <!-- Rét -->
+        <rect x="0" y="440" width="1200" height="160" fill="url(#grass)"/>
+        <g id="grassTufts" fill="#3f6e24"></g>
+        <rect class="night-only" x="0" y="0" width="1200" height="600" fill="#0a1030" fill-opacity=".35" pointer-events="none"/>
+        <g id="flowers"></g>
+
+        <!-- SZARVAS -->
+        <g class="animal" id="szarvas" data-key="szarvas" transform="translate(800,515)">
+          <g class="inner">
+            <ellipse cx="0" cy="0" rx="85" ry="10" fill="#000" opacity=".18"/>
+            <g fill="#5e301b">
+              <rect x="-58" y="-112" width="12" height="108" rx="5"/>
+              <rect x="38" y="-112" width="12" height="108" rx="5"/>
+            </g>
+            <ellipse class="tail-flick" cx="-82" cy="-132" rx="9" ry="7" fill="#e3c095"/>
+            <ellipse cx="0" cy="-120" rx="82" ry="42" fill="#8b4a2b"/>
+            <ellipse cx="-72" cy="-122" rx="16" ry="20" fill="#e3c095"/>
+            <ellipse cx="5" cy="-100" rx="60" ry="18" fill="#a8683f"/>
+            <g fill="#6b3820">
+              <rect x="-42" y="-108" width="12" height="108" rx="5"/>
+              <rect x="52" y="-108" width="12" height="108" rx="5"/>
+            </g>
+            <g fill="#2b1a12">
+              <rect x="-43" y="-6" width="14" height="7" rx="2"/><rect x="51" y="-6" width="14" height="7" rx="2"/>
+              <rect x="-59" y="-9" width="14" height="7" rx="2"/><rect x="37" y="-9" width="14" height="7" rx="2"/>
+            </g>
+            <path d="M42,-140 L72,-210 L104,-202 L82,-112 Z" fill="#6b3820"/>
+            <ellipse cx="104" cy="-210" rx="32" ry="16" transform="rotate(28 104 -210)" fill="#8b4a2b"/>
+            <circle cx="127" cy="-195" r="6" fill="#2b1a12"/>
+            <circle cx="98" cy="-217" r="3.8" fill="#1a0f08"/>
+            <circle cx="99" cy="-218" r="1.2" fill="#fff"/>
+            <path class="ear-twitch" d="M80,-222 L60,-246 L90,-230 Z" fill="#7a3f24"/>
+            <g stroke="#d9c7a3" stroke-width="6" stroke-linecap="round" fill="none">
+              <path d="M88,-226 C80,-262 68,-292 48,-326"/>
+              <path d="M80,-254 L104,-268"/><path d="M71,-282 L95,-300"/>
+              <path d="M58,-308 L70,-336"/><path d="M58,-308 L36,-330"/>
+            </g>
+            <g stroke="#c9b48c" stroke-width="5" stroke-linecap="round" fill="none">
+              <path d="M98,-226 C104,-262 114,-292 130,-320"/>
+              <path d="M105,-256 L128,-262"/><path d="M113,-286 L136,-292"/>
+              <path d="M124,-305 L140,-332"/>
+            </g>
+          </g>
+        </g>
+
+        <!-- ŐZ -->
+        <g class="animal" id="oz" data-key="oz" transform="translate(420,525)">
+          <g class="inner">
+            <ellipse cx="0" cy="0" rx="60" ry="8" fill="#000" opacity=".18"/>
+            <g fill="#7a5233">
+              <rect x="-42" y="-82" width="8" height="80" rx="4"/>
+              <rect x="26" y="-82" width="8" height="80" rx="4"/>
+            </g>
+            <ellipse cx="0" cy="-88" rx="56" ry="28" fill="#a0704a"/>
+            <ellipse class="tail-flick" cx="-50" cy="-90" rx="13" ry="17" fill="#f6efe0"/>
+            <ellipse cx="4" cy="-74" rx="40" ry="11" fill="#b98a62"/>
+            <g fill="#8a5f3c">
+              <rect x="-32" y="-80" width="8" height="80" rx="4"/>
+              <rect x="36" y="-80" width="8" height="80" rx="4"/>
+            </g>
+            <g fill="#2b1a12">
+              <rect x="-33" y="-4" width="10" height="5" rx="2"/><rect x="35" y="-4" width="10" height="5" rx="2"/>
+              <rect x="-43" y="-6" width="10" height="5" rx="2"/><rect x="25" y="-6" width="10" height="5" rx="2"/>
+            </g>
+            <path d="M30,-100 L52,-150 L74,-144 L52,-82 Z" fill="#9a6a44"/>
+            <ellipse cx="76" cy="-153" rx="24" ry="12" transform="rotate(28 76 -153)" fill="#a0704a"/>
+            <circle cx="93" cy="-142" r="4.5" fill="#1a0f08"/>
+            <ellipse cx="88" cy="-137" rx="7" ry="3.5" fill="#f6efe0"/>
+            <circle cx="72" cy="-158" r="3.3" fill="#1a0f08"/>
+            <circle cx="73" cy="-159" r="1" fill="#fff"/>
+            <ellipse class="ear-twitch" cx="56" cy="-172" rx="7" ry="15" transform="rotate(-35 56 -172)" fill="#8a5f3c"/>
+            <ellipse cx="56" cy="-172" rx="3.5" ry="10" transform="rotate(-35 56 -172)" fill="#d9b48f"/>
+            <g stroke="#cdb995" stroke-width="4" stroke-linecap="round" fill="none">
+              <path d="M66,-166 L62,-200"/><path d="M63,-184 L72,-190"/><path d="M62,-198 L54,-206"/>
+              <path d="M72,-164 L74,-196"/><path d="M73,-182 L82,-186"/>
+            </g>
+          </g>
+        </g>
+
+        <!-- RÓKA -->
+        <g class="animal" id="roka" data-key="roka" transform="translate(150,555)">
+          <g class="flip">
+            <g class="inner">
+              <ellipse cx="0" cy="0" rx="55" ry="7" fill="#000" opacity=".18"/>
+              <path class="tail-flick" d="M-42,-48 C-85,-62 -118,-40 -112,-14 C-96,-24 -72,-30 -44,-34 Z" fill="#d95d17"/>
+              <path d="M-112,-14 C-108,-26 -100,-30 -92,-27 C-98,-20 -104,-16 -112,-14 Z" fill="#fff"/>
+              <g fill="#2a1a12">
+                <rect x="-32" y="-38" width="7" height="38" rx="3"/>
+                <rect x="24" y="-38" width="7" height="38" rx="3"/>
+                <rect x="-22" y="-36" width="7" height="36" rx="3"/>
+                <rect x="33" y="-36" width="7" height="36" rx="3"/>
+              </g>
+              <ellipse cx="0" cy="-48" rx="50" ry="20" fill="#e66b1e"/>
+              <path d="M22,-40 C30,-30 46,-32 52,-46 C42,-44 32,-42 22,-40 Z" fill="#fbf3e6"/>
+              <path d="M36,-58 L48,-82 L80,-64 L104,-54 L80,-44 L44,-46 Z" fill="#e66b1e"/>
+              <path d="M58,-52 L104,-54 L80,-44 L56,-46 Z" fill="#fbf3e6"/>
+              <path d="M46,-72 L48,-100 L62,-78 Z" fill="#e66b1e"/>
+              <path d="M47,-90 L48,-100 L54,-91 Z" fill="#2a1a12"/>
+              <path class="ear-twitch" d="M58,-74 L66,-98 L72,-72 Z" fill="#d95d17"/>
+              <circle cx="104" cy="-54" r="4" fill="#1a0f08"/>
+              <ellipse class="fox-eye" cx="70" cy="-64" rx="3.4" ry="2.6" fill="#1a0f08"/>
+            </g>
+          </g>
+        </g>
+
+        <g id="fx"></g>
+        <g class="night-only" id="fireflies" fill="#fff88a"></g>
+      </svg>
+      <div class="hint">Kattints egy állatra! A rétre kattintva virágot ültethetsz 🌼</div>
+    </div>
+
+    <aside class="info" id="info">
+      <div class="empty">
+        <div class="big">🍃</div>
+        <p>Válassz ki egy állatot a képen vagy a fenti gombokkal, és itt megjelennek az érdekességek!</p>
+      </div>
+    </aside>
+  </div>
+
+  <section class="block">
+    <h2>Ismerkedj meg velük</h2>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <section class="block">
+    <h2>Összehasonlítás</h2>
+    <div class="table-wrap">
+      <table class="compare">
+        <thead><tr><th></th><th>Őz</th><th>Gímszarvas</th><th>Vörös róka</th></tr></thead>
+        <tbody>
+          <tr><td><b>Testtömeg</b></td><td>15–30 kg</td><td>80–250 kg</td><td>5–8 kg</td></tr>
+          <tr><td><b>Táplálék</b></td><td>növényevő</td><td>növényevő</td><td>mindenevő (ragadozó)</td></tr>
+          <tr><td><b>Hím neve</b></td><td>bak</td><td>bika</td><td>kan</td></tr>
+          <tr><td><b>Nőstény neve</b></td><td>suta</td><td>tehén (ünő)</td><td>szuka</td></tr>
+          <tr><td><b>Kicsinye</b></td><td>gida</td><td>borjú</td><td>kölyök</td></tr>
+          <tr><td><b>Agancs</b></td><td>kicsi, többnyire 3 ágú</td><td>nagy, sokágú</td><td>nincs</td></tr>
+          <tr><td><b>Hangja</b></td><td>ugatás (riasztás)</td><td>bőgés</td><td>vakkantás, sikoly</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>🧠 Kvíz: Melyik állatra gondoltam?</h2>
+    <div class="quiz" id="quiz"></div>
+  </section>
+</main>
+
+<footer>Erdei állatok • interaktív oldal • Készült szeretettel a természetért 🌿</footer>
+
+<script>
+const ANIMALS = {
+  oz: {
+    name: "Őz", latin: "Capreolus capreolus", emoji: "🦌", color: "#a0704a", food: "🌿",
+    short: "Hazánk legkisebb és leggyakoribb szarvasféléje. Kecses, félénk, gyakran a mezők szélén látható.",
+    stats: [["15–30 kg", "testtömeg"], ["60–75 cm", "marmagasság"], ["10–12 év", "élettartam"], ["növényevő", "táplálkozás"]],
+    facts: [
+      "A hím neve <b>bak</b>, a nőstényé <b>suta</b>, a kicsinyéé <b>gida</b>.",
+      "Veszély esetén a fenekén lévő fehér folt – a <b>tükör</b> – jól láthatóvá válik, ezzel figyelmezteti társait.",
+      "Riadtan kutyaugatáshoz hasonló hangot hallat.",
+      "A bak agancsa ősszel lehullik, és télen nő újra.",
+      "A gidák pettyes bundája elrejti őket a magas fűben."
+    ]
+  },
+  szarvas: {
+    name: "Gímszarvas", latin: "Cervus elaphus", emoji: "🦌", color: "#8b4a2b", food: "🌾",
+    short: "Erdeink legnagyobb vadja. A bikák hatalmas agancsa és őszi bőgése az erdő igazi különlegessége.",
+    stats: [["80–250 kg", "testtömeg"], ["1–1,5 m", "marmagasság"], ["15–20 év", "élettartam"], ["növényevő", "táplálkozás"]],
+    facts: [
+      "A hím a <b>bika</b>, a nőstény a <b>tehén</b>, a kicsinye a <b>borjú</b>.",
+      "Szeptember–októberben zajlik a <b>szarvasbőgés</b>: a bikák mély hangon versengenek a tehenekért.",
+      "Agancsát minden évben, tél végén leveti, és nyárra újat növeszt – ez az egyik leggyorsabban növő szövet.",
+      "Fűvel, rügyekkel, hajtásokkal, ősszel makkal és gesztenyével táplálkozik.",
+      "A tehenek és borjak csapatban (rudliban) élnek."
+    ]
+  },
+  roka: {
+    name: "Vörös róka", latin: "Vulpes vulpes", emoji: "🦊", color: "#e66b1e", food: "🐭",
+    short: "Ravasz és alkalmazkodó ragadozó a kutyafélék családjából. Erdőben, mezőn, sőt városban is él.",
+    stats: [["5–8 kg", "testtömeg"], ["35–40 cm", "marmagasság"], ["3–6 év (vadon)", "élettartam"], ["mindenevő", "táplálkozás"]],
+    facts: [
+      "A <b>kutyafélék</b> családjába tartozik, rokona a farkas és a kutya.",
+      "Kiváló a hallása: a hó alatt motoszkáló egeret is meghallja, majd magas ugrással rávetődik – ez az <b>egerészés</b>.",
+      "Bozontos farkát egyensúlyozásra használja, télen pedig takaróként maga köré tekeri.",
+      "Kölykeit földbe ásott üregben, a <b>kotorékban</b> neveli.",
+      "Eszik egeret, rovarokat, gyümölcsöt, bogyókat – szinte bármit, amit talál."
+    ]
+  }
+};
+
+const $ = s => document.querySelector(s);
+const svg = $("#scene");
+const NS = "http://www.w3.org/2000/svg";
+const seen = new Set();
+let soundOn = true;
+let selected = null;
+
+function el(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+
+/* --- Jelenet felépítése --- */
+(function buildScene() {
+  const trees = $("#trees");
+  const positions = [40, 120, 230, 300, 560, 640, 700, 960, 1060, 1150];
+  positions.forEach((x, i) => {
+    const s = 0.7 + ((i * 37) % 10) / 20;
+    const base = 440;
+    const g = el("g", { transform: `translate(${x},${base}) scale(${s})` }, trees);
+    el("rect", { x: -7, y: -60, width: 14, height: 60, fill: "#5b3a22" }, g);
+    if (i % 3 === 1) {
+      el("circle", { cx: 0, cy: -100, r: 48, fill: "#4f8a3a" }, g);
+      el("circle", { cx: -28, cy: -78, r: 32, fill: "#5d9a44" }, g);
+      el("circle", { cx: 28, cy: -80, r: 34, fill: "#477f33" }, g);
+    } else {
+      el("path", { d: "M0,-200 L45,-110 L-45,-110 Z", fill: "#2f6b35" }, g);
+      el("path", { d: "M0,-160 L55,-60 L-55,-60 Z", fill: "#2a5f2f" }, g);
+      el("path", { d: "M0,-120 L62,-20 L-62,-20 Z", fill: "#255428" }, g);
+    }
+  });
+
+  const tufts = $("#grassTufts");
+  for (let i = 0; i < 70; i++) {
+    const x = (i * 97) % 1200, y = 455 + ((i * 53) % 140);
+    el("path", { d: `M${x},${y} l4,-14 l3,14 l4,-10 l2,10 Z` }, tufts);
+  }
+
+  const stars = $("#stars");
+  for (let i = 0; i < 80; i++) {
+    el("circle", { cx: (i * 151) % 1200, cy: (i * 67) % 300, r: (i % 3) * 0.6 + 0.6, opacity: 0.5 + (i % 5) / 10 }, stars);
+  }
+
+  const ff = $("#fireflies");
+  for (let i = 0; i < 18; i++) {
+    const c = el("circle", { class: "firefly", cx: (i * 173) % 1200, cy: 360 + (i * 41) % 200, r: 2.6 }, ff);
+    c.style.animationDelay = (i * 0.27) + "s";
+    c.dataset.phase = i;
+  }
+})();
+
+/* --- Hangok (Web Audio) --- */
+let actx = null;
+function tone({ type = "sine", from, to, dur, vol = 0.25, delay = 0, filter }) {
+  if (!soundOn) return;
+  actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+  const t = actx.currentTime + delay;
+  const o = actx.createOscillator(), g = actx.createGain();
+  o.type = type;
+  o.frequency.setValueAtTime(from, t);
+  o.frequency.exponentialRampToValueAtTime(to, t + dur);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(vol, t + 0.05);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  let node = o;
+  if (filter) {
+    const f = actx.createBiquadFilter();
+    f.type = "lowpass"; f.frequency.value = filter;
+    o.connect(f); node = f;
+  }
+  node.connect(g); g.connect(actx.destination);
+  o.start(t); o.stop(t + dur + 0.05);
+}
+const SOUNDS = {
+  szarvas: () => { tone({ type: "sawtooth", from: 140, to: 75, dur: 1.4, vol: 0.3, filter: 600 }); },
+  oz: () => { tone({ type: "square", from: 420, to: 240, dur: 0.16, vol: 0.12, filter: 1500 });
+              tone({ type: "square", from: 420, to: 240, dur: 0.16, vol: 0.12, filter: 1500, delay: 0.35 }); },
+  roka: () => { tone({ type: "triangle", from: 900, to: 1500, dur: 0.15, vol: 0.2 });
+                tone({ type: "triangle", from: 1500, to: 600, dur: 0.3, vol: 0.2, delay: 0.15 }); }
+};
+
+/* --- Lebegő ikonok --- */
+function floatText(x, y, text, size = 28) {
+  const t = el("text", { x, y, "font-size": size, "text-anchor": "middle", class: "float" }, $("#fx"));
+  t.textContent = text;
+  setTimeout(() => t.remove(), 1500);
+}
+function animalPos(key) {
+  const m = document.getElementById(key).getAttribute("transform").match(/translate\(([-\d.]+),([-\d.]+)\)/);
+  return { x: +m[1], y: +m[2] };
+}
+const HEAD_OFFSET = { szarvas: [100, -260], oz: [70, -190], roka: [70, -100] };
+
+/* --- Kiválasztás és infópanel --- */
+function selectAnimal(key) {
+  const a = ANIMALS[key];
+  selected = key;
+  document.querySelectorAll(".animal").forEach(n => n.classList.toggle("selected", n.id === key));
+  const node = document.getElementById(key);
+  node.classList.remove("jump"); void node.getBBox(); node.classList.add("jump");
+  setTimeout(() => node.classList.remove("jump"), 650);
+  SOUNDS[key]();
+  if (key === "roka") foxPause = 120;
+
+  seen.add(key);
+  $("#counter").textContent = `Felfedezve: ${seen.size} / 3` + (seen.size === 3 ? " 🎉" : "");
+  renderCards();
+
+  $("#info").innerHTML = `
+    <h2>${a.emoji} ${a.name}</h2>
+    <div class="latin">${a.latin}</div>
+    <p>${a.short}</p>
+    <div class="stats">${a.stats.map(s => `<div class="stat"><b>${s[0]}</b><span>${s[1]}</span></div>`).join("")}</div>
+    <ul>${a.facts.map(f => `<li>${f}</li>`).join("")}</ul>
+    <div class="actions">
+      <button class="primary" id="btnFeed">${a.food} Etesd meg</button>
+      <button id="btnCall">🔊 Hangja</button>
+      <button id="btnPet">❤️ Simogasd</button>
+    </div>`;
+  $("#btnFeed").onclick = () => feed(key);
+  $("#btnCall").onclick = () => SOUNDS[key]();
+  $("#btnPet").onclick = () => {
+    const p = animalPos(key), [dx, dy] = HEAD_OFFSET[key], dir = key === "roka" ? foxDir : 1;
+    for (let i = 0; i < 4; i++) setTimeout(() => floatText(p.x + dx * dir + (Math.random() * 40 - 20), p.y + dy, "❤️", 24), i * 150);
+  };
+  if (window.innerWidth <= 900) $("#info").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function feed(key) {
+  const a = ANIMALS[key], p = animalPos(key), [dx, dy] = HEAD_OFFSET[key], dir = key === "roka" ? foxDir : 1;
+  if (key === "roka") foxPause = 150;
+  floatText(p.x + dx * dir, p.y + dy + 40, a.food, 34);
+  setTimeout(() => floatText(p.x + dx * dir, p.y + dy, "😋", 30), 500);
+  setTimeout(() => floatText(p.x + dx * dir + 20, p.y + dy - 10, "✨", 26), 800);
+}
+
+document.querySelectorAll(".animal").forEach(n =>
+  n.addEventListener("click", e => { e.stopPropagation(); selectAnimal(n.dataset.key); })
+);
+document.querySelectorAll("[data-pick]").forEach(b => b.onclick = () => selectAnimal(b.dataset.pick));
+
+/* --- Virágültetés a rétre --- */
+const FLOWER_COLORS = ["#ff6b9a", "#ffd23f", "#ffffff", "#b388ff", "#ff8c42"];
+svg.addEventListener("click", e => {
+  const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+  const p = pt.matrixTransform(svg.getScreenCTM().inverse());
+  if (p.y < 450) return;
+  const g = el("g", { class: "flower", transform: `translate(${p.x},${p.y})` }, $("#flowers"));
+  const c = FLOWER_COLORS[Math.floor(Math.random() * FLOWER_COLORS.length)];
+  el("path", { d: "M0,0 L0,-22", stroke: "#2f6b2a", "stroke-width": 3 }, g);
+  for (let i = 0; i < 5; i++) {
+    const ang = i * 72 * Math.PI / 180;
+    el("circle", { cx: Math.cos(ang) * 6, cy: -24 + Math.sin(ang) * 6, r: 5, fill: c }, g);
+  }
+  el("circle", { cx: 0, cy: -24, r: 3.5, fill: "#f2a900" }, g);
+});
+$("#btnClear").onclick = () => $("#flowers").innerHTML = "";
+
+/* --- Éjszaka / nappal --- */
+$("#btnNight").onclick = () => {
+  const night = document.body.classList.toggle("night");
+  $("#btnNight").textContent = night ? "☀️ Nappal" : "🌙 Éjszaka";
+};
+$("#btnSound").onclick = () => {
+  soundOn = !soundOn;
+  $("#btnSound").textContent = soundOn ? "🔊 Hang: be" : "🔇 Hang: ki";
+};
+
+/* --- Mozgás: róka sétál, felhők úsznak, szentjánosbogarak --- */
+let foxX = 150, foxDir = 1, foxPause = 0, t0 = 0;
+const fox = $("#roka"), foxFlip = fox.querySelector(".flip");
+function loop(t) {
+  const dt = Math.min(50, t - t0); t0 = t;
+  if (foxPause > 0) foxPause--;
+  else {
+    foxX += foxDir * dt * 0.06;
+    if (foxX > 1130) foxDir = -1;
+    if (foxX < 70) foxDir = 1;
+    if (Math.random() < 0.002) foxPause = 90 + Math.random() * 120;
+  }
+  const bob = foxPause > 0 ? 0 : Math.abs(Math.sin(t / 120)) * -3;
+  fox.setAttribute("transform", `translate(${foxX.toFixed(1)},${(555 + bob).toFixed(1)})`);
+  foxFlip.setAttribute("transform", `scale(${foxDir},1)`);
+
+  $("#cloud1").setAttribute("transform", `translate(${(t / 60) % 1400 - 200},0)`);
+  $("#cloud2").setAttribute("transform", `translate(${(t / 90) % 1500 - 700},0)`);
+
+  if (document.body.classList.contains("night")) {
+    document.querySelectorAll(".firefly").forEach(f => {
+      const ph = +f.dataset.phase;
+      f.setAttribute("transform", `translate(${Math.sin(t / 900 + ph) * 25},${Math.cos(t / 700 + ph * 2) * 15})`);
+    });
+  }
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+/* --- Kártyák --- */
+function renderCards() {
+  $("#cards").innerHTML = Object.entries(ANIMALS).map(([k, a]) => `
+    <div class="card" style="--c:${a.color}" data-key="${k}">
+      ${seen.has(k) ? '<span class="seen">✔ felfedezve</span>' : ""}
+      <h3>${a.emoji} ${a.name}</h3>
+      <p>${a.short}</p>
+    </div>`).join("");
+  document.querySelectorAll(".card").forEach(c => c.onclick = () => {
+    selectAnimal(c.dataset.key);
+    $(".scene-wrap").scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+}
+renderCards();
+
+/* --- Kvíz --- */
+const QUESTIONS = [
+  { q: "Melyik állat tartozik a kutyafélék családjába?", a: "roka" },
+  { q: "Melyik állat hímjét nevezzük <b>baknak</b>, a nőstényét <b>sutának</b>?", a: "oz" },
+  { q: "Kinek a bikája <b>bőg</b> ősszel, és lehet akár 250 kg is?", a: "szarvas" },
+  { q: "Ki <b>egerészik</b>: magasra ugrik, és ráveti magát a hó alatt motoszkáló egérre?", a: "roka" },
+  { q: "Melyik Magyarország legkisebb szarvasféléje?", a: "oz" },
+  { q: "Kinek a kicsinye a <b>borjú</b>?", a: "szarvas" },
+  { q: "Ki neveli kölykeit <b>kotorékban</b>?", a: "roka" },
+  { q: "Kinek a fenekén villan fel a fehér <b>tükör</b>, ha megijed?", a: "oz" }
+];
+let qOrder, qi, score;
+function startQuiz() {
+  qOrder = [...QUESTIONS].sort(() => Math.random() - 0.5).slice(0, 6);
+  qi = 0; score = 0; showQuestion();
+}
+function showQuestion() {
+  const box = $("#quiz");
+  if (qi >= qOrder.length) {
+    const msg = score === qOrder.length ? "Hibátlan! Igazi erdőjáró vagy! 🏆"
+              : score >= qOrder.length / 2 ? "Szép munka! 🌟" : "Gyakorolj még egy kicsit! 🌱";
+    box.innerHTML = `<div class="q">Eredményed: <b>${score} / ${qOrder.length}</b><br>${msg}</div>
+                     <button class="primary" id="again">🔁 Újra</button>`;
+    $("#again").onclick = startQuiz;
+    return;
+  }
+  const cur = qOrder[qi];
+  box.innerHTML = `
+    <div class="progress">${qi + 1}. kérdés / ${qOrder.length} • Pontszám: ${score}</div>
+    <div class="q">${cur.q}</div>
+    <div class="opts">
+      ${Object.entries(ANIMALS).map(([k, a]) => `<button data-k="${k}">${a.emoji} ${a.name}</button>`).join("")}
+    </div>
+    <div class="feedback" id="fb"></div>`;
+  box.querySelectorAll(".opts button").forEach(b => b.onclick = () => {
+    box.querySelectorAll(".opts button").forEach(x => x.disabled = true);
+    const ok = b.dataset.k === cur.a;
+    b.classList.add(ok ? "ok" : "bad");
+    if (!ok) box.querySelector(`[data-k="${cur.a}"]`).classList.add("ok");
+    if (ok) { score++; SOUNDS[cur.a](); }
+    $("#fb").textContent = ok ? "✅ Helyes!" : `❌ Nem talált – a helyes válasz: ${ANIMALS[cur.a].name}`;
+    setTimeout(() => { qi++; showQuestion(); }, 1400);
+  });
+}
+startQuiz();
+</script>
+</body>
+</html>
